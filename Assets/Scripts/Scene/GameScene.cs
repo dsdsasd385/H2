@@ -22,8 +22,9 @@ public abstract class GameScene : MonoBehaviour
         DontDestroyOnLoad(beforeScene.gameObject);
         
         beforeScene.OnReleaseScene();
-        
-        // todo LoadingUI
+
+        var loadingUI = UI.Open<LoadingUI>();
+        DontDestroyOnLoad(loadingUI.gameObject);
 
         yield return SceneManager.LoadSceneAsync(sceneName);
 
@@ -35,7 +36,8 @@ public abstract class GameScene : MonoBehaviour
 
         yield return new WaitUntil(() => newGameScene._isSceneReady);
         
-        // todo ReleaseLoadingUI
+        loadingUI.Close(true);
+        Destroy(beforeScene.gameObject);
     }
     
     /******************************************************************************************************************/
