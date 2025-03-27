@@ -5,10 +5,6 @@ using UnityEngine.UI;
 
 public class StagePlayUI : UI
 {
-    [SerializeField] private ScrollRect dialogView;
-    [SerializeField] private Transform  dialogParent;
-    [SerializeField] private DialogItem dialogPrefab;
-    
     #region Singleton
     private static StagePlayUI _instance;
     private static StagePlayUI Instance
@@ -22,7 +18,7 @@ public class StagePlayUI : UI
     }
     #endregion
 
-    private List<DialogItem> _dialogList = new();
+    private readonly List<DialogItem> _dialogList = new();
 
     public static void Initialize()
     {
@@ -43,6 +39,10 @@ public class StagePlayUI : UI
     
     /******************************************************************************************************************/
     /******************************************************************************************************************/
+    
+    [SerializeField] private ScrollRect dialogView;
+    [SerializeField] private Transform  dialogParent;
+    [SerializeField] private DialogItem dialogPrefab;
 
     private void RefreshDialogView()
     {

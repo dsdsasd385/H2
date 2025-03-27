@@ -70,7 +70,8 @@ public abstract class Chapter : MonoBehaviour
     {
         foreach (var stageAction in _stageActions)
         {
-         
+            yield return PopupButtonUI.WaitForClick("스테이지 진행", -1);
+            
             yield return stageAction;
         }
     }
