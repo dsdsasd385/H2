@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -28,6 +27,8 @@ public abstract class Chapter : MonoBehaviour
         // Loading Player
         // Loading Map
         // Stage Start
+        
+        StagePlayUI.Initialize();
         
         _growthRate = new(growthRateRange, BattleCount);
 
@@ -67,11 +68,7 @@ public abstract class Chapter : MonoBehaviour
 
     private IEnumerator PlayChapterCoroutine()
     {
-        print($"Start {GetType().Name}!");
-        
         foreach (var stageAction in _stageActions)
             yield return stageAction;
-        
-        print($"{GetType().Name} Finished!");
     }
 }
