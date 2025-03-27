@@ -7,25 +7,9 @@ public class Chapter_1 : Chapter
     
     protected override IEnumerator OnRoulette()
     {
-        RouletteScene rouletteScene = null;
-        
         yield return GetRandomDelay();
         
-        StagePlayUI.AddDialog($"룰렛이 시작됩니다!\n행운을 빌어요!");
-
-        yield return GetRandomDelay();
-
-        yield return AdditiveScene.LoadSceneAsync<RouletteScene>(0.8f, 0.8f, scene => rouletteScene = scene);
-
-        yield return rouletteScene.StartRoulette();
-
-        yield return rouletteScene.UnloadScene();
-        
-        yield return GetRandomDelay();
-        
-        StagePlayUI.AddDialog($"룰렛이 끝났어요\n축하해요!");
-
-        yield return GetRandomDelay();
+        StagePlayUI.AddDialog("룰렛 이벤트 발생!\n행운을 빌어요!");
     }
 
     protected override IEnumerator OnEvent()

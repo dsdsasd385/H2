@@ -26,6 +26,9 @@ public class StagePlayUI : UI
             Destroy(Instance._dialogList[i].gameObject);
         
         Instance._dialogList.Clear();
+        
+        Chapter.StageChangedEvent -= OnStageChanged;
+        Chapter.StageChangedEvent += OnStageChanged;
     }
 
     public static void AddDialog(string dialog)
@@ -35,6 +38,11 @@ public class StagePlayUI : UI
         item.gameObject.SetActive(true);
         Instance._dialogList.Add(item);
         Instance.RefreshDialogView();
+    }
+
+    private static void OnStageChanged(int stage, StageType stageType)
+    {
+        print($"현재 스테이지 : {stage} - {stageType}");
     }
     
     /******************************************************************************************************************/

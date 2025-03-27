@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,11 @@ using UnityEngine;
 
 public abstract class Chapter : MonoBehaviour
 {
+    public static event Action<int, StageType> StageChangedEvent; 
+    
+    /******************************************************************************************************************/
+    /******************************************************************************************************************/
+    
     [ShowNativeProperty] public int        TotalStageCount => stageList.Count;
     [ShowNativeProperty] public int        RouletteCount   => stageList.Count(stage => stage == StageType.STATUS_ROULETTE);
     [ShowNativeProperty] public int        EventCount      => stageList.Count(stage => stage == StageType.STAGE_EVENT);
@@ -15,7 +21,7 @@ public abstract class Chapter : MonoBehaviour
     [MinMaxSlider(1f, 5f), SerializeField] private Vector2         growthRateRange;
 
     private List<IEnumerator> _stageActions = new();
-    private GrowthRate    _growthRate;
+    private GrowthRate        _growthRate;
 
     protected abstract IEnumerator OnRoulette();
     protected abstract IEnumerator OnEvent();
@@ -68,10 +74,12 @@ public abstract class Chapter : MonoBehaviour
 
     private IEnumerator PlayChapterCoroutine()
     {
-        foreach (var stageAction in _stageActions)
+        for (var index = 0; index < _stageActions.Count; index++)
         {
-            yield return PopupButtonUI.WaitForClick("스테이지 진행", -1);
+            StageChangedEvent?.Invoke(index + 1, stageList[index]);
             
+            var stageAction = _stageActions[index];
+            yield return PopupButtonUI.WaitForClick("스테이지 진행", -1);
             yield return stageAction;
         }
     }
