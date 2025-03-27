@@ -69,6 +69,9 @@ public abstract class Chapter : MonoBehaviour
     private IEnumerator PlayChapterCoroutine()
     {
         foreach (var stageAction in _stageActions)
+        {
+         
             yield return stageAction;
+        }
     }
 }

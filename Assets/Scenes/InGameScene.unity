@@ -271,7 +271,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chapterList:
   - {fileID: -8079782794320091740, guid: c13982b9eec63a74f907a579a3aca62d, type: 3}
-  - {fileID: 3069768732210952623, guid: d4776c10caa020a4c8b29c095fa60f76, type: 3}
 --- !u!4 &230918096
 Transform:
   m_ObjectHideFlags: 0
