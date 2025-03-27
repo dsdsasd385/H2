@@ -5,24 +5,31 @@ using UnityEngine;
 
 public class InGameScene : GameScene
 {
+    public Chapter CurrentChapter { get; private set; }
+    
     [SerializeField] private List<Chapter> chapterList;
 
     private Dictionary<int, Chapter> _chapters;
-    private int                      _lastPlayedChapter;
+    private int                      _chapterToPlay;
 
     protected override IEnumerator OnPrepareScene()
     {
         _chapters = chapterList
             .ToDictionary(chapter => chapterList.IndexOf(chapter) + 1, chapter => chapter);
+        
+        // todo OutGameScene Sets Chapter To Play!
+        _chapterToPlay = SaveLoad.LoadLastChapter();
 
-        _lastPlayedChapter = SaveLoad.LoadLastChapter();
+        CurrentChapter = Instantiate(_chapters[_chapterToPlay]);
+        
+        CurrentChapter.Initialize();
         
         yield break;
     }
 
     protected override void OnSceneStarted()
     {
-        _chapters[_lastPlayedChapter].PlayChapter();
+        CurrentChapter.PlayChapter();
     }
     
     protected override void OnReleaseScene()
