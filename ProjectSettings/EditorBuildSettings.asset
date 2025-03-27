@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/InGameScene.unity
     guid: cdac4144efd191f42934da26774291b0
+  - enabled: 1
+    path: Assets/Scenes/RouletteScene.unity
+    guid: be254deb587282043b7de734ba155604
   m_configObjects: {}

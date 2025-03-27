@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEngine;
 
 public class Chapter_2 : Chapter
 {
@@ -9,13 +10,15 @@ public class Chapter_2 : Chapter
 
     protected override IEnumerator OnEvent()
     {
-        yield break;
+        print($"STAGE EVENT!");
+
+        yield return new WaitForSeconds(0.5f);
     }
 
     protected override IEnumerator OnBattle(float growthRate)
     {
-        print(growthRate);
+        print($"MONSTER STATUS GROWTH : {growthRate}");
         
-        yield break;
+        yield return new WaitForSeconds(0.5f);
     }
 }

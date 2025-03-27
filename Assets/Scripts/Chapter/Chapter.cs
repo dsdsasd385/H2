@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -15,7 +16,7 @@ public abstract class Chapter : MonoBehaviour
     [MinMaxSlider(1f, 5f), SerializeField] private Vector2         growthRateRange;
 
     private List<IEnumerator> _stageActions = new();
-    private GrowthRate        _growthRate;
+    private GrowthRate    _growthRate;
 
     protected abstract IEnumerator OnRoulette();
     protected abstract IEnumerator OnEvent();
@@ -23,6 +24,11 @@ public abstract class Chapter : MonoBehaviour
 
     public void Initialize()
     {
+        // todo
+        // Loading Player
+        // Loading Map
+        // Stage Start
+        
         _growthRate = new(growthRateRange, BattleCount);
 
         SetStageAction();
@@ -56,17 +62,16 @@ public abstract class Chapter : MonoBehaviour
 
     public void PlayChapter()
     {
-        // todo
-        // Loading Player
-        // Loading Map
-        // Stage Start
-
-        StartCoroutine(ChapterPlayCoroutine());
+        StartCoroutine(PlayChapterCoroutine());
     }
 
-    private IEnumerator ChapterPlayCoroutine()
+    private IEnumerator PlayChapterCoroutine()
     {
+        print($"Start {GetType().Name}!");
+        
         foreach (var stageAction in _stageActions)
             yield return stageAction;
+        
+        print($"{GetType().Name} Finished!");
     }
 }

@@ -5,22 +5,26 @@ public class Chapter_1 : Chapter
 {
     protected override IEnumerator OnRoulette()
     {
-        print($"PLAY ROULETTE!");
+        RouletteScene rouletteScene = null;
 
-        yield return new WaitForSeconds(0.5f);
+        yield return AdditiveScene.LoadSceneAsync<RouletteScene>(0.8f, 0.8f, scene => rouletteScene = scene);
+
+        yield return rouletteScene.StartRoulette();
+
+        yield return rouletteScene.UnloadScene();
     }
 
     protected override IEnumerator OnEvent()
     {
+        yield return new WaitForSeconds(1f);
+        
         print($"STAGE EVENT!");
-
-        yield return new WaitForSeconds(0.5f);
     }
 
     protected override IEnumerator OnBattle(float growthRate)
     {
-        print($"MONSTER STATUS GROWTH : {growthRate}");
+        yield return new WaitForSeconds(1f);
         
-        yield return new WaitForSeconds(0.5f);
+        print($"MONSTER STATUS GROWTH : {growthRate}");
     }
 }
