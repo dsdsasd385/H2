@@ -18,6 +18,8 @@ public class PopupButtonUI : UI
 
         ui.button.onClick.AddListener(() => isClicked = true);
 
+        yield return ui.button.image.FadeIn(0.15f);
+
         if (duration > 0)
         {
             while (elapsed < duration && isClicked == false)
@@ -28,6 +30,8 @@ public class PopupButtonUI : UI
         }
         else
             yield return new WaitUntil(() => isClicked);
+
+        yield return ui.button.image.FadeOut(0.15f);
         
         ui.Close();
     }

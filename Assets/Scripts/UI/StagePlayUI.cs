@@ -18,12 +18,12 @@ public class StagePlayUI : UI
     }
     #endregion
 
-    private readonly List<DialogItem> _dialogList = new();
+    private readonly List<GameObject> _dialogList = new();
 
     public static void Initialize()
     {
         for (var i = 0; i < Instance._dialogList.Count; i++)
-            Destroy(Instance._dialogList[i].gameObject);
+            Destroy(Instance._dialogList[i]);
         
         Instance._dialogList.Clear();
         
@@ -36,7 +36,15 @@ public class StagePlayUI : UI
         var item = Instantiate(Instance.dialogPrefab, Instance.dialogParent);
         item.SetDialog(dialog);
         item.gameObject.SetActive(true);
-        Instance._dialogList.Add(item);
+        Instance._dialogList.Add(item.gameObject);
+        Instance.RefreshDialogView();
+    }
+
+    public static void AddBlank()
+    {
+        var blank = Instantiate(Instance.dialogBlankPrefab, Instance.dialogParent);
+        blank.gameObject.SetActive(true);
+        Instance._dialogList.Add(blank);
         Instance.RefreshDialogView();
     }
 
@@ -51,6 +59,7 @@ public class StagePlayUI : UI
     [SerializeField] private ScrollRect dialogView;
     [SerializeField] private Transform  dialogParent;
     [SerializeField] private DialogItem dialogPrefab;
+    [SerializeField] private GameObject dialogBlankPrefab;
 
     private void RefreshDialogView()
     {

@@ -1,4 +1,5 @@
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,5 +27,21 @@ public static class UIExtensions
         }
 
         scroll.verticalNormalizedPosition = endPosition;
+    }
+
+    public static IEnumerator FadeIn(this Image img, float duration = 0.5f, bool needInit = true)
+    {
+        if (needInit)
+            img.DOKill();
+
+        yield return img.DOFade(1f, duration).WaitForCompletion();
+    }
+    
+    public static IEnumerator FadeOut(this Image img, float duration = 0.5f, bool needInit = true)
+    {
+        if (needInit)
+            img.DOKill();
+
+        yield return img.DOFade(0f, duration).WaitForCompletion();
     }
 }

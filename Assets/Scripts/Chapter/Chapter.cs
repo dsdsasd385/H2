@@ -14,12 +14,16 @@ public abstract class Chapter : MonoBehaviour
         RouletteResult result = default;
 
         yield return Roulette.OnRoulette(res => result = res);
-        
-        StagePlayUI.AddDialog(result.Dialog);
-        
-        // todo UI Roulette -> Show Status Change Event
 
-        yield return Delay.GetRandom(1f, 2f);
+        var logs = result.Dialog.Split('\n');
+
+        foreach (var log in logs)
+        {
+            StagePlayUI.AddDialog(log);
+            yield return new WaitForSeconds(0.3f);
+        }
+
+        yield return StatusRouletteUI.ShowRouletteImage(result.Type);
     }
     
     /******************************************************************************************************************/
@@ -93,6 +97,7 @@ public abstract class Chapter : MonoBehaviour
             var stageAction = _stageActions[index];
             yield return PopupButtonUI.WaitForClick("스테이지 진행", -1);
             yield return stageAction;
+            StagePlayUI.AddBlank();
         }
     }
 }
