@@ -1,21 +1,21 @@
 using System;
 using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public abstract class AdditiveScene : MonoBehaviour
 {
+    protected static AdditiveSceneUI SceneUI { get; private set; }
+    
     private static AdditiveScene CurrentAdditiveScene { get; set; }
 
     private static Scene         _currentScene;
     private static AudioListener _audioListener;
     
-    public static IEnumerator LoadSceneAsync<T>(float widthRatio, float heightRatio, Action<T> loadedScene) where T : AdditiveScene
+    public static IEnumerator LoadSceneAsync<T>(float width, float height, float yPos, Action<T> loadedScene) where T : AdditiveScene
     {
         var sceneName = typeof(T).Name;
-
-        var width = Mathf.CeilToInt(Screen.width * widthRatio);
-        var height = Mathf.CeilToInt(Screen.height * heightRatio);
 
         if (Camera.main.TryGetComponent(out AudioListener listener))
         {
@@ -29,7 +29,7 @@ public abstract class AdditiveScene : MonoBehaviour
 
         SceneManager.SetActiveScene(_currentScene);
 
-        yield return CurrentAdditiveScene.Initialize(width, height);
+        yield return CurrentAdditiveScene.Initialize(width, height, yPos);
         
         loadedScene?.Invoke(CurrentAdditiveScene as T);
     }
@@ -46,17 +46,25 @@ public abstract class AdditiveScene : MonoBehaviour
         CurrentAdditiveScene = this;
     }
 
-    private IEnumerator Initialize(int width, int height)
+    private IEnumerator Initialize(float width, float height, float yPos)
     {
-        var window = UI.Open<AdditiveSceneUI>();
-        window.SetWindow(width, height);
-        mainCam.targetTexture = window.DisplayTex;
+        SceneUI = UI.Open<AdditiveSceneUI>();
+        SceneUI.SetWindow(width, height, yPos);
+        mainCam.targetTexture = SceneUI.DisplayTex;
+        
+        yield return SceneUI.CanvasGroup.DOFade(1f, 0.5f)
+            .From(0f)
+            .WaitForCompletion();
+        
         yield return OnSceneLoaded();
     }
 
     public IEnumerator UnloadScene()
     {
         yield return OnUnloadScene();
+        
+        yield return SceneUI.CanvasGroup.DOFade(0f, 0.5f)
+            .WaitForCompletion();
         
         yield return SceneManager.UnloadSceneAsync(_currentScene);
 

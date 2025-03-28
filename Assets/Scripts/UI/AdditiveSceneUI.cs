@@ -1,3 +1,5 @@
+using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +10,11 @@ public class AdditiveSceneUI : UI
 
     public RenderTexture DisplayTex => displayWindow.texture as RenderTexture;
 
-    public void SetWindow(int width, int height)
+    public void SetWindow(float width, float height, float yPos)
     {
         windowRect.sizeDelta = new Vector2(width, height);
-        DisplayTex.width = width;
-        DisplayTex.height = height;
+        windowRect.anchoredPosition = Vector2.up * yPos;
+        DisplayTex.width = (int)width;
+        DisplayTex.height = (int)height;
     }
 }

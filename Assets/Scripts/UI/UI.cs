@@ -36,6 +36,18 @@ public abstract class UI : MonoBehaviour
     
     /******************************************************************************************************************/
     /******************************************************************************************************************/
+
+    private CanvasGroup _cg;
+    public CanvasGroup CanvasGroup
+    {
+        get
+        {
+            if (_cg == null)
+                _cg = gameObject.AddComponent<CanvasGroup>();
+            return _cg;
+        }
+    }
+    
     
     public void Close(bool kill = false)
     {

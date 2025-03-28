@@ -31,7 +31,7 @@ public static class Roulette
     
     public static IEnumerator OnRoulette(Action<RouletteResult> result)
     {
-        yield return Delay.GetRandom(1f, 1.5f);
+        yield return Delay.WaitRandom(1f, 1.5f);
         
         var randomType = RouletteTypes.PickRandom();
         
