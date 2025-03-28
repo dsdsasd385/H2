@@ -7,7 +7,20 @@ using UnityEngine;
 
 public abstract class Chapter : MonoBehaviour
 {
-    public static event Action<int, StageType> StageChangedEvent; 
+    public static event Action<int, StageType> StageChangedEvent;
+
+    private static IEnumerator OnRoulette()
+    {
+        RouletteResult result = default;
+
+        yield return Roulette.OnRoulette(res => result = res);
+        
+        StagePlayUI.AddDialog(result.Dialog);
+        
+        // todo UI Roulette -> Show Status Change Event
+
+        yield return Delay.GetRandom(1f, 2f);
+    }
     
     /******************************************************************************************************************/
     /******************************************************************************************************************/
@@ -23,7 +36,6 @@ public abstract class Chapter : MonoBehaviour
     private List<IEnumerator> _stageActions = new();
     private GrowthRate        _growthRate;
 
-    protected abstract IEnumerator OnRoulette();
     protected abstract IEnumerator OnEvent();
     protected abstract IEnumerator OnBattle(float growthRate);
 
