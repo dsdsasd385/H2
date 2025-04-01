@@ -5,8 +5,47 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class Player : Entity
 {
+    #region 싱글톤 
+    private static Player _instance;
+
+    public static Player Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<Player>();
+
+                if (_instance == null)
+                {
+                    GameObject player = new GameObject("Player");
+                    _instance = player.AddComponent<Player>();
+
+                }
+
+                else
+                {
+                    // 이럴일은 없겠지만 혹시나해서
+                    Destroy(_instance.gameObject);
+                    GameObject player = new GameObject("Player");
+                    _instance = player.AddComponent<Player>();
+                }
+
+                DontDestroyOnLoad(_instance.gameObject);  // 씬이 변경되어도 유지
+            }
+
+            return _instance;
+        }
+    }
+    #endregion
+
+
+    /**********************************************************************************/
+    /**********************************************************************************/
+
     public Status status;
     [SerializeField] Animator animator;
+
 
     private void Awake()
     {
@@ -17,8 +56,12 @@ public class Player : Entity
         // status.OnDefenseChange += PlayerUI.SetDefense;
         // status.OnCriticalChange += PlayerUI.SetCritical;
         // status.OnSpeedChange += PlayerUI.SetSpeed;
+
+        // PlayerItem 이벤트 연결
+        // 
         SetEntity();
     }
+
     protected override void SetEntity()
     {
         status = new(50, 50f, 10f, 0.05f, 1f);
@@ -28,7 +71,6 @@ public class Player : Entity
         //status.critical = 0.5f;
         //status.speed = 1;
     }
-    
 
     public override void Attack(Entity target)
     {
@@ -43,11 +85,11 @@ public class Player : Entity
         else
         {
             return;
-        }       
+        }
     }
     public override void TakeDamage(float power, float defense, float critical)
     {
-     
+
         //animator.SetTrigger("Damaged");
 
         float damage = base.CalculateDamage(power, defense, critical);
@@ -69,41 +111,36 @@ public class Player : Entity
     }
 
 
-
     // 체력변할때 이벤트
-    protected override void OnHpChanged(float value)
+    public void OnHpChanged(float hp, float value)
     {
         // 체력 수정
-        var newHp = status.Hp * value;
+        var newHp = status.Hp * (value / 100);
         status.Hp = (int)newHp;
+
     }
-
-
 
     // 공격력변할때 이벤트
-    protected override void OnPowerChanged(float value)
+    public void OnPowerChanged(float power, float value)
     {
         // 공격력 수정
-        status.Power *= value;
+        status.Power *= (value /100);
+        Debug.Log($"공격력이 변경되었습니다. {status.Power}");
     }
-
-    protected override void OnCriticalChanged(float value)
-    {
-        status.Critical *= value;
-    }
-
-    protected virtual void OnSpeedChanged(float value) 
-    { 
-        status.Speed *= value;
-    }
-
-
     // 방어력변할때 이벤트
-    protected override void OnDefenseChanged(float value)
+    public void OnDefenseChanged(float defense, float value)
     {
         // 방어력 수정
+        status.Defense *= (value / 100);
 
-        status.Defense *= value;
+        Debug.Log($"방어력이 변경되었습니다. {status.Defense}");
     }
 
+    public void OnCriticalChanged(float value)
+    {
+        status.Critical *= value;
+        Debug.Log($"크리티컬이 변경되었습니다. {status.Critical}");
+    }
+
+    
 }

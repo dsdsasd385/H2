@@ -9,9 +9,9 @@ public struct Status
     private float _speed;    // 선공(speed가 높은쪽이 선공)
 
 
-    public event Action<int> OnHpChange;
-    public event Action<float> OnPowerChange;
-    public event Action<float> OnDefenseChange;
+    public event Action<int, int> OnHpChange;
+    public event Action<float, float> OnPowerChange;
+    public event Action<float, float> OnDefenseChange;
     public event Action<float> OnCriticalChange;
     public event Action<float> OnSpeedChange;
 
@@ -20,10 +20,17 @@ public struct Status
         get { return _hp; }  // hp 값을 가져올 때는 그냥 반환
         set
         {
-
+            int oldHp = _hp;
+            // hp 값이 0 이하로 설정되지 않도록
             _hp = Mathf.Max(0, value);
-            OnHpChange?.Invoke(_hp);
-        }  // hp 값이 0 이하로 설정되지 않도록
+
+            if(oldHp != _hp)
+            {
+                OnHpChange?.Invoke(oldHp, _hp);
+
+                Debug.Log($"체력이 변경되었습니다. 이전체력 : {oldHp}, 현재체력 : {_hp}");
+            }
+        }  
     }
 
 
@@ -32,8 +39,13 @@ public struct Status
         get { return _power; }
         set
         {
+            float oldPower = _power;
             _power = Mathf.Max(0, value);
-            OnPowerChange?.Invoke(_power);
+            if(oldPower != _power)
+            {
+                OnPowerChange?.Invoke(oldPower, _power);
+                Debug.Log($"공격력이 변경되었습니다. 이전공격력 : {oldPower}, 현재공격력 : {_power}");
+            }
         } // 값이 0 이상만 설정되도록
     }
 
@@ -43,8 +55,15 @@ public struct Status
         get { return _defense; }
         set
         {
+            float oldDefense = _defense;
             _defense = Mathf.Max(0, value);
-            OnDefenseChange?.Invoke(_defense);
+            
+            if(oldDefense != _defense)
+            {
+                OnDefenseChange?.Invoke(oldDefense, _defense);
+                Debug.Log($"이 변경되었습니다. 이전방어력 : {oldDefense}, 현재방어력 : {_defense}");
+
+            }
         } // 값이 0 이상만 설정되도록
     }
 
@@ -103,6 +122,12 @@ public struct Status
 
 public abstract class Entity : MonoBehaviour
 {
+    public event Action<int, int> OnHpChange;
+    public event Action<float, float> OnPowerChange;
+    public event Action<float, float> OnDefenseChange;
+    public event Action<float> OnCriticalChange;
+    public event Action<float> OnSpeedChange;
+
     public Status status { get;protected set; }
 
     public bool myTurn;
@@ -141,22 +166,4 @@ public abstract class Entity : MonoBehaviour
     }
     // 사망 처리
     protected virtual void Die() { }
-
-    // 체력변할때 이벤트
-    protected virtual void OnHpChanged(float value) { }
-
-
-    // 공격력변할때 이벤트
-    protected virtual void OnPowerChanged(float value) { }
-
-    // 방어력변할때 이벤트
-    protected virtual void OnDefenseChanged(float value) { }
-
-    // 치명타변할때 이벤트
-    protected virtual void OnCriticalChanged(float value) { }
-
-    // 스피드변할때 이벤트
-    protected virtual void OnSpeedChanged(float value) { }
-
-
 }
