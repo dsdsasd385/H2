@@ -13,11 +13,11 @@ public struct Status
     private float _speed;    // 선공(speed가 높은쪽이 선공)
 
 
-    public event Action<int> OnHpChanged;
-    public event Action<int> OnPowerChanged;
-    public event Action<int> OnDefenseChanged;
-    public event Action<int> OnCriticalChanged;
-    public event Action<int> OnSpeedChanged;
+    public event Action<int> OnHpChange;
+    public event Action<float> OnPowerChange;
+    public event Action<float> OnDefenseChange;
+    public event Action<float> OnCriticalChange;
+    public event Action<float> OnSpeedChange;
 
     public int Hp
     {
@@ -26,7 +26,7 @@ public struct Status
         {
 
             _hp = Mathf.Max(0, value);
-            OnHpChanged?.Invoke(_hp);
+            OnHpChange?.Invoke(_hp);
         }  // hp 값이 0 이하로 설정되지 않도록
     }
 
@@ -37,7 +37,7 @@ public struct Status
         set
         {
             _power = Mathf.Max(0, value);
-            OnPowerChanged?.Invoke(_hp);
+            OnPowerChange?.Invoke(_power);
         } // 값이 0 이상만 설정되도록
     }
 
@@ -48,7 +48,7 @@ public struct Status
         set
         {
             _defense = Mathf.Max(0, value);
-            OnDefenseChanged?.Invoke(_hp);
+            OnDefenseChange?.Invoke(_defense);
         } // 값이 0 이상만 설정되도록
     }
 
@@ -60,7 +60,7 @@ public struct Status
         set
         {
             _critical = Mathf.Max(0, value);
-            OnCriticalChanged?.Invoke(_hp);
+            OnCriticalChange?.Invoke(_critical);
         } // 값이 0 이상만 설정되도록
     }
 
@@ -73,7 +73,7 @@ public struct Status
         set
         {
             _speed = Mathf.Max(0, value);
-            OnSpeedChanged?.Invoke(_hp);
+            OnSpeedChange?.Invoke(_speed);
         } // 값이 0 이상만 설정되도록
     }
 
@@ -86,11 +86,11 @@ public struct Status
         _critical = critical;
         _speed = speed;
 
-        OnHpChanged = null;
-        OnCriticalChanged = null;
-        OnDefenseChanged = null;
-        OnPowerChanged = null;
-        OnSpeedChanged = null;
+        OnHpChange = null;
+        OnCriticalChange = null;
+        OnDefenseChange = null;
+        OnPowerChange = null;
+        OnSpeedChange = null;
     }
 
     public static Status operator *(Status status, float multiplier)

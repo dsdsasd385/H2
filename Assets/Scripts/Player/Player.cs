@@ -1,16 +1,22 @@
+using NaughtyAttributes;
 using System.Threading.Tasks;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class Player : Entity
 {
-    Status status;
+    public Status status;
     [SerializeField] Animator animator;
 
     private void Awake()
     {
         // UI 이벤트 연결
         // if(OnHpChanged == null)
-        // OnHpChanged += UI.SetHpVar;
+        // status.OnHpChange += PlayerUI.SetHpVar;
+        // status.OnPowerChange += PlayerUI.SetPower;
+        // status.OnDefenseChange += PlayerUI.SetDefense;
+        // status.OnCriticalChange += PlayerUI.SetCritical;
+        // status.OnSpeedChange += PlayerUI.SetSpeed;
     }
     protected override void SetEntity()
     {
@@ -21,6 +27,7 @@ public class Player : Entity
         //status.critical = 0.5f;
         //status.speed = 1;
     }
+    
 
     public override void Attack(Entity target)
     {
@@ -33,9 +40,8 @@ public class Player : Entity
         else
         {
             return;
-        }
+        }       
     }
-
     public override void TakeDamage(float power)
     {
         if(power > status.Hp)
@@ -60,27 +66,33 @@ public class Player : Entity
 
 
 
-
     // 체력변할때 이벤트
     protected override void OnHpChanged(float value)
     {
         // 체력 수정
-
         var newHp = status.Hp * value;
         status.Hp = (int)newHp;
-
-       
     }
+
+
 
     // 공격력변할때 이벤트
     protected override void OnPowerChanged(float value)
     {
         // 공격력 수정
         status.Power *= value;
-      
-        // UI 이벤트 연결
-
     }
+
+    protected override void OnCriticalChanged(float value)
+    {
+        status.Critical *= value;
+    }
+
+    protected virtual void OnSpeedChanged(float value) 
+    { 
+        status.Speed *= value;
+    }
+
 
     // 방어력변할때 이벤트
     protected override void OnDefenseChanged(float value)
@@ -88,9 +100,6 @@ public class Player : Entity
         // 방어력 수정
 
         status.Defense *= value;
-
-        // UI 이벤트 연결
-
     }
 
 }

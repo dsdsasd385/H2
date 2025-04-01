@@ -4,11 +4,18 @@ using System.Threading.Tasks;
 
 public class Monster : Entity
 {
-    Status status;
+    public Status status;
 
     [SerializeField] Animator animator;
 
-
+    private void Awake()
+    {
+        // status.OnHpChange += MonsterUI.SetHpVar;
+        // status.OnOnPowerChange += MonsterUI.SetPower;
+        // status.OnDefenseChange += MonsterUI.SetDefense;
+        // status.OnCriticalChange += MonsterUI.SetCritical;
+        // status.OnSpeedChange += MonsterUI.SetSpeed;
+    }
     protected override void SetEntity()
     {
         status = new(150, 50f, 10f, 0.5f, 1f);
