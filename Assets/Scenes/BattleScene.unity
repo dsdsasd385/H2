@@ -173,6 +173,8 @@ MonoBehaviour:
   - {fileID: 1675404965}
   - {fileID: 679357915}
   - {fileID: 605618283}
+  playerPrefabs: {fileID: 0}
+  monsterPrefabs: {fileID: 0}
   player: {fileID: 0}
   monster: {fileID: 0}
 --- !u!1 &213940293

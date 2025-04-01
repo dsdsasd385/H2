@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
-
 public struct Status
 {
     private int _hp;        // 체력
@@ -107,7 +103,7 @@ public struct Status
 
 public abstract class Entity : MonoBehaviour
 {
-    Status status;
+    public Status status { get;protected set; }
 
     public bool myTurn;
 
@@ -118,16 +114,30 @@ public abstract class Entity : MonoBehaviour
     public virtual void Attack(Entity target) { }
 
     // 피해 입음
-    public virtual void TakeDamage(float power)
+    public virtual void TakeDamage(float power, float defense, float critical)
     {
-        float damage = CalculateDamage(power);
+        float damage = CalculateDamage(power, defense , critical);
     }
 
     // 피해량 계산
-    protected float CalculateDamage(float power)
+    protected float CalculateDamage(float power , float defense, float critical)
     {
-        float defenseRate = status.Defense / (1 + status.Defense);  // 방어율 계산
-        return power * (1 - defenseRate);  // 계산된 피해량 리턴
+        float finalDamage = power;
+        float criticaMultplier = 2.0f;
+        if(UnityEngine.Random.value < critical)
+        {
+            finalDamage *= criticaMultplier;
+            Debug.Log($"크리티컬 데미지! : {finalDamage}");            
+        }
+
+        float defenseRate = defense / (1 + defense);  // 방어율 계산
+        Debug.Log($"방어율은 {defenseRate}");
+        
+        finalDamage = finalDamage * (1 - defenseRate);
+        Debug.Log($"최종 데미지는 {finalDamage}");
+        return finalDamage;  // 계산된 피해량 리턴
+
+
     }
     // 사망 처리
     protected virtual void Die() { }

@@ -15,10 +15,11 @@ public class Monster : Entity
         // status.OnDefenseChange += MonsterUI.SetDefense;
         // status.OnCriticalChange += MonsterUI.SetCritical;
         // status.OnSpeedChange += MonsterUI.SetSpeed;
+        SetEntity();
     }
     protected override void SetEntity()
     {
-        status = new(150, 50f, 10f, 0.5f, 1f);
+        status = new(50, 50f, 10f, 0.05f, 1f);
         //status.hp = 150;
         //status.power = 50f;
         //status.defense = 10f;
@@ -40,11 +41,13 @@ public class Monster : Entity
 
     public override void Attack(Entity target)
     {
+        Player playerTarget = target as Player;
+
         if (target is Player)
         {
             //animator.SetTrigger("Attack");
 
-            target.TakeDamage(status.Power);
+            target.TakeDamage(status.Power, playerTarget.status.Defense, status.Critical);
         }
 
         else
@@ -53,15 +56,17 @@ public class Monster : Entity
         }
     }
 
-    public override void TakeDamage(float power)
+    public override void TakeDamage(float power, float defense, float critical)
     {
-        if (power > status.Hp)
+
+        //animator.SetTrigger("Damaged");
+
+        float damage = base.CalculateDamage(power, defense, critical);
+
+        if (damage > status.Hp)
         {
             Die();
         }
-        //animator.SetTrigger("Damaged");
-
-        float damage = base.CalculateDamage(power);
 
         int damageInt = (int)damage;
 
@@ -73,6 +78,8 @@ public class Monster : Entity
         // »ç¸Á ·ÎÁ÷
         //animator.SetTrigger("Die");
         await Task.Delay(1500);
+
+        if(gameObject != null) 
         Destroy(gameObject);
     }
 }
