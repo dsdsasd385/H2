@@ -9,9 +9,9 @@ public struct Status
     private float _speed;    // 선공(speed가 높은쪽이 선공)
 
 
-    public event Action<int, int> OnHpChange;
-    public event Action<float, float> OnPowerChange;
-    public event Action<float, float> OnDefenseChange;
+    public event Action<int> OnHpChange;
+    public event Action<float> OnPowerChange;
+    public event Action<float> OnDefenseChange;
     public event Action<float> OnCriticalChange;
     public event Action<float> OnSpeedChange;
 
@@ -26,7 +26,7 @@ public struct Status
 
             if(oldHp != _hp)
             {
-                OnHpChange?.Invoke(oldHp, _hp);
+                OnHpChange?.Invoke(_hp);
 
                 Debug.Log($"체력이 변경되었습니다. 이전체력 : {oldHp}, 현재체력 : {_hp}");
             }
@@ -43,7 +43,7 @@ public struct Status
             _power = Mathf.Max(0, value);
             if(oldPower != _power)
             {
-                OnPowerChange?.Invoke(oldPower, _power);
+                OnPowerChange?.Invoke(_power);
                 Debug.Log($"공격력이 변경되었습니다. 이전공격력 : {oldPower}, 현재공격력 : {_power}");
             }
         } // 값이 0 이상만 설정되도록
@@ -60,7 +60,7 @@ public struct Status
             
             if(oldDefense != _defense)
             {
-                OnDefenseChange?.Invoke(oldDefense, _defense);
+                OnDefenseChange?.Invoke(_defense);
                 Debug.Log($"이 변경되었습니다. 이전방어력 : {oldDefense}, 현재방어력 : {_defense}");
 
             }
@@ -121,13 +121,7 @@ public struct Status
 }
 
 public abstract class Entity : MonoBehaviour
-{
-    public event Action<int, int> OnHpChange;
-    public event Action<float, float> OnPowerChange;
-    public event Action<float, float> OnDefenseChange;
-    public event Action<float> OnCriticalChange;
-    public event Action<float> OnSpeedChange;
-
+{  
     public Status status { get;protected set; }
 
     public bool myTurn;

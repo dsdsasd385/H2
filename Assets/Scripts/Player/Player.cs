@@ -43,28 +43,29 @@ public class Player : Entity
     /**********************************************************************************/
     /**********************************************************************************/
 
-    public Status status;
+    public Status status = new (50, 50f, 10f, 0.05f, 1f);
     [SerializeField] Animator animator;
 
+    public int _lastHp;
+    private PlayerUI _playerUI;
+    private PlayerItem _playerItem;
 
     private void Awake()
     {
+        _playerUI = GetComponent<PlayerUI>();
+        _playerItem = GetComponent<PlayerItem>();
         // UI 이벤트 연결
-        // if(OnHpChanged == null)
-        // status.OnHpChange += PlayerUI.SetHpVar;
-        // status.OnPowerChange += PlayerUI.SetPower;
-        // status.OnDefenseChange += PlayerUI.SetDefense;
-        // status.OnCriticalChange += PlayerUI.SetCritical;
-        // status.OnSpeedChange += PlayerUI.SetSpeed;
+        // PlayerEventChaining에서 체이닝
+
 
         // PlayerItem 이벤트 연결
         // 
-        SetEntity();
+        //SetEntity();
     }
 
     protected override void SetEntity()
     {
-        status = new(50, 50f, 10f, 0.05f, 1f);
+        //status = new(50, 50f, 10f, 0.05f, 1f);
         //status.hp = 150;
         //status.power = 50f;
         //status.defense = 10f;
@@ -114,6 +115,8 @@ public class Player : Entity
     // 체력변할때 이벤트
     public void OnHpChanged(float hp, float value)
     {
+        // 이전 체력 저장
+        _lastHp = status.Hp;
         // 체력 수정
         var newHp = status.Hp * (value / 100);
         status.Hp = (int)newHp;

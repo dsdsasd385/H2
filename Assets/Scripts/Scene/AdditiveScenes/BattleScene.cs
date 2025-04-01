@@ -12,11 +12,15 @@ public class BattleScene : AdditiveScene
 
     public Player player;
     public Monster monster;
+
+    public PlayerItem playerItem;
+
     
     protected override IEnumerator OnSceneLoaded()
     {
         playerPrefabs = GameObject.CreatePrimitive(PrimitiveType.Cube);
         player = playerPrefabs.AddComponent<Player>();
+        playerItem = playerPrefabs.AddComponent<PlayerItem>();
         playerPrefabs.transform.position = playerPos.position;
         playerPrefabs.transform.rotation = Quaternion.LookRotation(mapCenter.position);
 
