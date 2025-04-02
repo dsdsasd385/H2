@@ -21,15 +21,7 @@ public class Player : Entity
                     GameObject player = new GameObject("Player");
                     _instance = player.AddComponent<Player>();
 
-                }
-
-                else
-                {
-                    // 이럴일은 없겠지만 혹시나해서
-                    Destroy(_instance.gameObject);
-                    GameObject player = new GameObject("Player");
-                    _instance = player.AddComponent<Player>();
-                }
+                }               
 
                 DontDestroyOnLoad(_instance.gameObject);  // 씬이 변경되어도 유지
             }
@@ -43,7 +35,7 @@ public class Player : Entity
     /**********************************************************************************/
     /**********************************************************************************/
 
-    public Status status = new (50, 50f, 10f, 0.05f, 1f);
+    public Status status = new(50, 50f, 10f, 0.05f, 1f);
     [SerializeField] Animator animator;
 
     public int _lastHp;
@@ -52,6 +44,16 @@ public class Player : Entity
 
     private void Awake()
     {
+        // 중복방지
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
+        DontDestroyOnLoad(gameObject);
+
         _playerUI = GetComponent<PlayerUI>();
         _playerItem = GetComponent<PlayerItem>();
         // UI 이벤트 연결
@@ -113,37 +115,36 @@ public class Player : Entity
 
 
     // 체력변할때 이벤트
-    public void OnHpChanged(float hp, float value)
+    public void OnHpChanged(float hp, int value)
     {
         // 이전 체력 저장
         _lastHp = status.Hp;
         // 체력 수정
-        var newHp = status.Hp * (value / 100);
+        var newHp = _lastHp * (1 + value / 100f);
         status.Hp = (int)newHp;
-
     }
 
     // 공격력변할때 이벤트
-    public void OnPowerChanged(float power, float value)
+    public void OnPowerChanged(float power, int value)
     {
         // 공격력 수정
-        status.Power *= (value /100);
+        status.Power *= (1 + value / 100f);
         Debug.Log($"공격력이 변경되었습니다. {status.Power}");
     }
     // 방어력변할때 이벤트
-    public void OnDefenseChanged(float defense, float value)
+    public void OnDefenseChanged(float defense, int value)
     {
         // 방어력 수정
-        status.Defense *= (value / 100);
+        status.Defense *= (1 + value / 100f);
 
         Debug.Log($"방어력이 변경되었습니다. {status.Defense}");
     }
 
-    public void OnCriticalChanged(float value)
+    public void OnCriticalChanged(int value)
     {
-        status.Critical *= value;
+        status.Critical *= (1 + value / 100f);
         Debug.Log($"크리티컬이 변경되었습니다. {status.Critical}");
     }
 
-    
+
 }

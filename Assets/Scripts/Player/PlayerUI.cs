@@ -31,5 +31,10 @@ public class PlayerUI : MonoBehaviour
 
     }
 
+    public void SetCoinText(int coin)
+    {
+
+    }
+
 
 }

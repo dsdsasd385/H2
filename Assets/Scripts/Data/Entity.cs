@@ -23,14 +23,10 @@ public struct Status
             int oldHp = _hp;
             // hp 값이 0 이하로 설정되지 않도록
             _hp = Mathf.Max(0, value);
+            OnHpChange?.Invoke(_hp);
+            Debug.Log($"체력이 변경되었습니다. 이전체력 : {oldHp}, 현재체력 : {_hp}");
 
-            if(oldHp != _hp)
-            {
-                OnHpChange?.Invoke(_hp);
-
-                Debug.Log($"체력이 변경되었습니다. 이전체력 : {oldHp}, 현재체력 : {_hp}");
-            }
-        }  
+        }
     }
 
 
@@ -41,11 +37,9 @@ public struct Status
         {
             float oldPower = _power;
             _power = Mathf.Max(0, value);
-            if(oldPower != _power)
-            {
-                OnPowerChange?.Invoke(_power);
-                Debug.Log($"공격력이 변경되었습니다. 이전공격력 : {oldPower}, 현재공격력 : {_power}");
-            }
+            OnPowerChange?.Invoke(_power);
+            Debug.Log($"공격력이 변경되었습니다. 이전공격력 : {oldPower}, 현재공격력 : {_power}");
+
         } // 값이 0 이상만 설정되도록
     }
 
@@ -57,13 +51,10 @@ public struct Status
         {
             float oldDefense = _defense;
             _defense = Mathf.Max(0, value);
-            
-            if(oldDefense != _defense)
-            {
-                OnDefenseChange?.Invoke(_defense);
-                Debug.Log($"이 변경되었습니다. 이전방어력 : {oldDefense}, 현재방어력 : {_defense}");
+            OnDefenseChange?.Invoke(_defense);
+            Debug.Log($"이 변경되었습니다. 이전방어력 : {oldDefense}, 현재방어력 : {_defense}");
 
-            }
+
         } // 값이 0 이상만 설정되도록
     }
 
@@ -121,8 +112,8 @@ public struct Status
 }
 
 public abstract class Entity : MonoBehaviour
-{  
-    public Status status { get;protected set; }
+{
+    public Status status { get; protected set; }
 
     public bool myTurn;
 
@@ -135,23 +126,23 @@ public abstract class Entity : MonoBehaviour
     // 피해 입음
     public virtual void TakeDamage(float power, float defense, float critical)
     {
-        float damage = CalculateDamage(power, defense , critical);
+        float damage = CalculateDamage(power, defense, critical);
     }
 
     // 피해량 계산
-    protected float CalculateDamage(float power , float defense, float critical)
+    protected float CalculateDamage(float power, float defense, float critical)
     {
         float finalDamage = power;
         float criticaMultplier = 2.0f;
-        if(UnityEngine.Random.value < critical)
+        if (UnityEngine.Random.value < critical)
         {
             finalDamage *= criticaMultplier;
-            Debug.Log($"크리티컬 데미지! : {finalDamage}");            
+            Debug.Log($"크리티컬 데미지! : {finalDamage}");
         }
 
         float defenseRate = defense / (1 + defense);  // 방어율 계산
         Debug.Log($"방어율은 {defenseRate}");
-        
+
         finalDamage = finalDamage * (1 - defenseRate);
         Debug.Log($"최종 데미지는 {finalDamage}");
         return finalDamage;  // 계산된 피해량 리턴
