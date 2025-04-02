@@ -36,5 +36,10 @@ public class PlayerUI : MonoBehaviour
 
     }
 
+    public void SetExp(int exp)
+    {
+
+    }
+
 
 }

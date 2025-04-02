@@ -29,7 +29,7 @@ public static class Roulette
             return _rouletteTypes;
         }
     }
-
+        
     public static IEnumerator OnRoulette(Action<RouletteResult> result)
     {
         yield return Delay.WaitRandom(1f, 1.5f);
@@ -39,7 +39,7 @@ public static class Roulette
         result?.Invoke(GetResult(randomType));
     }
     
-    private static RouletteResult GetResult(StageRouletteType type)
+        private static RouletteResult GetResult(StageRouletteType type)
     {
         string dialogFormat = null;
         string dialog = null;
@@ -51,20 +51,16 @@ public static class Roulette
                 dialogFormat = Dialog.Get(1001);
                 value = Random.Range(5, 16);
                 dialog = string.Format(dialogFormat, value);
-                Player.Instance.OnHpChanged(Player.Instance.status.Hp, value);
-                Console.WriteLine(($"·ê·¿ÀÇ Ã¼·Â°ªÀº {value}")); 
                 break;
             case StageRouletteType.RESHARPENING_WEAPON:
                 dialogFormat = Dialog.Get(1002);
                 value = Random.Range(5, 16);
                 dialog = string.Format(dialogFormat, value);
-                Player.Instance.OnPowerChanged(Player.Instance.status.Power, value);
                 break;
             case StageRouletteType.CLEANING_ARMOR:
                 dialogFormat = Dialog.Get(1003);
                 value = Random.Range(5, 16);
                 dialog = string.Format(dialogFormat, value);
-                Player.Instance.OnDefenseChanged(Player.Instance.status.Defense, value);
                 break;
             case StageRouletteType.PICK_COIN:
                 dialogFormat = Dialog.Get(1004);
@@ -76,20 +72,17 @@ public static class Roulette
                 dialogFormat = Dialog.Get(1005);
                 value = Random.Range(-15, -6);
                 dialog = string.Format(dialogFormat, value);
-                Player.Instance.OnHpChanged(Player.Instance.status.Hp, value);
                 break;
             case StageRouletteType.BROKEN_WEAPON:
                 dialogFormat = Dialog.Get(1006);
                 value = Random.Range(-15, -6);
                 dialog = string.Format(dialogFormat, value);
-                Player.Instance.OnPowerChanged(Player.Instance.status.Power, value);
 
                 break;
             case StageRouletteType.LOOSEN_ARMOR:
                 dialogFormat = Dialog.Get(1007);
                 value = Random.Range(-15, -6);
                 dialog = string.Format(dialogFormat, value);
-                Player.Instance.OnDefenseChanged(Player.Instance.status.Defense, value);
                 break;
             case StageRouletteType.LOST_COIN:
                 dialogFormat = Dialog.Get(1008);

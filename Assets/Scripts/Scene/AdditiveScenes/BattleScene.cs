@@ -18,6 +18,7 @@ public class BattleScene : AdditiveScene
     
     protected override IEnumerator OnSceneLoaded()
     {
+
         playerPrefabs = GameObject.CreatePrimitive(PrimitiveType.Cube);
         player = playerPrefabs.AddComponent<Player>();
         playerItem = playerPrefabs.AddComponent<PlayerItem>();

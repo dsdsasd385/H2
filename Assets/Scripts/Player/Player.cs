@@ -1,61 +1,29 @@
 using NaughtyAttributes;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
 public class Player : Entity
 {
-    #region 싱글톤 
-    private static Player _instance;
 
-    public static Player Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<Player>();
-
-                if (_instance == null)
-                {
-                    GameObject player = new GameObject("Player");
-                    _instance = player.AddComponent<Player>();
-
-                }               
-
-                DontDestroyOnLoad(_instance.gameObject);  // 씬이 변경되어도 유지
-            }
-
-            return _instance;
-        }
-    }
-    #endregion
-
-
-    /**********************************************************************************/
-    /**********************************************************************************/
+    private StageRouletteType _stageRouletteTypes;
 
     public Status status = new(50, 50f, 10f, 0.05f, 1f);
     [SerializeField] Animator animator;
 
     public int _lastHp;
     private PlayerUI _playerUI;
-    private PlayerItem _playerItem;
+
+    private event Action<RouletteResult> roulette;
+
 
     private void Awake()
     {
-        // 중복방지
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _instance = this;
-        DontDestroyOnLoad(gameObject);
 
         _playerUI = GetComponent<PlayerUI>();
-        _playerItem = GetComponent<PlayerItem>();
         // UI 이벤트 연결
         // PlayerEventChaining에서 체이닝
 
@@ -65,6 +33,15 @@ public class Player : Entity
         //SetEntity();
     }
 
+    private void OnEnable()
+    {
+        Chapter.RouletteResultChangedEvent += SetStatus;
+    }
+
+    private void OnDisable()
+    {
+        Chapter.RouletteResultChangedEvent -= SetStatus;
+    }
     protected override void SetEntity()
     {
         //status = new(50, 50f, 10f, 0.05f, 1f);
@@ -114,25 +91,57 @@ public class Player : Entity
     }
 
 
+
+    private void SetStatus(RouletteResult result)
+    {
+        switch (result.Type)
+        {
+            case StageRouletteType.EXERCISE:
+                OnHpChanged(result.ChangeValue);
+                Debug.Log($"체력 증가! {result.ChangeValue}%");
+                break;
+            case StageRouletteType.RESHARPENING_WEAPON:
+                OnPowerChanged(result.ChangeValue);
+                Debug.Log($"공격력 증가! {result.ChangeValue}%");
+                break;
+            case StageRouletteType.CLEANING_ARMOR:
+                OnDefenseChanged(result.ChangeValue);
+                Debug.Log($"방어력 증가! {result.ChangeValue}%");
+                break; 
+            case StageRouletteType.BUG_BITE:
+                OnHpChanged(result.ChangeValue);
+                Debug.Log($"체력 감소! {result.ChangeValue} %");
+                break;
+            case StageRouletteType.BROKEN_WEAPON:
+                OnPowerChanged(result.ChangeValue);
+                Debug.Log($"공격력 감소! {result.ChangeValue} %");
+                break;
+            case StageRouletteType.LOOSEN_ARMOR:
+                OnDefenseChanged(result.ChangeValue);
+                Debug.Log($"방어력 감소! {result.ChangeValue} %");
+                break;
+        }
+    }
     // 체력변할때 이벤트
-    public void OnHpChanged(float hp, int value)
+    public void OnHpChanged(int value)
     {
         // 이전 체력 저장
         _lastHp = status.Hp;
         // 체력 수정
         var newHp = _lastHp * (1 + value / 100f);
         status.Hp = (int)newHp;
+        Debug.Log($"체력이 변경되었습니다. {status.Hp}");
     }
 
     // 공격력변할때 이벤트
-    public void OnPowerChanged(float power, int value)
+    public void OnPowerChanged(int value)
     {
         // 공격력 수정
         status.Power *= (1 + value / 100f);
         Debug.Log($"공격력이 변경되었습니다. {status.Power}");
     }
     // 방어력변할때 이벤트
-    public void OnDefenseChanged(float defense, int value)
+    public void OnDefenseChanged(int value)
     {
         // 방어력 수정
         status.Defense *= (1 + value / 100f);

@@ -115,8 +115,6 @@ public abstract class Entity : MonoBehaviour
 {
     public Status status { get; protected set; }
 
-    public bool myTurn;
-
     // ½ºÅÝ ±¸Çö
     protected abstract void SetEntity();
 

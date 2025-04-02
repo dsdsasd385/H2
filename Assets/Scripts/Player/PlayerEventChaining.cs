@@ -5,10 +5,10 @@ using static UnityEditor.Progress;
 
 public class PlayerEventChaining : MonoBehaviour
 {
-
     private Status _status;
     private PlayerUI _playerUI;
     private PlayerItem _item;
+
     private void Awake()
     {
         _playerUI = GetComponent<PlayerUI>();
@@ -19,7 +19,7 @@ public class PlayerEventChaining : MonoBehaviour
 
     private void SubscribeToEvents()
     {
-        _item.OnChangeCoin += _playerUI.SetCoinText;
+        PlayerItem.Instance.OnChangeCoin += _playerUI.SetCoinText;
         _status.OnHpChange += _playerUI.SetHpVar;
         _status.OnPowerChange += _playerUI.SetPowerText;
         _status.OnDefenseChange += _playerUI.SetDefenseText;
@@ -29,7 +29,7 @@ public class PlayerEventChaining : MonoBehaviour
 
     private void OnDestroy()
     {
-        _item.OnChangeCoin -= _playerUI.SetCoinText;
+        PlayerItem.Instance.OnChangeCoin    -= _playerUI.SetCoinText;
         _status.OnHpChange -= _playerUI.SetHpVar;
         _status.OnPowerChange -= _playerUI.SetPowerText;
         _status.OnDefenseChange -= _playerUI.SetDefenseText;

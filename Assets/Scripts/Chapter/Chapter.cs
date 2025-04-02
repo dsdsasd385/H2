@@ -8,12 +8,19 @@ using UnityEngine;
 public abstract class Chapter : MonoBehaviour
 {
     public static event Action<int, StageType> StageChangedEvent;
+    public static event Action<RouletteResult> RouletteResultChangedEvent;
 
     private static IEnumerator OnRoulette()
     {
         RouletteResult result = default;
 
-        yield return Roulette.OnRoulette(res => result = res);
+        yield return Roulette.OnRoulette(res =>  
+        {
+            result = res;
+            Debug.Log($"룰렛 실행 : 값은 {res.ChangeValue}, 결과 타입은{res.Type}");
+            RouletteResultChangedEvent?.Invoke(result);
+        });
+
 
         var logs = result.Dialog.Split('\n');
 
@@ -35,8 +42,11 @@ public abstract class Chapter : MonoBehaviour
     [ShowNativeProperty] public int        BattleCount     => stageList.Count(stage => stage == StageType.BATTLE);
     
     [SerializeField]                       private List<StageType> stageList;
+    [SerializeField] private GameObject playerPrefab;  // 인스펙터에서 할당
+
     [MinMaxSlider(1f, 5f), SerializeField] private Vector2         growthRateRange;
 
+    private Player player;
     private List<IEnumerator> _stageActions = new();
     private GrowthRate        _growthRate;
 
@@ -47,14 +57,23 @@ public abstract class Chapter : MonoBehaviour
     {
         // todo
         // Loading Player
+        SetPlayer();
         // Loading Map
-        // Stage Start
-        
+
         StagePlayUI.Initialize();
         
         _growthRate = new(growthRateRange, BattleCount);
 
         SetStageAction();
+    }
+
+    private void SetPlayer()
+    {
+        if(player == null)
+        {
+            GameObject playerObj = Instantiate(playerPrefab);
+            player = playerObj.GetComponent<Player>();
+        }
     }
 
     private void SetStageAction()

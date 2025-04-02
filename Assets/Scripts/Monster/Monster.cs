@@ -7,7 +7,9 @@ public class Monster : Entity
     public Status status;
 
     [SerializeField] Animator animator;
+    private Player _playerTarget;
 
+    private int _exp = 30;
     private void Awake()
     {
         // status.OnHpChange += MonsterUI.SetHpVar;
@@ -41,13 +43,13 @@ public class Monster : Entity
 
     public override void Attack(Entity target)
     {
-        Player playerTarget = target as Player;
+        _playerTarget = target as Player;
 
         if (target is Player)
         {
             //animator.SetTrigger("Attack");
 
-            target.TakeDamage(status.Power, playerTarget.status.Defense, status.Critical);
+            target.TakeDamage(status.Power, _playerTarget.status.Defense, status.Critical);
         }
 
         else
@@ -77,9 +79,11 @@ public class Monster : Entity
     {
         // »ç¸Á ·ÎÁ÷
         //animator.SetTrigger("Die");
+        
         await Task.Delay(1500);
+        PlayerExp.Instance.AddExp(_exp);
 
-        if(gameObject != null) 
+        if (gameObject != null) 
         Destroy(gameObject);
     }
 }
