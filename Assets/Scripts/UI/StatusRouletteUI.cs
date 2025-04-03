@@ -7,8 +7,10 @@ public class StatusRouletteUI : UI
     public static IEnumerator ShowRouletteImage(StageRouletteType type, float duration = 2f)
     {
         var ui = UI.Open<StatusRouletteUI>();
-        
-        // todo get sprite by type
+
+        var sprite = ResourceManager.GetSprite(type.ToString());
+
+        ui.imgRoulette.sprite = sprite;
 
         yield return ui.imgRoulette.FadeIn();
 
