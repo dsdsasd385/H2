@@ -4,10 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.Rendering.DebugUI;
 
 public class Player : Entity
 {
+    public static bool loadToPlayer;
 
     private StageRouletteType _stageRouletteTypes;
 
@@ -15,13 +17,17 @@ public class Player : Entity
     [SerializeField] Animator animator;
 
     public int _lastHp;
-    private PlayerUI _playerUI;
 
+    private PlayerUI _playerUI;
     private event Action<RouletteResult> roulette;
+    private Transform _oldTransform;
+    private Scene _oldScene;
 
 
     private void Awake()
     {
+        _oldScene = SceneManager.GetActiveScene();
+        Debug.Log($"OidScene Name : {_oldScene.name}");
 
         _playerUI = GetComponent<PlayerUI>();
         // UI 이벤트 연결
@@ -36,11 +42,22 @@ public class Player : Entity
     private void OnEnable()
     {
         Chapter.RouletteResultChangedEvent += SetStatus;
+        Battle.BattleStart += MoveToBattleScene;
+        Battle.BattleEnd += MoveToBattleScene;
     }
 
     private void OnDisable()
     {
         Chapter.RouletteResultChangedEvent -= SetStatus;
+        Battle.BattleStart -= MoveToBattleScene;
+        Battle.BattleEnd -= MoveToBattleScene;
+    }
+    private void OnDestroy()
+    {
+        Chapter.RouletteResultChangedEvent -= SetStatus;
+        Battle.BattleStart -= MoveToBattleScene;
+        Battle.BattleEnd -= MoveToBattleScene;
+
     }
     protected override void SetEntity()
     {
@@ -90,7 +107,22 @@ public class Player : Entity
         Destroy(gameObject);
     }
 
+    private void MoveToBattleScene()
+    {
+        if (Battle._battle && Battle.IsBattle)
+        {
+            SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName("BattleScene"));
+        }
+        else
+        {
+            SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName(_oldScene.name));
+        }
+    }
 
+    private void ReturnOidScene()
+    {
+        SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName(_oldScene.name));
+    }
 
     private void SetStatus(RouletteResult result)
     {
@@ -107,7 +139,7 @@ public class Player : Entity
             case StageRouletteType.CLEANING_ARMOR:
                 OnDefenseChanged(result.ChangeValue);
                 Debug.Log($"방어력 증가! {result.ChangeValue}%");
-                break; 
+                break;
             case StageRouletteType.BUG_BITE:
                 OnHpChanged(result.ChangeValue);
                 Debug.Log($"체력 감소! {result.ChangeValue} %");

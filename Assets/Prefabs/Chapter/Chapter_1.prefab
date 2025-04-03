@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26d10a048beb4560b2ec9a47c10b473a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageList: 0000000000000000000000000000000000000000
+  stageList: 000000000100000002000000000000000100000002000000
   playerPrefab: {fileID: 3161377970867179447, guid: 58a6fcdf878aa6b42a2b87cb071b1fcb,
     type: 3}
   growthRateRange: {x: 1, y: 1.15}

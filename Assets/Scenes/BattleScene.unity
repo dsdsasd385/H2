@@ -173,10 +173,14 @@ MonoBehaviour:
   - {fileID: 1675404965}
   - {fileID: 679357915}
   - {fileID: 605618283}
-  playerPrefabs: {fileID: 0}
-  monsterPrefabs: {fileID: 0}
-  player: {fileID: 0}
-  monster: {fileID: 0}
+  playerPrefabs: {fileID: 3161377970867179447, guid: 58a6fcdf878aa6b42a2b87cb071b1fcb,
+    type: 3}
+  monsterPrefabs: {fileID: 723457909043310149, guid: b087fc24ead7a7746aaf9fd8c8696017,
+    type: 3}
+  player: {fileID: 8304495042102914515, guid: 58a6fcdf878aa6b42a2b87cb071b1fcb, type: 3}
+  monster: {fileID: 8222381801421552123, guid: b087fc24ead7a7746aaf9fd8c8696017, type: 3}
+  playerItem: {fileID: 511225256562530393, guid: 58a6fcdf878aa6b42a2b87cb071b1fcb,
+    type: 3}
 --- !u!1 &213940293
 GameObject:
   m_ObjectHideFlags: 0

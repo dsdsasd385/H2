@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 
 public class Monster : Entity
 {
-    public Status status;
+    public Status status = new(30, 20f, 5f, 0.05f, 0.8f);
+
 
     [SerializeField] Animator animator;
     private Player _playerTarget;
@@ -21,7 +22,6 @@ public class Monster : Entity
     }
     protected override void SetEntity()
     {
-        status = new(50, 50f, 10f, 0.05f, 1f);
         //status.hp = 150;
         //status.power = 50f;
         //status.defense = 10f;
@@ -83,7 +83,7 @@ public class Monster : Entity
         await Task.Delay(1500);
         PlayerExp.Instance.AddExp(_exp);
 
-        if (gameObject != null) 
-        Destroy(gameObject);
+        if (gameObject != null)
+            Destroy(this.gameObject);
     }
 }
