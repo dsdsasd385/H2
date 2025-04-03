@@ -1,8 +1,15 @@
+using System;
 using System.Collections;
+using System.Threading;
 using UnityEngine;
 
 public class BattleScene : AdditiveScene
 {
+    public static event Action<BattleScene> SceneLoaded;
+
+    /************************************************************************************************************************/
+    /************************************************************************************************************************/
+
     public Transform   mapCenter;
     public Transform   playerPos;
     public Transform[] monsterPos;
@@ -19,14 +26,18 @@ public class BattleScene : AdditiveScene
     protected override IEnumerator OnSceneLoaded()
     {
 
-        playerPrefabs = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        player = playerPrefabs.AddComponent<Player>();
-        playerItem = playerPrefabs.AddComponent<PlayerItem>();
+        //playerPrefabs = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //player = playerPrefabs.AddComponent<Player>();
+        //playerItem = playerPrefabs.AddComponent<PlayerItem>();
+        if(player == null)
+        player = Instantiate(playerPrefabs).GetComponent<Player>();
+
         playerPrefabs.transform.position = playerPos.position;
         playerPrefabs.transform.rotation = Quaternion.LookRotation(mapCenter.position);
 
-        monsterPrefabs = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        monster = monsterPrefabs.AddComponent<Monster>();
+        //monsterPrefabs = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        //monster = monsterPrefabs.AddComponent<Monster>();
+        monster = Instantiate(monsterPrefabs).GetComponent<Monster>();
         monsterPrefabs.transform.position = monsterPos[0].position;
         monsterPrefabs.transform.rotation = Quaternion.LookRotation(mapCenter.position);
 

@@ -9,7 +9,7 @@ public abstract class Chapter : MonoBehaviour
 {
     public static event Action<int, StageType> StageChangedEvent;
     public static event Action<RouletteResult> RouletteResultChangedEvent;
-
+    public static GameObject playerObj { get; private set; }
     private static IEnumerator OnRoulette()
     {
         RouletteResult result = default;
@@ -46,7 +46,7 @@ public abstract class Chapter : MonoBehaviour
 
     [MinMaxSlider(1f, 5f), SerializeField] private Vector2         growthRateRange;
 
-    private Player player;
+
     private List<IEnumerator> _stageActions = new();
     private GrowthRate        _growthRate;
 
@@ -69,10 +69,9 @@ public abstract class Chapter : MonoBehaviour
 
     private void SetPlayer()
     {
-        if(player == null)
+        if(playerObj == null)
         {
-            GameObject playerObj = Instantiate(playerPrefab);
-            player = playerObj.GetComponent<Player>();
+            playerObj = Instantiate(playerPrefab);
         }
     }
 

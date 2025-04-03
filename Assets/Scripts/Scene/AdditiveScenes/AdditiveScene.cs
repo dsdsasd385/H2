@@ -13,6 +13,8 @@ public abstract class AdditiveScene : MonoBehaviour
     private static Scene         _currentScene;
     private static AudioListener _audioListener;
     
+
+
     public static IEnumerator LoadSceneAsync<T>(float width, float height, float yPos, Action<T> loadedScene) where T : AdditiveScene
     {
         var sceneName = typeof(T).Name;
@@ -30,7 +32,6 @@ public abstract class AdditiveScene : MonoBehaviour
         SceneManager.SetActiveScene(_currentScene);
 
         yield return CurrentAdditiveScene.Initialize(width, height, yPos);
-        
         loadedScene?.Invoke(CurrentAdditiveScene as T);
     }
     
