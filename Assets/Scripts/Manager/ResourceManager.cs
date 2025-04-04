@@ -24,12 +24,17 @@ public class ResourceManager : MonoBehaviour
     }
     #endregion
 
-    [SerializeField] private List<Sprite> imgList;
+    [SerializeField] private List<GameObject> prefabList;
+    [SerializeField] private List<Sprite>     imgList;
 
-    private Dictionary<string, Sprite> _sprites;
+    private Dictionary<string, GameObject> _prefabs;
+    private Dictionary<string, Sprite>     _sprites;
 
     private void Awake()
     {
+        _prefabs = prefabList
+            .ToDictionary(prefab => prefab.name, prefab => prefab);
+        
         _sprites = imgList
             .ToDictionary(img => img.name, img => img);
     }
@@ -40,5 +45,13 @@ public class ResourceManager : MonoBehaviour
             throw new($"Image[{spriteName}] has not added to ResourceManager.");
         
         return img;
+    }
+
+    public static T GetPrefab<T>(string prefabName) where T : Component
+    {
+        if (Instance._prefabs.TryGetValue(prefabName, out var prefab) == false)
+            throw new($"Prefab[{prefabName}] has not added to ResourceManager.");
+
+        return prefab.GetComponent<T>();
     }
 }
