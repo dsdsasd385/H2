@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23b0da5c09e9484185ecaf85cf34576b, type: 3}
+  m_Name: PuzzleSettings
+  m_EditorClassIdentifier: 
+  tilePrefab: {fileID: 812390381429852609, guid: a3d31747508ba9349be0d2f0f918239a,
+    type: 3}
+  viewPrefab: {fileID: 5659408712183161083, guid: fdbb41ec470c7824f95a2e22b78fb03f,
+    type: 3}
+  particlePrefab: {fileID: 3185806160049473690, guid: 0dc306c21675ff747be0a4b4d7dea7dc,
+    type: 3}
+  tileFloatingAmp: 35
+  tileFloatingDuration: 1
+  delayEachTile: 0.05
+  fadeInDuration: 0.1
+  fadeInEase: 24
+  moveDuration: 0.25
+  moveEase: 21
+  removeTileDuration: 0.5
+  removeEase: 34
+  jumpOnMerge: 30
+  particleMinDuration: 0.3
+  particleMaxDuration: 0.8
+  particleMinSize: 1.5
+  particleMaxSize: 2
+  particleMinSpeed: 60
+  particleMaxSpeed: 120
