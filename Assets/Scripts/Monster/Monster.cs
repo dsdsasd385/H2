@@ -4,13 +4,15 @@ using System.Threading.Tasks;
 
 public class Monster : Entity
 {
-    public Status status = new(30, 20f, 5f, 0.05f, 0.8f);
+    public Status _status = new(30, 20f, 3f, 0.05f, 0.8f);
 
 
     [SerializeField] Animator animator;
     private Player _playerTarget;
 
     private int _exp = 30;
+
+
     private void Awake()
     {
         // status.OnHpChange += MonsterUI.SetHpVar;
@@ -18,17 +20,9 @@ public class Monster : Entity
         // status.OnDefenseChange += MonsterUI.SetDefense;
         // status.OnCriticalChange += MonsterUI.SetCritical;
         // status.OnSpeedChange += MonsterUI.SetSpeed;
-        SetEntity();
-    }
-    protected override void SetEntity()
-    {
-        //status.hp = 150;
-        //status.power = 50f;
-        //status.defense = 10f;
-        //status.critical = 0.5f;
-        //status.speed = 1;
     }
 
+    //public override void SetStatus() { }
     public void UpgradeStatus(float multiplier)
     {
         //float multHp = (float)status.hp * multiplier;
@@ -38,7 +32,7 @@ public class Monster : Entity
         //status.critical *= multiplier;
         //status.speed *= multiplier;
 
-        status = status * multiplier;
+        _status = _status * multiplier;
     }
 
     public override void Attack(Entity target)
@@ -49,7 +43,7 @@ public class Monster : Entity
         {
             //animator.SetTrigger("Attack");
 
-            target.TakeDamage(status.Power, _playerTarget.status.Defense, status.Critical);
+            target.TakeDamage(_status.Power, _playerTarget._status.Defense, _status.Critical);
         }
 
         else
@@ -65,14 +59,14 @@ public class Monster : Entity
 
         float damage = base.CalculateDamage(power, defense, critical);
 
-        if (damage > status.Hp)
+        if (damage > _status.Hp)
         {
             Die();
         }
 
         int damageInt = (int)damage;
 
-        status.Hp -= damageInt;
+       _status.Hp -= damageInt;
     }
 
     protected async override void Die()
@@ -81,9 +75,9 @@ public class Monster : Entity
         //animator.SetTrigger("Die");
         
         await Task.Delay(1500);
-        PlayerExp.Instance.AddExp(_exp);
+  // 경험치 주기
 
-        if (gameObject != null)
-            Destroy(this.gameObject);
+        //if (gameObject != null)
+        //    Destroy(this.gameObject);
     }
 }

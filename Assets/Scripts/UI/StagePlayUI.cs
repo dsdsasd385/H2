@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,12 @@ public class StagePlayUI : UI
 
     private readonly List<GameObject> _dialogList = new();
 
+    [SerializeField] private List<TMP_Text> _textList = new();
+
+    public TMP_Text GetText(string key)
+    {
+        return _textList.Find(text => text.name == key);
+    }
     public static void Initialize()
     {
         for (var i = 0; i < Instance._dialogList.Count; i++)

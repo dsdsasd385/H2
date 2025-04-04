@@ -66,7 +66,6 @@ public static class Roulette
                 dialogFormat = Dialog.Get(1004);
                 value = Random.Range(500, 1501);
                 dialog = string.Format(dialogFormat, value);
-                PlayerItem.Instance.SetGold(value);
                 break;
             case StageRouletteType.BUG_BITE:
                 dialogFormat = Dialog.Get(1005);
@@ -88,7 +87,6 @@ public static class Roulette
                 dialogFormat = Dialog.Get(1008);
                 value = Random.Range(-1500, -501);
                 dialog = string.Format(dialogFormat, value);
-                PlayerItem.Instance.SetGold(value);
                 break;
         }
 
