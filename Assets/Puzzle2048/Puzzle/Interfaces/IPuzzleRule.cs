@@ -5,9 +5,7 @@ namespace Puzzle2048
     public interface IPuzzleRule
     {
         int GetBoardSize();
-        
-        bool IsGameWin(int totalMovedCount);
-        
+        int GetTotalMoveCount();
         bool ShouldRemoveTile(Vector2Int position, int value);
     }
 }

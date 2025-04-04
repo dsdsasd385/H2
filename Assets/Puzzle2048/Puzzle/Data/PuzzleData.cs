@@ -9,8 +9,7 @@ namespace Puzzle2048
         WAIT_FOR_INPUT,
         HANDLE_MOVE,
         HANDLE_UNDO,
-        WIN,
-        DEFEAT,
+        GAME_OVER,
     }
     
     public enum InputDirection

@@ -2,6 +2,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Puzzle2048
 {
@@ -32,7 +33,7 @@ namespace Puzzle2048
         }
         #endregion
 
-        public static void PlayParticle(Transform ui, Vector2 anchoredPos, int mergeValue)
+        public static void PlayMergeParticle(Transform ui, Vector2 anchoredPos, int mergeValue)
         {
             int count = mergeValue switch
             {
@@ -45,9 +46,24 @@ namespace Puzzle2048
             {
                 var angle = (360 / count) * i;
                 var particle = Pool.Get();
+                particle.img.sprite = PuzzleSettings.GetParticleSprite(0);
                 particle.transform.SetParent(ui, false);
                 particle.rect.anchoredPosition = anchoredPos;
-                particle.Initialize(angle);
+                particle.PlaySpread(angle);
+            }
+        }
+
+        public static void PlayCoinParticle(Transform ui, Vector2 anchoredPos, Vector2 to)
+        {
+            int count = Random.Range(10, 15);
+            
+            for (int i = 0; i < count; i++)
+            {
+                var particle = Pool.Get();
+                particle.img.sprite = PuzzleSettings.GetParticleSprite(1);
+                particle.transform.SetParent(ui, false);
+                particle.rect.anchoredPosition = anchoredPos;
+                particle.FlyTo(to);
             }
         }
         
@@ -57,14 +73,14 @@ namespace Puzzle2048
         [SerializeField] private RectTransform rect;
         [SerializeField] private Image         img;
 
-        private void Initialize(float angle)
+        private Sequence PlaySpread(float angle)
         {
             float duration = Random.Range(PuzzleSettings.ParticleMinDuration, PuzzleSettings.ParticleMaxDuration);
             float size     = Random.Range(PuzzleSettings.ParticleMinSize, PuzzleSettings.ParticleMaxSize);
             float speed    = Random.Range(PuzzleSettings.ParticleMinSpeed, PuzzleSettings.ParticleMaxSpeed);
 
             rect.localScale = Vector3.one * size;
-            img.color = new Color(1f, 1f, 1f, 1f); // 혹시 누락되어 있을 경우 대비
+            img.color = new Color(1f, 1f, 1f, 1f);
 
             float rad = angle * Mathf.Deg2Rad;
             Vector2 direction = new Vector2(Mathf.Cos(rad), Mathf.Sin(rad)).normalized;
@@ -80,7 +96,34 @@ namespace Puzzle2048
                 .SetEase(Ease.OutQuad));
 
             seq.OnComplete(() => Pool.Release(this));
+
+            return seq;
         }
 
+        private Sequence FlyTo(Vector2 to)
+        {
+            float duration = Random.Range(PuzzleSettings.ParticleMinDuration, PuzzleSettings.ParticleMaxDuration);
+            float size     = Random.Range(PuzzleSettings.ParticleMinSize, PuzzleSettings.ParticleMaxSize) * 0.75f;
+            
+            img.color = new Color(1f, 1f, 1f, 1f);
+
+           float spin = Random.Range(-180f, 180f);
+
+            Sequence seq = DOTween.Sequence();
+
+            seq.Join(rect.DOAnchorPos(to, duration).SetEase(Ease.InCubic));
+            seq.Join(rect.DOScale(size, duration).SetEase(Ease.OutSine));
+            seq.Join(rect.DOLocalRotate(new Vector3(0, 0, spin), duration, RotateMode.FastBeyond360));
+            seq.Append(rect.DOScale(0, 0.15f));
+
+            seq.OnComplete(() => Pool.Release(this));
+
+            return seq;
+        }
+
+        private void OnDisable()
+        {
+            rect.DOScale(1, 0);
+        }
     }
 }

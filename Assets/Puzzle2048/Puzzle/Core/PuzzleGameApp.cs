@@ -16,7 +16,6 @@ namespace Puzzle2048
         public event Action<int>                         TotalMoveChangedEvent;
         public event Action<int>                         TotalUndoChangedEvent;
         public event Action<bool>                        UndoAbleChangeEvent;
-        public event Action<Dictionary<Vector2Int, int>> GameWinEvent;
         public event Action<Dictionary<Vector2Int, int>> GameOverEvent;
 
         private IPuzzleRule    _rule;
@@ -41,6 +40,11 @@ namespace Puzzle2048
         public void StartGame()
         {
             SetState(GameState.INITIALIZE);
+        }
+
+        public void FinishGame()
+        {
+            SetState(GameState.GAME_OVER);
         }
 
         public void Move(InputDirection dir)
@@ -84,11 +88,8 @@ namespace Puzzle2048
                 case GameState.HANDLE_UNDO:
                     _gameCoroutine = UndoCoroutine();
                     break;
-                case GameState.WIN:
-                    _gameCoroutine = WinCoroutine();
-                    break;
-                case GameState.DEFEAT:
-                    _gameCoroutine = DefeatCoroutine();
+                case GameState.GAME_OVER:
+                    _gameCoroutine = GameOverCoroutine();
                     break;
             }
 
@@ -119,7 +120,7 @@ namespace Puzzle2048
 
             if (emptyTiles.Count == 0)
             {
-                SetState(GameState.DEFEAT);
+                SetState(GameState.GAME_OVER);
                 yield break;
             }
 
@@ -130,7 +131,7 @@ namespace Puzzle2048
 
             if (_board.IsStuck())
             {
-                SetState(GameState.DEFEAT);
+                SetState(GameState.GAME_OVER);
                 yield break;
             }
             
@@ -172,12 +173,6 @@ namespace Puzzle2048
             
             yield return _view.MoveTile(mergeResult, moveResult);
             
-            if (_rule?.IsGameWin(_totalMove) ?? false)
-            {
-                SetState(GameState.WIN);
-                yield break;
-            }
-            
             SetState(GameState.SPAWN_TILE);
         }
 
@@ -200,14 +195,7 @@ namespace Puzzle2048
             SetState(GameState.WAIT_FOR_INPUT);
         }
 
-        private IEnumerator WinCoroutine()
-        {
-            GameWinEvent?.Invoke(_board.GetBoardSnapshot());
-            
-            yield break;
-        }
-
-        private IEnumerator DefeatCoroutine()
+        private IEnumerator GameOverCoroutine()
         {
             GameOverEvent?.Invoke(_board.GetBoardSnapshot());
             

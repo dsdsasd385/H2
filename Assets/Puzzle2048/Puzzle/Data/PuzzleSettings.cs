@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
@@ -33,7 +34,8 @@ namespace Puzzle2048
         public static PuzzleView     GetViewPrefab()     => Instance.viewPrefab;
         public static PuzzleTile     GetTilePrefab()     => Instance.tilePrefab;
         public static PuzzleParticle GetParticlePrefab() => Instance.particlePrefab;
-
+        public static Sprite         GetParticleSprite(int index) => Instance.particleSpriteList[index];
+        
         public static float ParticleMinDuration => Instance.particleMinDuration;
         public static float ParticleMaxDuration => Instance.particleMaxDuration;
         public static float ParticleMinSize     => Instance.particleMinSize;
@@ -61,7 +63,8 @@ namespace Puzzle2048
         [SerializeField] private Ease  removeEase           = Ease.OutFlash;
         [SerializeField] private float jumpOnMerge          = 30f;
 
-        [Header("PARTICLE SETTINGS")]
+        [Header("PARTICLE SETTINGS")] 
+        [SerializeField] private List<Sprite> particleSpriteList;
         [SerializeField] private float particleMinDuration = 0.3f;
         [SerializeField] private float particleMaxDuration = 0.6f;
         [SerializeField] private float particleMinSize     = 0.5f;

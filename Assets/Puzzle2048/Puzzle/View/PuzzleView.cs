@@ -8,6 +8,7 @@ namespace Puzzle2048
     {
         [SerializeField] private RectTransform boardRect;
         [SerializeField] private RectTransform particleLayout;
+        [SerializeField] private RectTransform flyTarget;
 
         public Vector2 GetBoardRect()   => boardRect.rect.size;
         public Vector2 GetTilePadding() => Vector2.one * 10f;
@@ -43,11 +44,12 @@ namespace Puzzle2048
                 _tiles.Remove(merge.From);
                 mergedTile.Value = merge.MergedValue;
                 tile.ReleaseOnMerge(GetAnchoredPos(merge.To));
-                PuzzleParticle.PlayParticle(particleLayout.transform, GetAnchoredPos(merge.To), merge.MergedValue);
+                PuzzleParticle.PlayMergeParticle(particleLayout.transform, GetAnchoredPos(merge.To), merge.MergedValue);
                 yield return mergedTile.PlayMergeEffect(mergedTile.Value >= 8);
 
                 if (merge.IsRemoved)
                 {
+                    PuzzleParticle.PlayCoinParticle(particleLayout.transform, GetAnchoredPos(merge.To), flyTarget.anchoredPosition);
                     _tiles.Remove(merge.To);
                     yield return mergedTile.OnRemoved();
                 }
@@ -74,6 +76,11 @@ namespace Puzzle2048
         public IEnumerator Restore(Dictionary<Vector2Int, int> current, Dictionary<Vector2Int, int> restore)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void OnRemainMoveChanged(int moveCount)
+        {
+            
         }
     }
 }
