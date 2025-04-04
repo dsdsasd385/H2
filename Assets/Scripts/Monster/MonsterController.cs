@@ -6,7 +6,8 @@ public class MonsterController : MonoBehaviour
 {
     private Monster _monster;
     public Monster Monster => _monster;
-    public Status status => _monster._status; 
+    public Status status => _monster.Status; 
+
     private Player _playerTarget;
 
     // Start is called before the first frame update

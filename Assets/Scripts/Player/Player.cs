@@ -1,16 +1,23 @@
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
 
 public class Player : Entity
 {
-    public Status _status = new Status(50, 30f, 5f, 0.05f, 1f);
+    private Status _status;
+    public ref Status Status => ref _status;
 
     private int _lastHp;
 
 
     //public override void SetStatus() {; }
-   
+
+    public void Init()
+    {
+        _status = new Status(50, 30f, 5f, 0.05f, 1f);
+    }
+
     public override void Attack(Entity target)
     {
         Monster monsterTarget = target as Monster;
@@ -18,7 +25,7 @@ public class Player : Entity
         if (target is Monster)
         {
             //animator.SetTrigger("Attack");
-            target.TakeDamage(_status.Power, monsterTarget._status.Defense, _status.Critical);
+            target.TakeDamage(_status.Power, monsterTarget.Status.Defense, _status.Critical);
         }
 
         else

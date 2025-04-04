@@ -14,17 +14,17 @@ public class PlayerUI : MonoBehaviour
 
     private StagePlayUI _stagePlayUI;
 
-    //private void Awake()
-    //{
-    //    _stagePlayUI = FindObjectOfType<StagePlayUI>();
-    //    if( _stagePlayUI != null)
-    //    {
-    //        _leveltxt = _stagePlayUI.GetText("Level");
-    //        _powerTxt = _stagePlayUI.GetText("Power");
-    //        _defenseTxt = _stagePlayUI.GetText("Defense");
-    //        _coinTxt = _stagePlayUI.GetText("Coin");
-    //    }
-    //}
+    private void Start()
+    {
+        _stagePlayUI = FindObjectOfType<StagePlayUI>();
+        if (_stagePlayUI != null)
+        {
+            _leveltxt = _stagePlayUI.GetText("Level");
+            _powerTxt = _stagePlayUI.GetText("Power");
+            _defenseTxt = _stagePlayUI.GetText("Defense");
+            _coinTxt = _stagePlayUI.GetText("Coin");
+        }
+    }
     public void SetHpVar(int hp)
     {
         _hpVar.value = hp;

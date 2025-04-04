@@ -5,8 +5,7 @@ using UnityEditor;
 
 public class PlayerController : MonoBehaviour
 {
-    private Player _player;
-    public Player Player => _player;
+    public Player Player {  get; private set; }
 
     private Wallet _wallet;
     public Wallet Wallet => _wallet;
@@ -19,10 +18,49 @@ public class PlayerController : MonoBehaviour
 
     private event Action<RouletteResult> roulette;
       
+
+    public static void InitializeFromChapter()
+    {
+        if(Chapter.playerObj.TryGetComponent(out PlayerController controller))
+        {
+            controller.InitializeComponents();
+        }
+
+        else
+        {
+            Debug.Log($" PlayerController가 Chapter.playerObj에 없습니다!");
+        }
+
+    }
+
+    public void InitializeComponents()
+    {
+        if(Player == null)
+            Player = new Player();
+
+        Player.Init();
+
+        _playerUI = GetComponent<PlayerUI>();
+        _playerExp = new PlayerExp();
+        _wallet = GetComponent<Wallet>();
+
+        var eventHandle = GetComponent<PlayerUIEventHandler>();
+
+        if( eventHandle != null)
+        {
+            eventHandle.Initialize(_playerUI, _wallet, _playerExp, Player.Status);
+        }
+        else
+        {
+            Debug.LogWarning("PlayerUIEventHandler가 존재하지 않습니다.");
+        }
+    }
     void Awake()
     {
-        _player = new Player();
-        Debug.Log($"Player Status = {Player._status}");
+        //Player = new Player();
+        //_playerExp = new PlayerExp();
+        //_playerUI = GetComponent<PlayerUI>();
+        //Debug.Log($"Player Status = {Player.Status}");
 
         _oldScene = SceneManager.GetActiveScene();
     }
@@ -42,32 +80,33 @@ public class PlayerController : MonoBehaviour
         Chapter.RouletteResultChangedEvent -= SetStatus;
         Battle.BattleStart -= MoveToBattleScene;
     }
+
     private void SetStatus(RouletteResult result)
     {
         switch (result.Type)
         {
             case StageRouletteType.EXERCISE:
-                _player.OnHpChanged(result.ChangeValue);
+                Player.OnHpChanged(result.ChangeValue);
                 Debug.Log($"체력 증가! {result.ChangeValue}%");
                 break;
             case StageRouletteType.RESHARPENING_WEAPON:
-                _player.OnPowerChanged(result.ChangeValue);
+                Player.OnPowerChanged(result.ChangeValue);
                 Debug.Log($"공격력 증가! {result.ChangeValue}%");
                 break;
             case StageRouletteType.CLEANING_ARMOR:
-                _player.OnDefenseChanged(result.ChangeValue);
+                Player.OnDefenseChanged(result.ChangeValue);
                 Debug.Log($"방어력 증가! {result.ChangeValue}%");
                 break;
             case StageRouletteType.BUG_BITE:
-                _player.OnHpChanged(result.ChangeValue);
+                Player.OnHpChanged(result.ChangeValue);
                 Debug.Log($"체력 감소! {result.ChangeValue} %");
                 break;
             case StageRouletteType.BROKEN_WEAPON:
-                _player.OnPowerChanged(result.ChangeValue);
+                Player.OnPowerChanged(result.ChangeValue);
                 Debug.Log($"공격력 감소! {result.ChangeValue} %");
                 break;
             case StageRouletteType.LOOSEN_ARMOR:
-                _player.OnDefenseChanged(result.ChangeValue);
+                Player.OnDefenseChanged(result.ChangeValue);
                 Debug.Log($"방어력 감소! {result.ChangeValue} %");
                 break;
         }

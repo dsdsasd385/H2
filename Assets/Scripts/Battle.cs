@@ -47,11 +47,11 @@ public static class Battle
         //}
 
 
-        if (player._status.Speed > monster._status.Speed)
+        if (player.Status.Speed > monster.Status.Speed)
         {
             yield return AttackSequence(player, monster);
         }
-        else if (player._status.Speed < monster._status.Speed)
+        else if (player.Status.Speed < monster.Status.Speed)
         {
 
             yield return AttackSequence(monster, player);
@@ -61,7 +61,7 @@ public static class Battle
             yield return AttackSequence(player, monster);
         }
 
-        if (player._status.Hp > 0)
+        if (player.Status.Hp > 0)
         {
             StagePlayUI.AddDialog("플레이어 승리! 축하해요!!");
         }
@@ -80,11 +80,11 @@ public static class Battle
 
     private static IEnumerator AttackSequence(Player player, Monster monster)
     {
-        Debug.Log($"플레이어 선공입니다. 플레이어 공격력은 : {player._status.Power} 몬스터 체력은 : {monster._status.Hp}");
+        Debug.Log($"플레이어 선공입니다. 플레이어 공격력은 : {player.Status.Power} 몬스터 체력은 : {monster.Status.Hp}");
 
-        while (player._status.Hp > 0 && monster._status.Hp > 0)
+        while (player.Status.Hp > 0 && monster.Status.Hp > 0)
         {            // 공격 후 즉시 승패 체크
-            if (player._status.Hp <= 0)
+            if (player.Status.Hp <= 0)
             {
                 break; // 상대방의 HP가 0 이하일 경우 공격을 중지
             }
@@ -95,9 +95,9 @@ public static class Battle
             //    .WaitForCompletion();
 
             player.Attack(monster);
-            Debug.Log($"플레이어가 공격했습니다! 플레이어의 공격력은 '{player._status.Power}', 크리는 '{player._status.Critical}'입니다.");
-            Debug.Log($"몬스터가 공격당한뒤 체력은 : '{monster._status.Hp}', 방어력은 '{monster._status.Defense}' 입니다.");
-            if (monster._status.Hp <= 0)
+            Debug.Log($"플레이어가 공격했습니다! 플레이어의 공격력은 '{player.Status.Power}', 크리는 '{player.Status.Critical}'입니다.");
+            Debug.Log($"몬스터가 공격당한뒤 체력은 : '{monster.Status.Hp}', 방어력은 '{monster.Status.Defense}' 입니다.");
+            if (monster.Status.Hp <= 0)
             {
                 break; // 플레이어의 HP가 0 이하일 경우 공격을 중지
             }
@@ -113,10 +113,10 @@ public static class Battle
 
             monster.Attack(player);
 
-            Debug.Log($"몬스터가 공격했습니다! 몬스터의 공격력은 : '{monster._status.Power}', 몬스터 크리는 '{monster._status.Critical}'");
-            Debug.Log($"플레이어가 공격당한뒤 체력은 : '{player._status.Hp}' 플레이어 방어력은, '{player._status.Defense}' 입니다. ");
+            Debug.Log($"몬스터가 공격했습니다! 몬스터의 공격력은 : '{monster.Status.Power}', 몬스터 크리는 '{monster.Status.Critical}'");
+            Debug.Log($"플레이어가 공격당한뒤 체력은 : '{player.Status.Hp}' 플레이어 방어력은, '{player.Status.Defense}' 입니다. ");
             
-            if (monster._status.Hp <= 0)
+            if (monster.Status.Hp <= 0)
             {
                 break; // 플레이어의 HP가 0 이하일 경우 공격을 중지
             }
@@ -128,10 +128,10 @@ public static class Battle
 
     private static IEnumerator AttackSequence(Monster monster, Player player)
     {
-        Debug.Log($"몬스터 선공입니다. 몬스터 공격력은 : {monster._status.Power}, 플레이어 체력은 : {player._status.Hp}");
-        while (monster._status.Hp > 0 && player._status.Hp > 0)
+        Debug.Log($"몬스터 선공입니다. 몬스터 공격력은 : {monster.Status.Power}, 플레이어 체력은 : {player.Status.Hp}");
+        while (monster.Status.Hp > 0 && player.Status.Hp > 0)
         {            // 공격 후 즉시 승패 체크
-            if (monster._status.Hp <= 0)
+            if (monster.Status.Hp <= 0)
             {
                 break; // 상대방의 HP가 0 이하일 경우 공격을 중지
             }
@@ -143,9 +143,9 @@ public static class Battle
 
             monster.Attack(player);
 
-            Debug.Log($"몬스터가 공격했습니다! 몬스터의 공격력은 : '{monster._status.Power}', 몬스터 크리는 '{monster._status.Critical}'");
-            Debug.Log($"플레이어가 공격당한뒤 체력은 : '{player._status.Hp}' 플레이어 방어력은, '{player._status.Defense}' 입니다. ");
-            if (player._status.Hp <= 0)
+            Debug.Log($"몬스터가 공격했습니다! 몬스터의 공격력은 : '{monster.Status.Power}', 몬스터 크리는 '{monster.Status.Critical}'");
+            Debug.Log($"플레이어가 공격당한뒤 체력은 : '{player.Status.Hp}' 플레이어 방어력은, '{player.Status.Defense}' 입니다. ");
+            if (player.Status.Hp <= 0)
             {
                 break; // 플레이어의 HP가 0 이하일 경우 공격을 중지
             }
@@ -161,12 +161,12 @@ public static class Battle
 
             player.Attack(monster);
 
-            if (player._status.Hp <= 0)
+            if (player.Status.Hp <= 0)
             {
                 break; // 플레이어의 HP가 0 이하일 경우 공격을 중지
             }
-            Debug.Log($"플레이어가 공격했습니다! 플레이어의 공격력은 '{player._status.Power}', 크리는 '{player._status.Critical}'입니다.");
-            Debug.Log($"몬스터가 공격당한뒤 체력은 : '{monster._status.Hp}', 방어력은 '{monster._status.Defense}' 입니다.");
+            Debug.Log($"플레이어가 공격했습니다! 플레이어의 공격력은 '{player.Status.Power}', 크리는 '{player.Status.Critical}'입니다.");
+            Debug.Log($"몬스터가 공격당한뒤 체력은 : '{monster.Status.Hp}', 방어력은 '{monster.Status.Defense}' 입니다.");
 
             yield return new WaitForSeconds(1f);
         }

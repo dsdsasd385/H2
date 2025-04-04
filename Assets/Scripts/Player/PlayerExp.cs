@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerExp : Player
+public class PlayerExp
 {
     private int _exp;
     private int _expToNextLevel;
     private int _level;
+
     public int Exp
     {
         get

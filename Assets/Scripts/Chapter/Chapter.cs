@@ -58,6 +58,8 @@ public abstract class Chapter : MonoBehaviour
         // todo
         // Loading Player
         SetPlayer();
+        PlayerController.InitializeFromChapter();
+
         // Loading Map
 
         StagePlayUI.Initialize();

@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 public class Monster : Entity
 {
-    public Status _status = new(30, 20f, 3f, 0.05f, 0.8f);
-
+    private Status _status = new(30, 20f, 3f, 0.05f, 0.8f);    
+    public ref Status Status => ref _status;
 
     [SerializeField] Animator animator;
     private Player _playerTarget;
@@ -43,7 +43,7 @@ public class Monster : Entity
         {
             //animator.SetTrigger("Attack");
 
-            target.TakeDamage(_status.Power, _playerTarget._status.Defense, _status.Critical);
+            target.TakeDamage(_status.Power, _playerTarget.Status.Defense, _status.Critical);
         }
 
         else
