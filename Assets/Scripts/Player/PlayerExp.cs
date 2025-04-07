@@ -3,53 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerExp : MonoBehaviour
+public class PlayerExp
 {
-    #region 싱글톤 
-    private static PlayerExp _instance;
-
-    public static PlayerExp Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<PlayerExp>();
-
-                if (_instance == null)
-                {
-                    GameObject player = new GameObject("PlayerExp");
-                    _instance = player.AddComponent<PlayerExp>();
-
-                }
-
-                DontDestroyOnLoad(_instance.gameObject);  // 씬이 변경되어도 유지
-            }
-
-            return _instance;
-        }
-    }
-    #endregion
-
-    public event Action<int> OnChangeExp;
-    public event Action<int> OnLevelUp;
-
-
     private int _exp;
     private int _expToNextLevel;
     private int _level;
 
-    private void Awake()
-    {
-        // 중복방지
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        _instance = this;
-    }
     public int Exp
     {
         get
@@ -63,6 +22,14 @@ public class PlayerExp : MonoBehaviour
             Debug.Log($"Exp가 변경되었습니다. {_exp}");
         }
     }
+    public PlayerExp _playerExp { get; private set; }
+
+    public event Action<int> OnChangeExp;
+    public event Action<int> OnLevelUp;
+
+
+
+
 
     public int Level
     {
@@ -91,6 +58,8 @@ public class PlayerExp : MonoBehaviour
     public void LevelUp()
     {
         _level++;
+        // UI연결
+
         // 스킬추가
     }
 }

@@ -1,39 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
-public class PlayerEventChaining : MonoBehaviour
+public class PlayerUIEventHandler : MonoBehaviour
 {
     private Status _status;
     private PlayerUI _playerUI;
-    private PlayerItem _item;
+    private Wallet _wallet;
+    private PlayerExp _playerExp;
 
-    private void Awake()
+    
+    public void Initialize(PlayerUI playerUI,Wallet wallet,PlayerExp playerExp,Status status)
     {
-        _playerUI = GetComponent<PlayerUI>();
-        _status = GetComponent<Player>().status;
-
+        _playerUI = playerUI;
+        _wallet = wallet;
+        _playerExp = playerExp;
+        _status = status;
+        
         SubscribeToEvents();
     }
 
     private void SubscribeToEvents()
     {
-        PlayerItem.Instance.OnChangeCoin += _playerUI.SetCoinText;
         _status.OnHpChange += _playerUI.SetHpVar;
         _status.OnPowerChange += _playerUI.SetPowerText;
         _status.OnDefenseChange += _playerUI.SetDefenseText;
         _status.OnCriticalChange += _playerUI.SetCriticalText;
         _status.OnSpeedChange += _playerUI.SetSpeedText;
+        _wallet.OnCoinChanged += _playerUI.SetCoinText;
     }
 
     private void OnDestroy()
-    {
-        PlayerItem.Instance.OnChangeCoin    -= _playerUI.SetCoinText;
+    { 
+
         _status.OnHpChange -= _playerUI.SetHpVar;
         _status.OnPowerChange -= _playerUI.SetPowerText;
         _status.OnDefenseChange -= _playerUI.SetDefenseText;
         _status.OnCriticalChange -= _playerUI.SetCriticalText;
         _status.OnSpeedChange -= _playerUI.SetSpeedText;
+        _wallet.OnCoinChanged -= _playerUI.SetCoinText;
+        
     }
 }

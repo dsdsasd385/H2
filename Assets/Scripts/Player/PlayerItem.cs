@@ -5,30 +5,30 @@ using UnityEngine;
 
 public class PlayerItem : MonoBehaviour
 {
-    #region ΩÃ±€≈Ê
-    private static PlayerItem _instance;
+    //#region ΩÃ±€≈Ê
+    //private static PlayerItem _instance;
 
-    public static PlayerItem Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<PlayerItem>();
+    //public static PlayerItem Instance
+    //{
+    //    get
+    //    {
+    //        if (_instance == null)
+    //        {
+    //            _instance = FindObjectOfType<PlayerItem>();
 
-                if(_instance == null)
-                {
-                    GameObject playerItem = new GameObject("PlayerItem");
-                    _instance = playerItem.AddComponent<PlayerItem>();
+    //            if(_instance == null)
+    //            {
+    //                GameObject playerItem = new GameObject("PlayerItem");
+    //                _instance = playerItem.AddComponent<PlayerItem>();
 
-                    DontDestroyOnLoad(playerItem);
-                }
-            }
-            return _instance;
-        }
-    }
+    //                DontDestroyOnLoad(playerItem);
+    //            }
+    //        }
+    //        return _instance;
+    //    }
+    //}
 
-    #endregion      
+    //#endregion      
 
     public event Action<int> OnChangeCoin;
 
@@ -49,13 +49,13 @@ public class PlayerItem : MonoBehaviour
 
     private void Awake()
     {
-        if(_instance != null && _instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        //if(_instance != null && _instance != this)
+        //{
+        //    Destroy(gameObject);
+        //    return;
+        //}
 
-        _instance = this;
+        //_instance = this;
     }
 
 

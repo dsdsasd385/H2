@@ -17,8 +17,8 @@ public class BattleScene : AdditiveScene
     public GameObject playerPrefabs;
     public GameObject monsterPrefabs;
 
-    public Player player;
-    public Monster monster;
+    public PlayerController player;
+    public MonsterController monster;
 
     public PlayerItem playerItem;
 
@@ -30,15 +30,15 @@ public class BattleScene : AdditiveScene
         //player = playerPrefabs.AddComponent<Player>();
         //playerItem = playerPrefabs.AddComponent<PlayerItem>();
         if(player == null)
-        player = Instantiate(playerPrefabs).GetComponent<Player>();
+        player = Instantiate(playerPrefabs).GetComponent<PlayerController>();
 
-        playerPrefabs.transform.position = playerPos.position;
-        playerPrefabs.transform.rotation = Quaternion.LookRotation(mapCenter.position);
+        player.transform.position = playerPos.position;
+        player.transform.rotation = Quaternion.LookRotation(mapCenter.position);
 
         //monsterPrefabs = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
         //monster = monsterPrefabs.AddComponent<Monster>();
-        monster = Instantiate(monsterPrefabs).GetComponent<Monster>();
-        monsterPrefabs.transform.position = monsterPos[0].position;
+        monster = Instantiate(monsterPrefabs).GetComponent<MonsterController>();
+        monster.transform.position = monsterPos[0].position;
         monsterPrefabs.transform.rotation = Quaternion.LookRotation(mapCenter.position);
 
         //Instantiate(player);

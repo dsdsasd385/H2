@@ -111,12 +111,12 @@ public struct Status
     }
 }
 
-public abstract class Entity : MonoBehaviour
+public abstract class Entity
 {
     public Status status { get; protected set; }
 
     // 스텟 구현
-    protected abstract void SetEntity();
+    //public abstract void SetStatus();
 
     // 공격 기능
     public virtual void Attack(Entity target) { }
