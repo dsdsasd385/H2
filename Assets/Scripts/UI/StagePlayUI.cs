@@ -36,8 +36,6 @@ public class StagePlayUI : UI
         
         Chapter.StageChangedEvent -= OnStageChanged;
         Chapter.StageChangedEvent += OnStageChanged;
-
-        // Player.StatusChangeEvent += 
     }
 
     public static void AddDialog(string dialog)

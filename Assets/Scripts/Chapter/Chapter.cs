@@ -9,7 +9,7 @@ public abstract class Chapter : MonoBehaviour
 {
     public static event Action<int, StageType> StageChangedEvent;
     public static event Action<RouletteResult> RouletteResultChangedEvent;
-    public static GameObject playerObj { get; private set; }
+    
     private static IEnumerator OnRoulette()
     {
         RouletteResult result = default;
@@ -20,8 +20,7 @@ public abstract class Chapter : MonoBehaviour
             Debug.Log($"룰렛 실행 : 값은 {res.ChangeValue}, 결과 타입은{res.Type}");
             RouletteResultChangedEvent?.Invoke(result);
         });
-
-
+        
         var logs = result.Dialog.Split('\n');
 
         foreach (var log in logs)
@@ -42,7 +41,6 @@ public abstract class Chapter : MonoBehaviour
     [ShowNativeProperty] public int        BattleCount     => stageList.Count(stage => stage == StageType.BATTLE);
     
     [SerializeField]                       private List<StageType> stageList;
-    [SerializeField] private GameObject playerPrefab;  // 인스펙터에서 할당
 
     [MinMaxSlider(1f, 5f), SerializeField] private Vector2         growthRateRange;
 
@@ -55,26 +53,21 @@ public abstract class Chapter : MonoBehaviour
 
     public void Initialize()
     {
-        // todo
-        // Loading Player
-        SetPlayer();
-        PlayerController.InitializeFromChapter();
-
-        // Loading Map
-
+        var player = Entities.Player.CreateNew(1000, 100, 100, 15, 3, 0);
+        
+        RouletteResultChangedEvent += player.OnRoulette;
+        
+        player.HpChanged += (oldVal, newVal) => print($"HP : {oldVal} -> {newVal}");
+        player.DefenceChanged += (oldVal, newVal) => print($"DEF : {oldVal} -> {newVal}");
+        player.AttackPointChanged += (oldVal, newVal) => print($"ATT : {oldVal} -> {newVal}");
+        player.CriticalChanged += (oldVal, newVal) => print($"CRI : {oldVal} -> {newVal}");
+        player.GoldChanged += (oldVal, newVal) => print($"GOLD : {oldVal} -> {newVal}");
+        
         StagePlayUI.Initialize();
         
         _growthRate = new(growthRateRange, BattleCount);
 
         SetStageAction();
-    }
-
-    private void SetPlayer()
-    {
-        if(playerObj == null)
-        {
-            playerObj = Instantiate(playerPrefab);
-        }
     }
 
     private void SetStageAction()

@@ -22,7 +22,7 @@ public static class Battle
         StagePlayUI.AddDialog("<color=red>전투</color>가 발생했습니다!");
 
 
-        var player = Chapter.playerObj.GetComponent<PlayerController>().Player;
+        // var player = Chapter.playerObj.GetComponent<PlayerController>().Player;
                
         var monster = _battle.monster.GetComponent<MonsterController>().Monster;
 
@@ -47,29 +47,29 @@ public static class Battle
         //}
 
 
-        if (player.Status.Speed > monster.Status.Speed)
-        {
-            yield return AttackSequence(player, monster);
-        }
-        else if (player.Status.Speed < monster.Status.Speed)
-        {
+        // if (player.Status.Speed > monster.Status.Speed)
+        // {
+        //     yield return AttackSequence(player, monster);
+        // }
+        // else if (player.Status.Speed < monster.Status.Speed)
+        // {
+        //
+        //     yield return AttackSequence(monster, player);
+        // }
+        // else
+        // {
+        //     yield return AttackSequence(player, monster);
+        // }
+        //
+        // if (player.Status.Hp > 0)
+        // {
+        //     StagePlayUI.AddDialog("플레이어 승리! 축하해요!!");
+        // }
 
-            yield return AttackSequence(monster, player);
-        }
-        else
-        {
-            yield return AttackSequence(player, monster);
-        }
-
-        if (player.Status.Hp > 0)
-        {
-            StagePlayUI.AddDialog("플레이어 승리! 축하해요!!");
-        }
-
-        else
-        {
-            StagePlayUI.AddDialog("플레이어 패배! 더 강해지기!!");
-        }
+        // else
+        // {
+        //     StagePlayUI.AddDialog("플레이어 패배! 더 강해지기!!");
+        // }
         IsBattle = false;
         BattleStart?.Invoke();
 
