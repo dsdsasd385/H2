@@ -16,14 +16,15 @@ namespace Puzzle2048
         /******************************************************************************************************************/
         /******************************************************************************************************************/
     
-        public event Action                              TileRemovedEvent;
-        public event Action<Dictionary<Vector2Int, int>> GameOverEvent;
+        public event Action                                   TileRemovedEvent;
+        public event Action<Dictionary<Vector2Int, int>, int> GameOverEvent;
 
         private IPuzzleRule   _rule;
         private PuzzleView    _view;
         private PuzzleGameApp _app;
         
         private int           _remainMove;
+        private int           _point;
 
         private void Initialize(IPuzzleRule rule)
         {
@@ -35,8 +36,8 @@ namespace Puzzle2048
 
         public void StartGame()
         {
-            _app.TileRemovedEvent      += TileRemovedEvent;
-            _app.GameOverEvent         += GameOverEvent;
+            _app.GameOverEvent         += dict => GameOverEvent?.Invoke(dict, _point);
+            
             _app.TotalMoveChangedEvent += move =>
             {
                 _remainMove = _rule.GetTotalMoveCount() - move;
@@ -45,6 +46,16 @@ namespace Puzzle2048
                 if (_remainMove == 0)
                     _app.FinishGame();
             };
+
+            _app.TileRemovedEvent += () =>
+            {
+                int before = _point;
+                _point += _rule.GetPointPerRemoveTile();
+                _view.OnPointUpdated(before, _point);
+                TileRemovedEvent?.Invoke();
+            };
+            
+            _view.OnRemainMoveChanged(_rule.GetTotalMoveCount());
         
             _app.StartGame();
         }
@@ -107,6 +118,9 @@ namespace Puzzle2048
 
             if (_app != null)
                 Destroy(_app.gameObject);
+            
+            PuzzleTile.ClearPool();
+            PuzzleParticle.ClearPool();
         }
     }
 }

@@ -32,6 +32,11 @@ public abstract class Chapter : MonoBehaviour
 
         yield return StatusRouletteUI.ShowRouletteImage(result.Type);
     }
+
+    private static IEnumerator OnPuzzle()
+    {
+        yield return AdditiveScene.LoadSceneAsync<PuzzleScene>(Screen.width, Screen.height, 0f, null);
+    }
     
     /******************************************************************************************************************/
     /******************************************************************************************************************/
@@ -50,7 +55,6 @@ public abstract class Chapter : MonoBehaviour
     private List<IEnumerator> _stageActions = new();
     private GrowthRate        _growthRate;
 
-    protected abstract IEnumerator OnEvent();
     protected abstract IEnumerator OnBattle(float growthRate);
 
     public void Initialize()
@@ -91,7 +95,7 @@ public abstract class Chapter : MonoBehaviour
                     action = OnRoulette();
                     break;
                 case StageType.STAGE_EVENT:
-                    action = OnEvent();
+                    action = OnPuzzle();
                     break;
                 case StageType.BATTLE:
                     action = OnBattle(_growthRate.GetRate(battleStageOrder));

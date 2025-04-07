@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace Puzzle2048
@@ -9,6 +10,8 @@ namespace Puzzle2048
         [SerializeField] private RectTransform boardRect;
         [SerializeField] private RectTransform particleLayout;
         [SerializeField] private RectTransform flyTarget;
+        [SerializeField] private TMP_Text      txtPoint;
+        [SerializeField] private TMP_Text      txtMoveCount;
 
         public Vector2 GetBoardRect()   => boardRect.rect.size;
         public Vector2 GetTilePadding() => Vector2.one * 10f;
@@ -80,7 +83,35 @@ namespace Puzzle2048
 
         public void OnRemainMoveChanged(int moveCount)
         {
-            
+            txtMoveCount.text = $"남은 이동 : {Mathf.Max(0, moveCount)}";
+        }
+
+        public void OnPointUpdated(int before, int point)
+        {
+            StartCoroutine(UpdatePointCoroutine(before, point));
+        }
+
+        private IEnumerator UpdatePointCoroutine(int before, int point, float duration = 1f)
+        {
+            float time = 0f;
+            int current = before;
+
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                float t = Mathf.Clamp01(time / duration);
+                int display = Mathf.RoundToInt(Mathf.Lerp(before, point, t));
+
+                if (display != current)
+                {
+                    current = display;
+                    txtPoint.text = current.ToString();
+                }
+
+                yield return null;
+            }
+
+            txtPoint.text = point.ToString();
         }
     }
 }

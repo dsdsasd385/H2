@@ -167,11 +167,11 @@ namespace Puzzle2048
                 if (merge.IsRemoved)
                     TileRemovedEvent?.Invoke();
             }
-
-            _totalMove++;
-            TotalMoveChangedEvent?.Invoke(_totalMove);
             
             yield return _view.MoveTile(mergeResult, moveResult);
+            
+            _totalMove++;
+            TotalMoveChangedEvent?.Invoke(_totalMove);
             
             SetState(GameState.SPAWN_TILE);
         }

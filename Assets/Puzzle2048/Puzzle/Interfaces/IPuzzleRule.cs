@@ -6,6 +6,7 @@ namespace Puzzle2048
     {
         int GetBoardSize();
         int GetTotalMoveCount();
+        int GetPointPerRemoveTile();
         bool ShouldRemoveTile(Vector2Int position, int value);
     }
 }
