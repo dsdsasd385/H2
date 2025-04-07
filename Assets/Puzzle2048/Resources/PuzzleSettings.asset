@@ -28,6 +28,9 @@ MonoBehaviour:
   removeTileDuration: 0.5
   removeEase: 34
   jumpOnMerge: 30
+  particleSpriteList:
+  - {fileID: 21300000, guid: 4182d836342076b429c4777dde003996, type: 3}
+  - {fileID: 21300000, guid: ea05e9519ac61994ea8574efb865219e, type: 3}
   particleMinDuration: 0.3
   particleMaxDuration: 0.8
   particleMinSize: 1.5
