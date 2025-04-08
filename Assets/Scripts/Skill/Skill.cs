@@ -67,6 +67,9 @@ public abstract class Skill
         if (skill is PassiveSkill passiveSkill)
             passiveSkill.OnGetPassive();
     }
+
+    public abstract string GetSkillName();
+    public abstract string GetSkillDescription();
 }
 
 public abstract class PassiveSkill : Skill

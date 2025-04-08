@@ -16,7 +16,7 @@ public class AddSkillButton : MonoBehaviour
         
         btnAdd.onClick.RemoveAllListeners();
         btnAdd.onClick.AddListener(()=> SkillSelected?.Invoke(skillToAdd));
-        txtDescribe.text = $"{skillToAdd}";
+        txtDescribe.text = $"{skillToAdd.GetSkillName()}\n\n{skillToAdd.GetSkillDescription()}";
         gameObject.SetActive(true);
     }
 }
