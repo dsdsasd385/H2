@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Threading.Tasks;
+using System;
 
 
 public class Monster : Entity
@@ -8,10 +9,16 @@ public class Monster : Entity
     public ref Status Status => ref _status;
 
     [SerializeField] Animator animator;
-    private Player _playerTarget;
+    public Player _playerTarget { get; private set; }
 
     private int _exp = 30;
 
+
+    public Action OnPlayAttackAnimation;
+    public Action OnPlayDamagedAnimation;
+    public Action OnPlayDieAnimation;
+    public Action OnPlayDieAction;
+    public Action<int> OnDieGiveExp;
 
     private void Awake()
     {
@@ -43,7 +50,9 @@ public class Monster : Entity
         {
             //animator.SetTrigger("Attack");
 
-            target.TakeDamage(_status.Power, _playerTarget.Status.Defense, _status.Critical);
+            target.TakeDamage(_status.Power, _playerTarget.Status.Defense, _status.Critical,this);
+            OnPlayAttackAnimation?.Invoke();
+
         }
 
         else
@@ -52,8 +61,10 @@ public class Monster : Entity
         }
     }
 
-    public override void TakeDamage(float power, float defense, float critical)
+    public override void TakeDamage(float power, float defense, float critical, Entity attacker)
     {
+        if (_playerTarget == null && attacker is Player player)
+            _playerTarget = player;
 
         //animator.SetTrigger("Damaged");
 
@@ -63,6 +74,8 @@ public class Monster : Entity
         {
             Die();
         }
+        OnPlayDamagedAnimation?.Invoke();
+
 
         int damageInt = (int)damage;
 
@@ -73,8 +86,10 @@ public class Monster : Entity
     {
         // 사망 로직
         //animator.SetTrigger("Die");
-        
-        await Task.Delay(1500);
+        OnPlayDieAnimation?.Invoke();
+        OnPlayDieAction?.Invoke();
+        OnDieGiveExp?.Invoke(_exp);
+
   // 경험치 주기
 
         //if (gameObject != null)

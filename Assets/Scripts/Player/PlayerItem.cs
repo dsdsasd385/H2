@@ -4,32 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerItem : MonoBehaviour
-{
-    //#region ΩÃ±€≈Ê
-    //private static PlayerItem _instance;
-
-    //public static PlayerItem Instance
-    //{
-    //    get
-    //    {
-    //        if (_instance == null)
-    //        {
-    //            _instance = FindObjectOfType<PlayerItem>();
-
-    //            if(_instance == null)
-    //            {
-    //                GameObject playerItem = new GameObject("PlayerItem");
-    //                _instance = playerItem.AddComponent<PlayerItem>();
-
-    //                DontDestroyOnLoad(playerItem);
-    //            }
-    //        }
-    //        return _instance;
-    //    }
-    //}
-
-    //#endregion      
-
+{   
     public event Action<int> OnChangeCoin;
 
     private int _coin;

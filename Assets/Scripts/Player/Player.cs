@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class Player : Entity
@@ -9,23 +10,85 @@ public class Player : Entity
     public ref Status Status => ref _status;
 
     private int _lastHp;
+    private int _exp;
+    private int _expToNextLevel;
+    private int _level;
+    private Monster _monsterTarget;
+
+    public Action OnPlayAttackAnimation;
+    public Action OnPlayDamagedAnimation;
+    public Action OnPlayDieAnimation;
+    public event Action<int> OnChangeExp;
+    public event Action<int> OnLevelUp;
+
+    public int Exp
+    {
+        get
+        {
+            return _exp;
+        }
+        set
+        {
+            _exp = value;
+            OnChangeExp?.Invoke(_exp);
+            Debug.Log($"Exp가 변경되었습니다. {_exp}");
+        }
+    }
 
 
-    //public override void SetStatus() {; }
+    public int Level
+    {
+        get
+        {
+            return _level;
+        }
+        set
+        {
+            _level = value;
+            OnLevelUp?.Invoke(_level);
+        }
+    }
+
 
     public void Init()
     {
-        _status = new Status(50, 30f, 5f, 0.05f, 1f);
+        _status = new Status(50, 3000f, 5f, 0.05f, 1f);
+        _level = 1;
+        _exp = 0;
+        _expToNextLevel = 25;
+    }   
+
+    public void AddExp(int exp)
+    {
+        Exp += exp;
+
+        while (Exp >= _expToNextLevel)
+        {
+            LevelUp();
+        }     
     }
 
+    public void LevelUp()
+    {
+        Exp -= _expToNextLevel;
+        Level++;
+        Debug.Log($"레벨업 했습니다. Level : {_level}");
+
+        _expToNextLevel = Mathf.RoundToInt(_expToNextLevel * 1.5f);
+        Debug.Log($"남은 경험치는 {Exp}이며 레벨업 경험치는 {_expToNextLevel}으로 변경되었습니다.");
+        // UI연결
+
+        // 스킬추가
+    }
     public override void Attack(Entity target)
     {
-        Monster monsterTarget = target as Monster;
+        _monsterTarget = target as Monster;
 
-        if (target is Monster)
+        if (_monsterTarget != null)
         {
             //animator.SetTrigger("Attack");
-            target.TakeDamage(_status.Power, monsterTarget.Status.Defense, _status.Critical);
+            target.TakeDamage(_status.Power, _monsterTarget.Status.Defense, _status.Critical, this);
+            OnPlayAttackAnimation?.Invoke();
         }
 
         else
@@ -33,16 +96,20 @@ public class Player : Entity
             return;
         }
     }
-    public override void TakeDamage(float power, float defense, float critical)
+    public override void TakeDamage(float power, float defense, float critical, Entity attacker)
     {
         //animator.SetTrigger("Damaged");
+        if (_monsterTarget == null && attacker is Monster monster)
+            _monsterTarget = monster;
 
         float damage = base.CalculateDamage(power, defense, critical);
 
         if (damage > _status.Hp)
         {
             Die();
+            return;
         }
+        OnPlayDamagedAnimation?.Invoke();
         int damageInt = (int)damage;
         _status.Hp -= damageInt;
     }
@@ -50,12 +117,15 @@ public class Player : Entity
     protected async override void Die()
     {
         // 사망 로직
+        OnPlayDieAnimation?.Invoke();
         //animator.SetTrigger("Die");
-        await Task.Delay(1500);
-        //Destroy(gameObject);
+        Debug.Log("플레이어가 사망했습니다.");
+        await Task.Delay(2500);
+
+        SceneManager.LoadScene("TitleScene");
     }
 
-    
+
     // 체력변할때 이벤트
     public void OnHpChanged(int value)
     {
@@ -87,15 +157,5 @@ public class Player : Entity
     {
         _status.Critical *= (1 + value / 100f);
         Debug.Log($"크리티컬이 변경되었습니다. {_status.Critical}");
-    }
-
-    
-
-
- 
-
-    //private void ReturnOidScene()
-    //{
-    //    SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName(_oldScene.name));
-    //}  
+    }   
 }

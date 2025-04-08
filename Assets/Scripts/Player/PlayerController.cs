@@ -2,16 +2,17 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using System;
 using UnityEditor;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
     public Player Player {  get; private set; }
 
-    private Wallet _wallet;
-    public Wallet Wallet => _wallet;
+    private WalletController _wallet;
+    public WalletController Wallet => _wallet;
 
     public PlayerUI _playerUI { get; private set; }
-    public PlayerExp _playerExp { get; private set; }
+    public PlayerAnimationHandler _playerAni { get; private set; }
 
     private Scene _oldScene; 
     private StageRouletteType _stageRouletteTypes;
@@ -35,33 +36,19 @@ public class PlayerController : MonoBehaviour
 
     public void InitializeComponents()
     {
-        if(Player == null)
+        _playerUI = GetComponent<PlayerUI>();
+        _wallet = GetComponent<WalletController>();
+        _playerAni = GetComponent<PlayerAnimationHandler>();
+
+        if (Player == null)
             Player = new Player();
 
         Player.Init();
 
-        _playerUI = GetComponent<PlayerUI>();
-        _playerExp = new PlayerExp();
-        _wallet = GetComponent<Wallet>();
-
-        var eventHandle = GetComponent<PlayerUIEventHandler>();
-
-        if( eventHandle != null)
-        {
-            eventHandle.Initialize(_playerUI, _wallet, _playerExp, Player.Status);
-        }
-        else
-        {
-            Debug.LogWarning("PlayerUIEventHandler가 존재하지 않습니다.");
-        }
+        SubscribeToEvents();
     }
     void Awake()
     {
-        //Player = new Player();
-        //_playerExp = new PlayerExp();
-        //_playerUI = GetComponent<PlayerUI>();
-        //Debug.Log($"Player Status = {Player.Status}");
-
         _oldScene = SceneManager.GetActiveScene();
     }
     private void OnEnable()
@@ -79,6 +66,7 @@ public class PlayerController : MonoBehaviour
     {
         Chapter.RouletteResultChangedEvent -= SetStatus;
         Battle.BattleStart -= MoveToBattleScene;
+        UnsubscribeFromEvents();
     }
 
     private void SetStatus(RouletteResult result)
@@ -112,6 +100,38 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    public void SubscribeToEvents()
+    {
+        if (_wallet != null && _playerUI != null && Player != null)
+        {
+            Player.Status.OnHpChange += _playerUI.SetHpVar;
+            Player.Status.OnPowerChange += _playerUI.SetPowerText;
+            Player.Status.OnDefenseChange += _playerUI.SetDefenseText;
+            Player.OnChangeExp += _playerUI.SetExp;
+            Player.OnLevelUp += _playerUI.SetLevel;
+            _wallet.wallet.OnCoinChanged += _playerUI.SetCoinText;
+            Player.OnPlayAttackAnimation += _playerAni.PlayAttackAni;
+            Player.OnPlayDamagedAnimation += _playerAni.PlayDamagedAni;
+            Player.OnPlayDieAnimation += _playerAni.PlayDieAni;
+        }
+    }
+
+    public void UnsubscribeFromEvents()
+    {
+        if(_wallet != null &&  _playerUI != null && Player != null)
+        {
+            Player.Status.OnHpChange -= _playerUI.SetHpVar;
+            Player.Status.OnPowerChange -= _playerUI.SetPowerText;
+            Player.Status.OnDefenseChange -= _playerUI.SetDefenseText;
+            Player.OnChangeExp -= _playerUI.SetExp;
+            Player.OnLevelUp -= _playerUI.SetLevel;
+            _wallet.wallet.OnCoinChanged -= _playerUI.SetCoinText;
+            Player.OnPlayAttackAnimation -= _playerAni.PlayAttackAni;
+            Player.OnPlayDamagedAnimation -= _playerAni.PlayDamagedAni;
+            Player.OnPlayDieAnimation -= _playerAni.PlayDieAni;
+        }      
+    }
 
 
     private void MoveToBattleScene()

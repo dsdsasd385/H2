@@ -26,27 +26,6 @@ public static class Battle
                
         var monster = _battle.monster.GetComponent<MonsterController>().Monster;
 
-
-        //for (int i = 0; i < 5; i++)
-        //{
-        //    yield return player.transform.DOLocalJump(player.transform.position, 1.5f, 2, 1f)
-        //        .SetEase(Ease.InQuart)
-        //        .WaitForCompletion();
-
-        //    yield return Delay.WaitRandom(0.5f, 0.8f);
-
-        //    StagePlayUI.AddDialog($"플레이어의 공격!\n<color=red>{Random.Range(100, 1000)}</color>의 피해를 입혔습니다!");
-
-        //    yield return monster.transform.DOLocalJump(monster.transform.position, 1.5f, 2, 1f)
-        //        .SetEase(Ease.InQuart)
-        //        .WaitForCompletion();
-
-        //    yield return Delay.WaitRandom(0.5f, 0.8f);
-
-        //    StagePlayUI.AddDialog($"몬스터의 공격!\n<color=red>{Random.Range(100, 1000)}</color>의 피해를 입혔습니다!");
-        //}
-
-
         if (player.Status.Speed > monster.Status.Speed)
         {
             yield return AttackSequence(player, monster);
@@ -101,7 +80,7 @@ public static class Battle
             {
                 break; // 플레이어의 HP가 0 이하일 경우 공격을 중지
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
 
             // 공격 후 즉시 승패 체크
            
@@ -121,7 +100,7 @@ public static class Battle
                 break; // 플레이어의 HP가 0 이하일 경우 공격을 중지
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
 
         }
     }
@@ -149,7 +128,7 @@ public static class Battle
             {
                 break; // 플레이어의 HP가 0 이하일 경우 공격을 중지
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
 
             // 공격 후 즉시 승패 체크
           
@@ -168,7 +147,7 @@ public static class Battle
             Debug.Log($"플레이어가 공격했습니다! 플레이어의 공격력은 '{player.Status.Power}', 크리는 '{player.Status.Critical}'입니다.");
             Debug.Log($"몬스터가 공격당한뒤 체력은 : '{monster.Status.Hp}', 방어력은 '{monster.Status.Defense}' 입니다.");
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
         }
     }
 }

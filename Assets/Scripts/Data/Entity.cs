@@ -122,7 +122,7 @@ public abstract class Entity
     public virtual void Attack(Entity target) { }
 
     // 피해 입음
-    public virtual void TakeDamage(float power, float defense, float critical)
+    public virtual void TakeDamage(float power, float defense, float critical, Entity attacker)
     {
         float damage = CalculateDamage(power, defense, critical);
     }

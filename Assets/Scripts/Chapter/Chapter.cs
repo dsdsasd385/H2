@@ -62,12 +62,13 @@ public abstract class Chapter : MonoBehaviour
         // todo
         // Loading Player
         SetPlayer();
+
+        StagePlayUI.Initialize();
+
         PlayerController.InitializeFromChapter();
 
         // Loading Map
 
-        StagePlayUI.Initialize();
-        
         _growthRate = new(growthRateRange, BattleCount);
 
         SetStageAction();
