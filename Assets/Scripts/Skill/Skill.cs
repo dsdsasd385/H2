@@ -5,23 +5,22 @@ using UnityEngine;
 
 public abstract class Skill
 {
-    private static Dictionary<SkillGrade, List<Skill>> _skillDB = new()
-    {
-        { SkillGrade.NORMAL, new(){ new AttackDefence(), new Critical(), new Health(), new MagicMissile() } },
-        { SkillGrade.UNIQUE, new(){new AttackDefence2(), new Critical2(), new Health2(), new BloodMissile(), new PoisonMissile(), new IceMissile() } },
-        { SkillGrade.LEGENDARY , new(){new Rewind(), new Flair(), new Smog(), new HeatDeath()}}
-    };
-    
+    private static Dictionary<SkillGrade, List<Skill>> _skillDB;
     private static List<Skill> _addedSkillList;
     private static int _skillDBCount;
         
     public static void Initialize()
     {
+        _skillDB = new()
+        {
+            { SkillGrade.NORMAL, new(){ new AttackDefence(), new Critical(), new Health(), new MagicMissile() } },
+            { SkillGrade.UNIQUE, new(){new AttackDefence2(), new Critical2(), new Health2(), new BloodMissile(), new PoisonMissile(), new IceMissile() } },
+            { SkillGrade.LEGENDARY , new(){new Rewind(), new Flair(), new Smog(), new HeatDeath()}}
+        };
+        
         _skillDBCount = _skillDB
             .SelectMany(pair => pair.Value)
             .Count();
-        
-        Debug.Log($"SKILL COUNT : {_skillDBCount}");
         
         _addedSkillList = new();
     }
@@ -61,11 +60,38 @@ public abstract class Skill
     public static void AddSkill(Skill skill)
     {
         _addedSkillList.Add(skill);
-        
-        Debug.Log($"{skill} added!");
 
         if (skill is PassiveSkill passiveSkill)
             passiveSkill.OnGetPassive();
+    }
+    
+    public static void InitActiveSkills()
+    {
+        var activeSkills = _addedSkillList
+            .OfType<ActiveSkill>()
+            .ToList();
+        
+        activeSkills.ForEach(skill => skill.InitTurnCount());
+    }
+
+    public static void ProceedTurn()
+    {
+        var activeSkills = _addedSkillList
+            .OfType<ActiveSkill>()
+            .ToList();
+        
+        activeSkills.ForEach(skill => skill.AddProceedTurn());
+    }
+
+    public static IEnumerator UseActiveSkills()
+    {
+        var activeSkills = _addedSkillList
+            .OfType<ActiveSkill>()
+            .Where(skill => skill.CanUseSkill())
+            .ToList();
+
+        foreach (var skill in activeSkills)
+            yield return skill.OnUseActive();
     }
 
     public abstract string GetSkillName();
@@ -81,5 +107,26 @@ public abstract class PassiveSkill : Skill
 
 public abstract class ActiveSkill : Skill
 {
-    public abstract IEnumerator OnUseActive(Entities.Entity target);
+    protected abstract int GetTurnCount();
+
+    private int _turnCount;
+    private int _proceedTurn;
+
+    public void InitTurnCount()
+    {
+        _turnCount = GetTurnCount();
+        _proceedTurn = 0;
+    }
+
+    public void AddProceedTurn()
+    {
+        if (_turnCount < 0)
+            return;
+        
+        _proceedTurn++;
+    }
+
+    public bool CanUseSkill() => _turnCount <= _proceedTurn;
+    
+    public abstract IEnumerator OnUseActive();
 }

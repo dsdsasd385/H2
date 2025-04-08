@@ -2,7 +2,9 @@ using System.Collections;
 
 public class Rewind : ActiveSkill
 {
-    public override IEnumerator OnUseActive(Entities.Entity target)
+    protected override int GetTurnCount() => 1;
+
+    public override IEnumerator OnUseActive()
     {
         yield break;
     }
@@ -16,7 +18,9 @@ public class Rewind : ActiveSkill
 
 public class Flair : ActiveSkill
 {
-    public override IEnumerator OnUseActive(Entities.Entity target)
+    protected override int GetTurnCount() => 2;
+    
+    public override IEnumerator OnUseActive()
     {
         yield break;
     }
@@ -30,7 +34,9 @@ public class Flair : ActiveSkill
 
 public class Smog : ActiveSkill
 {
-    public override IEnumerator OnUseActive(Entities.Entity target)
+    protected override int GetTurnCount() => 3;
+    
+    public override IEnumerator OnUseActive()
     {
         yield break;
     }
@@ -44,7 +50,9 @@ public class Smog : ActiveSkill
 
 public class HeatDeath : ActiveSkill
 {
-    public override IEnumerator OnUseActive(Entities.Entity target)
+    protected override int GetTurnCount() => -1;
+    
+    public override IEnumerator OnUseActive()
     {
         yield break;
     }

@@ -2,7 +2,9 @@ using System.Collections;
 
 public class MagicMissile : ActiveSkill
 {
-    public override IEnumerator OnUseActive(Entities.Entity target)
+    protected override int GetTurnCount() => 2;
+    
+    public override IEnumerator OnUseActive()
     {
         yield break;
     }
@@ -16,7 +18,9 @@ public class MagicMissile : ActiveSkill
 
 public class BloodMissile : ActiveSkill
 {
-    public override IEnumerator OnUseActive(Entities.Entity target)
+    protected override int GetTurnCount() => 2;
+    
+    public override IEnumerator OnUseActive()
     {
         yield break;
     }
@@ -30,7 +34,9 @@ public class BloodMissile : ActiveSkill
 
 public class PoisonMissile : ActiveSkill
 {
-    public override IEnumerator OnUseActive(Entities.Entity target)
+    protected override int GetTurnCount() => 2;
+    
+    public override IEnumerator OnUseActive()
     {
         yield break;
     }
@@ -44,7 +50,9 @@ public class PoisonMissile : ActiveSkill
 
 public class IceMissile : ActiveSkill
 {
-    public override IEnumerator OnUseActive(Entities.Entity target)
+    protected override int GetTurnCount() => 2;
+    
+    public override IEnumerator OnUseActive()
     {
         yield break;
     }
