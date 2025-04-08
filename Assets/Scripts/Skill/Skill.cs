@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public abstract class Skill
 {
@@ -12,9 +13,16 @@ public abstract class Skill
     };
     
     private static List<Skill> _addedSkillList;
+    private static int _skillDBCount;
         
     public static void Initialize()
     {
+        _skillDBCount = _skillDB
+            .SelectMany(pair => pair.Value)
+            .Count();
+        
+        Debug.Log($"SKILL COUNT : {_skillDBCount}");
+        
         _addedSkillList = new();
     }
 
@@ -25,20 +33,39 @@ public abstract class Skill
 
     public static List<Skill> GetAddableSkills(int count = 3)
     {
-        var notAddedSkills = _skillDB
-            .SelectMany(pair => pair.Value)
+        SkillGrade grade = Random.Range(0, 101) switch
+        {
+            <= 5  => SkillGrade.LEGENDARY,
+            <= 30 => SkillGrade.UNIQUE,
+            _     => SkillGrade.NORMAL
+        };
+
+        var skills = _skillDB[grade]
             .Where(skill => _addedSkillList.Contains(skill) == false)
+            .OrderBy(_ => Random.value)
+            .Take(count)
             .ToList();
 
-        List<Skill> addables = new();
-        
-        for (int i = 0; i < count; i++)
+        if (skills.Count == 0)
         {
-            if (notAddedSkills.Count >= 1)
-                addables.Add(notAddedSkills.PullRandom());
+            if (_addedSkillList.Count < _skillDBCount)
+                return GetAddableSkills(count);
+
+            else
+                throw new("Can not add any Skill.");
         }
 
-        return addables;
+        return skills;
+    }
+
+    public static void AddSkill(Skill skill)
+    {
+        _addedSkillList.Add(skill);
+        
+        Debug.Log($"{skill} added!");
+
+        if (skill is PassiveSkill passiveSkill)
+            passiveSkill.OnGetPassive();
     }
 }
 

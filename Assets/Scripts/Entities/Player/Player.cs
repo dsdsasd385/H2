@@ -123,12 +123,13 @@ namespace Entities
         {
             if (_skillPoint == 0)
                 yield break;
-            
-            // todo Load Skill Add UI
-            
+
             for (int i = 0; i < _skillPoint; i++)
             {
-                Debug.Log("스킬 선택!");
+                var addableSkills = Skill.GetAddableSkills();
+                SelectSkillUI.Initialize(addableSkills);
+                yield return new WaitUntil(() => SelectSkillUI.SelectedSkill != null);
+                Skill.AddSkill(SelectSkillUI.SelectedSkill);
             }
 
             _skillPoint = 0;
