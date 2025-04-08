@@ -3,26 +3,23 @@ using UnityEngine;
 using System;
 using UnityEditor;
 using DG.Tweening;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    public Player Player {  get; private set; }
+    public Player Player { get; private set; }
 
-    private WalletController _wallet;
-    public WalletController Wallet => _wallet;
-
-    public PlayerUI _playerUI { get; private set; }
     public PlayerAnimationHandler _playerAni { get; private set; }
 
-    private Scene _oldScene; 
+    private Scene _oldScene;
     private StageRouletteType _stageRouletteTypes;
 
     private event Action<RouletteResult> roulette;
-      
+
 
     public static void InitializeFromChapter()
     {
-        if(Chapter.playerObj.TryGetComponent(out PlayerController controller))
+        if (Chapter.playerObj.TryGetComponent(out PlayerController controller))
         {
             controller.InitializeComponents();
         }
@@ -36,22 +33,21 @@ public class PlayerController : MonoBehaviour
 
     public void InitializeComponents()
     {
-        _playerUI = GetComponent<PlayerUI>();
-        _wallet = GetComponent<WalletController>();
         _playerAni = GetComponent<PlayerAnimationHandler>();
+        Player = Player.currentPlayer;
 
         if (Player == null)
-            Player = new Player();
+        {
+            Debug.Log("Player가 없습니다.");
+        }
 
-        Player.Init();
+        _oldScene = SceneManager.GetActiveScene();
 
         SubscribeToEvents();
+
+        Player.Init();
     }
-    void Awake()
-    {
-        _oldScene = SceneManager.GetActiveScene();
-    }
-    private void OnEnable()
+    private void SubscribeToEvents()
     {
         Chapter.RouletteResultChangedEvent += SetStatus;
         Battle.BattleStart += MoveToBattleScene;
@@ -66,7 +62,6 @@ public class PlayerController : MonoBehaviour
     {
         Chapter.RouletteResultChangedEvent -= SetStatus;
         Battle.BattleStart -= MoveToBattleScene;
-        UnsubscribeFromEvents();
     }
 
     private void SetStatus(RouletteResult result)
@@ -85,6 +80,10 @@ public class PlayerController : MonoBehaviour
                 Player.OnDefenseChanged(result.ChangeValue);
                 Debug.Log($"방어력 증가! {result.ChangeValue}%");
                 break;
+            case StageRouletteType.PICK_COIN:
+                Player.AddCoin(result.ChangeValue);
+                Debug.Log($"코인 획득! {result.ChangeValue}");
+                break;
             case StageRouletteType.BUG_BITE:
                 Player.OnHpChanged(result.ChangeValue);
                 Debug.Log($"체력 감소! {result.ChangeValue} %");
@@ -97,46 +96,17 @@ public class PlayerController : MonoBehaviour
                 Player.OnDefenseChanged(result.ChangeValue);
                 Debug.Log($"방어력 감소! {result.ChangeValue} %");
                 break;
+
+            case StageRouletteType.LOST_COIN:
+                Player.LostCoin(result.ChangeValue);
+                Debug.Log($"코인 감소! {result.ChangeValue}");
+                break;
         }
     }
-
-
-    public void SubscribeToEvents()
-    {
-        if (_wallet != null && _playerUI != null && Player != null)
-        {
-            Player.Status.OnHpChange += _playerUI.SetHpVar;
-            Player.Status.OnPowerChange += _playerUI.SetPowerText;
-            Player.Status.OnDefenseChange += _playerUI.SetDefenseText;
-            Player.OnChangeExp += _playerUI.SetExp;
-            Player.OnLevelUp += _playerUI.SetLevel;
-            _wallet.wallet.OnCoinChanged += _playerUI.SetCoinText;
-            Player.OnPlayAttackAnimation += _playerAni.PlayAttackAni;
-            Player.OnPlayDamagedAnimation += _playerAni.PlayDamagedAni;
-            Player.OnPlayDieAnimation += _playerAni.PlayDieAni;
-        }
-    }
-
-    public void UnsubscribeFromEvents()
-    {
-        if(_wallet != null &&  _playerUI != null && Player != null)
-        {
-            Player.Status.OnHpChange -= _playerUI.SetHpVar;
-            Player.Status.OnPowerChange -= _playerUI.SetPowerText;
-            Player.Status.OnDefenseChange -= _playerUI.SetDefenseText;
-            Player.OnChangeExp -= _playerUI.SetExp;
-            Player.OnLevelUp -= _playerUI.SetLevel;
-            _wallet.wallet.OnCoinChanged -= _playerUI.SetCoinText;
-            Player.OnPlayAttackAnimation -= _playerAni.PlayAttackAni;
-            Player.OnPlayDamagedAnimation -= _playerAni.PlayDamagedAni;
-            Player.OnPlayDieAnimation -= _playerAni.PlayDieAni;
-        }      
-    }
-
 
     private void MoveToBattleScene()
     {
-        if (Battle._battle && Battle.IsBattle)  
+        if (Battle._battle && Battle.IsBattle)
         {
             SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName("BattleScene"));
         }
@@ -146,6 +116,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public IEnumerator AttackCoroutine(Entity target)
+    {
+        _playerAni.PlayAttackAni();
 
+        yield return new WaitForSeconds(0.5f); // => 애니메이션 시간에 맞춰 시간설정
+
+        Player.Attack(target);
+    }
 
 }

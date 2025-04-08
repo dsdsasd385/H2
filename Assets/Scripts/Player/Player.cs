@@ -6,6 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class Player : Entity
 {
+    public static Player currentPlayer {  get; private set; }
+    public static void CreatePlayer()
+    {
+        var player = new Player();
+        currentPlayer = player;
+
+        PlayerController.InitializeFromChapter();
+    }
+
     private Status _status;
     public ref Status Status => ref _status;
 
@@ -15,11 +24,32 @@ public class Player : Entity
     private int _level;
     private Monster _monsterTarget;
 
-    public Action OnPlayAttackAnimation;
-    public Action OnPlayDamagedAnimation;
-    public Action OnPlayDieAnimation;
     public event Action<int> OnChangeExp;
     public event Action<int> OnLevelUp;
+    public event Action<int> OnCoinChanged;
+
+    private int _coin;
+    public int Coin
+    {
+        get => _coin;
+        private set
+        {
+            int oldCoin = _coin;
+            _coin = Math.Max(0, value);
+            OnCoinChanged?.Invoke(_coin);
+            Debug.Log($"코인 변경: {oldCoin} -> {_coin}");
+        }
+    }
+
+    public void AddCoin(int amount)
+    {
+        Coin += amount;
+    }
+
+    public void LostCoin(int amount)
+    {
+        Coin += amount;
+    }
 
     public int Exp
     {
@@ -88,7 +118,6 @@ public class Player : Entity
         {
             //animator.SetTrigger("Attack");
             target.TakeDamage(_status.Power, _monsterTarget.Status.Defense, _status.Critical, this);
-            OnPlayAttackAnimation?.Invoke();
         }
 
         else
@@ -109,7 +138,6 @@ public class Player : Entity
             Die();
             return;
         }
-        OnPlayDamagedAnimation?.Invoke();
         int damageInt = (int)damage;
         _status.Hp -= damageInt;
     }
@@ -117,7 +145,6 @@ public class Player : Entity
     protected async override void Die()
     {
         // 사망 로직
-        OnPlayDieAnimation?.Invoke();
         //animator.SetTrigger("Die");
         Debug.Log("플레이어가 사망했습니다.");
         await Task.Delay(2500);

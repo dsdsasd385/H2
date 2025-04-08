@@ -61,26 +61,18 @@ public abstract class Chapter : MonoBehaviour
     {
         // todo
         // Loading Player
-        SetPlayer();
+        playerObj = playerPrefab;
+        Player.CreatePlayer();
 
         StagePlayUI.Initialize();
 
-        PlayerController.InitializeFromChapter();
 
         // Loading Map
 
         _growthRate = new(growthRateRange, BattleCount);
 
         SetStageAction();
-    }
-
-    private void SetPlayer()
-    {
-        if(playerObj == null)
-        {
-            playerObj = Instantiate(playerPrefab);
-        }
-    }
+    } 
 
     private void SetStageAction()
     {

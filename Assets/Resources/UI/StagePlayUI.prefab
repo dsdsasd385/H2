@@ -134,6 +134,7 @@ MonoBehaviour:
   - {fileID: 5314792398381095558}
   - {fileID: 1407703404383900416}
   - {fileID: 2563105305740549626}
+  playerUI: {fileID: 6282265781386205726}
   dialogView: {fileID: 5790243172240921995}
   dialogParent: {fileID: 2372449604260732569}
   dialogPrefab: {fileID: 6994141669441231174}
@@ -1118,6 +1119,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2439596469257951492}
+  - component: {fileID: 6282265781386205726}
   - component: {fileID: 3391498269396029951}
   - component: {fileID: 8903680411554901670}
   m_Layer: 5
@@ -1150,6 +1152,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -241}
   m_SizeDelta: {x: 0, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6282265781386205726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6906313609668065127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd643d4f32c8ec7449308143eaab2dd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hpTxt: {fileID: 840585749436787342}
+  _leveltxt: {fileID: 3290040466221228253}
+  _powerTxt: {fileID: 5314792398381095558}
+  _defenseTxt: {fileID: 1407703404383900416}
+  _coinTxt: {fileID: 2563105305740549626}
 --- !u!222 &3391498269396029951
 CanvasRenderer:
   m_ObjectHideFlags: 0

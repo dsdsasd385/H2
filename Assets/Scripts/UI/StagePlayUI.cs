@@ -32,20 +32,14 @@ public class StagePlayUI : UI
     {
         for (var i = 0; i < Instance._dialogList.Count; i++)
             Destroy(Instance._dialogList[i]);
-        
+
         Instance._dialogList.Clear();
-        
+
         Chapter.StageChangedEvent -= OnStageChanged;
         Chapter.StageChangedEvent += OnStageChanged;
 
-        // eventHandler = Chapter.playerObj.GetComponent<PlayerUIEventHandler>();
-        // eventHandler.SubscribeToEvents();
-
-        var playerUI = Chapter.playerObj.GetComponent<PlayerUI>();
-
-        playerUI.SetText(Instance);
-
-            }
+        Instance.playerUI.Initialize();
+    }
 
     public static void AddDialog(string dialog)
     {
@@ -68,14 +62,16 @@ public class StagePlayUI : UI
     {
         print($"현재 스테이지 : {stage} - {stageType}");
     }
-    
+
     /******************************************************************************************************************/
     /******************************************************************************************************************/
-    
+
+    [SerializeField] private PlayerUI playerUI;
     [SerializeField] private ScrollRect dialogView;
-    [SerializeField] private Transform  dialogParent;
+    [SerializeField] private Transform dialogParent;
     [SerializeField] private DialogItem dialogPrefab;
     [SerializeField] private GameObject dialogBlankPrefab;
+
 
     private void RefreshDialogView()
     {

@@ -19,7 +19,6 @@ public class BattleScene : AdditiveScene
     public PlayerController player;
     public MonsterController monster;
 
-    public PlayerItem playerItem;
 
     
     protected override IEnumerator OnSceneLoaded()
