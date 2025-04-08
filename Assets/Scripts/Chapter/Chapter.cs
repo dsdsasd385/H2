@@ -44,9 +44,9 @@ public abstract class Chapter : MonoBehaviour
 
     [MinMaxSlider(1f, 5f), SerializeField] private Vector2         growthRateRange;
 
-
-    private List<IEnumerator> _stageActions = new();
-    private GrowthRate        _growthRate;
+    private Queue<IEnumerator> _otherActions = new();
+    private List<IEnumerator>  _stageActions = new();
+    private GrowthRate         _growthRate;
 
     protected abstract IEnumerator OnEvent();
     protected abstract IEnumerator OnBattle(float growthRate);
@@ -54,14 +54,12 @@ public abstract class Chapter : MonoBehaviour
     public void Initialize()
     {
         var player = Entities.Player.CreateNew(1000, 100, 100, 15, 3, 0);
-        
+
         RouletteResultChangedEvent += player.OnRoulette;
+
+        player.LevelChanged += _ => _otherActions.Enqueue(player.AddSkill());
         
-        player.HpChanged += (oldVal, newVal) => print($"HP : {oldVal} -> {newVal}");
-        player.DefenceChanged += (oldVal, newVal) => print($"DEF : {oldVal} -> {newVal}");
-        player.AttackPointChanged += (oldVal, newVal) => print($"ATT : {oldVal} -> {newVal}");
-        player.CriticalChanged += (oldVal, newVal) => print($"CRI : {oldVal} -> {newVal}");
-        player.GoldChanged += (oldVal, newVal) => print($"GOLD : {oldVal} -> {newVal}");
+        Skill.Initialize();
         
         StagePlayUI.Initialize();
         
@@ -108,6 +106,10 @@ public abstract class Chapter : MonoBehaviour
             StageChangedEvent?.Invoke(index + 1, stageList[index]);
             
             var stageAction = _stageActions[index];
+
+            while (_otherActions.Count > 0)
+                yield return _otherActions.Dequeue();
+            
             yield return PopupButtonUI.WaitForClick("스테이지 진행", -1);
             yield return stageAction;
             StagePlayUI.AddBlank();

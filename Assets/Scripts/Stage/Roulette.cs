@@ -67,24 +67,29 @@ public static class Roulette
                 value = Random.Range(500, 1501);
                 dialog = string.Format(dialogFormat, value);
                 break;
-            case StageRouletteType.BUG_BITE:
+            case StageRouletteType.READ_BOOK:
                 dialogFormat = Dialog.Get(1005);
+                value = Random.Range(10, 30);
+                dialog = string.Format(dialogFormat, value);
+                break;
+            case StageRouletteType.BUG_BITE:
+                dialogFormat = Dialog.Get(1006);
                 value = Random.Range(-15, -6);
                 dialog = string.Format(dialogFormat, value);
                 break;
             case StageRouletteType.BROKEN_WEAPON:
-                dialogFormat = Dialog.Get(1006);
+                dialogFormat = Dialog.Get(1007);
                 value = Random.Range(-15, -6);
                 dialog = string.Format(dialogFormat, value);
 
                 break;
             case StageRouletteType.LOOSEN_ARMOR:
-                dialogFormat = Dialog.Get(1007);
+                dialogFormat = Dialog.Get(1008);
                 value = Random.Range(-15, -6);
                 dialog = string.Format(dialogFormat, value);
                 break;
             case StageRouletteType.LOST_COIN:
-                dialogFormat = Dialog.Get(1008);
+                dialogFormat = Dialog.Get(1009);
                 value = Random.Range(-1500, -501);
                 dialog = string.Format(dialogFormat, value);
                 break;

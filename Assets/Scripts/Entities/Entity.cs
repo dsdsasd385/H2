@@ -5,11 +5,24 @@ namespace Entities
 {
     public abstract class Entity
     {
+        public event Action<int, int> MaxHpChanged;
         public event Action<int, int> HpChanged;
         public event Action<int, int> AttackPointChanged;
         public event Action<int, int> DefenceChanged;
         public event Action<int, int> CriticalChanged;
         public event Action<int, int> SpeedChanged;
+        
+        public int MaxHp
+        {
+            get => _status.MaxHp;
+            set
+            {
+                int before = _status.MaxHp;
+                _status.MaxHp = Mathf.Max(0, value);
+                Hp += _status.MaxHp - before;
+                MaxHpChanged?.Invoke(before, _status.Hp);
+            }
+        }
         
         public int Hp
         {
@@ -17,7 +30,7 @@ namespace Entities
             set
             {
                 int before = _status.Hp;
-                _status.Hp = Mathf.Max(0, value);
+                _status.Hp = Mathf.Clamp(value, 0, MaxHp);
                 HpChanged?.Invoke(before, _status.Hp);
             }
         }
@@ -68,13 +81,14 @@ namespace Entities
         
         private EntityStatus _status;
 
-        public void SetHpByPercent(int percent)          => Hp          +=(Hp * percent / 100);
+        public void SetMaxHpByPercent(int percent)       => MaxHp       += (MaxHp * percent / 100);
+        public void SetHpByPercent(int percent)          => Hp          += (Hp * percent / 100);
         public void SetAttackPointByPercent(int percent) => AttackPoint +=(AttackPoint * percent / 100);
         public void SetDefenceByPercent(int percent)     => Defence     +=(Defence * percent / 100);
         public void SetCriticalByPercent(int percent)    => Critical    +=(Critical * percent / 100);
         public void SetSpeedByPercent(int percent)       => Speed       +=(Speed * percent / 100);
 
-        public void AddHp(int value)          => Hp          += value;
+        public void AddMaxHp(int value)       => Hp          += value;
         public void AddAttackPoint(int value) => AttackPoint += value;
         public void AddDefence(int value)     => Defence     += value;
         public void AddCritical(int value)    => Critical    += value;
