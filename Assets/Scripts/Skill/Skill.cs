@@ -23,6 +23,8 @@ public abstract class Skill
             .Count();
         
         _addedSkillList = new();
+        
+        Projectile.InitPool();
     }
 
     public static bool HasSkill<T>() where T : Skill
@@ -59,6 +61,9 @@ public abstract class Skill
 
     public static void AddSkill(Skill skill)
     {
+        if (_addedSkillList.Contains(skill))
+            return;
+        
         _addedSkillList.Add(skill);
 
         if (skill is PassiveSkill passiveSkill)
@@ -83,7 +88,7 @@ public abstract class Skill
         activeSkills.ForEach(skill => skill.AddProceedTurn());
     }
 
-    public static IEnumerator UseActiveSkills()
+    public static IEnumerator UseActiveSkills(Entities.Entity from, List<Entities.Entity> targetList)
     {
         var activeSkills = _addedSkillList
             .OfType<ActiveSkill>()
@@ -91,7 +96,10 @@ public abstract class Skill
             .ToList();
 
         foreach (var skill in activeSkills)
-            yield return skill.OnUseActive();
+            yield return skill.OnUseActive(from, targetList);
+        
+        foreach (var skill in activeSkills)
+            skill.InitTurnCount();
     }
 
     public abstract string GetSkillName();
@@ -128,5 +136,5 @@ public abstract class ActiveSkill : Skill
 
     public bool CanUseSkill() => _turnCount <= _proceedTurn;
     
-    public abstract IEnumerator OnUseActive();
+    public abstract IEnumerator OnUseActive(Entities.Entity from, List<Entities.Entity> targetList);
 }

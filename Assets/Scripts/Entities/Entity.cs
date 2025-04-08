@@ -99,5 +99,14 @@ namespace Entities
         {
             _status = new EntityStatus(hp, attackPoint, defence, criticalPercentage, speed);
         }
+
+        private GameObject _model;
+        public Transform transform => _model.transform;
+        
+        public Entity SetModel(GameObject obj)
+        {
+            _model = obj;
+            return this;
+        }
     }
 }
