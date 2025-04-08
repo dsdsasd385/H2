@@ -18,6 +18,9 @@ public class MagicMissile : ActiveSkill
             .SetEase(Ease.InQuart)
             .OnComplete(()=>projectile.Release(2f))
             .WaitForCompletion();
+        
+        var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
+        text.ShowDamage(Random.Range(100, 1000));
 
         yield return null;
     }

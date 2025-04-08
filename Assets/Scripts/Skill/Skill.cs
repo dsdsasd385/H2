@@ -25,6 +25,7 @@ public abstract class Skill
         _addedSkillList = new();
         
         Projectile.InitPool();
+        WorldCanvas.InitPool();
     }
 
     public static bool HasSkill<T>() where T : Skill

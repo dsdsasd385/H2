@@ -33,15 +33,15 @@ public abstract class Projectile : MonoBehaviour
                 {
                     p._isReleased = false;
                     p.view.enabled = true;
+                    p.transform.position = initPosition;
+                    p.transform.rotation = Quaternion.LookRotation(target.position);
+                    p.transform.localScale = Vector3.one * scale;
                 });
 
             Pool[projectileName] = pool;
         }
 
         var projectile = Pool[projectileName].Get();
-        projectile.transform.position = initPosition;
-        projectile.transform.rotation = Quaternion.LookRotation(target.position);
-        projectile.transform.localScale = Vector3.one * scale;
         projectile.Initialize();
         projectile.gameObject.SetActive(true);
         return projectile as T;
