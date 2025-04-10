@@ -11,17 +11,23 @@ public class MonsterAnimationHandler : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void PlayAttackAni()
+    public IEnumerator PlayAttackAni()
     {
         _animator.SetTrigger("Attack");
+
+        yield return new WaitForSeconds(0.5f);
     }
-    public void PlayDamagedAni()
+    public IEnumerator PlayDamagedAni()
     {
         _animator.SetTrigger("Damaged");
+
+        yield return new WaitForSeconds(0.5f);
     }
 
-    public void PlayDieAni()
+    public IEnumerator PlayDieAni()
     {
         _animator.SetTrigger("Die");
+
+        yield return new WaitForSeconds(0.5f);
     }
 }

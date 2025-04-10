@@ -61,7 +61,9 @@ public abstract class Chapter : MonoBehaviour
     {
         // todo
         // Loading Player
-        playerObj = playerPrefab;
+        playerObj = Instantiate(playerPrefab);
+        DontDestroyOnLoad(playerObj);
+
         Player.CreatePlayer();
 
         StagePlayUI.Initialize();

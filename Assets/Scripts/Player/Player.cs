@@ -16,7 +16,7 @@ public class Player : Entity
     }
 
     private Status _status;
-    public ref Status Status => ref _status;
+    public Status Status => _status;
 
     private int _lastHp;
     private int _exp;
@@ -110,44 +110,22 @@ public class Player : Entity
 
         // 스킬추가
     }
-    public override void Attack(Entity target)
+
+    public override void TakeDamage(float power, float defense, float critical)
     {
-        _monsterTarget = target as Monster;
-
-        if (_monsterTarget != null)
-        {
-            //animator.SetTrigger("Attack");
-            target.TakeDamage(_status.Power, _monsterTarget.Status.Defense, _status.Critical, this);
-        }
-
-        else
-        {
-            return;
-        }
-    }
-    public override void TakeDamage(float power, float defense, float critical, Entity attacker)
-    {
-        //animator.SetTrigger("Damaged");
-        if (_monsterTarget == null && attacker is Monster monster)
-            _monsterTarget = monster;
-
         float damage = base.CalculateDamage(power, defense, critical);
 
-        if (damage > _status.Hp)
-        {
-            Die();
-            return;
-        }
         int damageInt = (int)damage;
+
         _status.Hp -= damageInt;
     }
 
-    protected async override void Die()
+
+    public override void Die()
     {
         // 사망 로직
         //animator.SetTrigger("Die");
         Debug.Log("플레이어가 사망했습니다.");
-        await Task.Delay(2500);
 
         SceneManager.LoadScene("TitleScene");
     }

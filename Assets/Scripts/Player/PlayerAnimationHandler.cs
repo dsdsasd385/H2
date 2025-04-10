@@ -4,25 +4,32 @@ using UnityEngine;
 
 public class PlayerAnimationHandler : MonoBehaviour
 {
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
+        //_animator = GetComponent<Animator>();
     }
 
-    public void PlayAttackAni()
+    public IEnumerator PlayAttackAni()
     {
+        Debug.Log("애니메이션 실행");
         _animator.SetTrigger("Attack");
+
+        yield return new WaitForSeconds(0.5f);
     }
-    public void PlayDamagedAni()
+    public IEnumerator PlayDamagedAni()
     {
         _animator.SetTrigger("Damaged");
+
+        yield return new WaitForSeconds(0.5f);
     }
 
-    public void PlayDieAni()
+    public IEnumerator PlayDieAni()
     {
         _animator.SetTrigger("Die");
+
+        yield return new WaitForSeconds(0.5f);
     }
 
 }

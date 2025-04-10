@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-public struct Status
+public class Status
 {
     private int _hp;        // 체력
     private float _power;    // 공격력
@@ -122,13 +122,11 @@ public abstract class Entity
     public virtual void Attack(Entity target) { }
 
     // 피해 입음
-    public virtual void TakeDamage(float power, float defense, float critical, Entity attacker)
-    {
-        float damage = CalculateDamage(power, defense, critical);
-    }
+    public abstract void TakeDamage(float power, float defense, float critical);
+
 
     // 피해량 계산
-    protected float CalculateDamage(float power, float defense, float critical)
+    public float CalculateDamage(float power, float defense, float critical)
     {
         float finalDamage = power;
         float criticaMultplier = 2.0f;
@@ -148,5 +146,5 @@ public abstract class Entity
 
     }
     // 사망 처리
-    protected virtual void Die() { }
+    public virtual void Die() { }
 }

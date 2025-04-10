@@ -1,8 +1,6 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using System;
-using UnityEditor;
-using DG.Tweening;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour
@@ -16,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     private event Action<RouletteResult> roulette;
 
+    private Monster _monster;
 
     public static void InitializeFromChapter()
     {
@@ -28,7 +27,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log($" PlayerController가 Chapter.playerObj에 없습니다!");
         }
-
+        
     }
 
     public void InitializeComponents()
@@ -104,7 +103,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void MoveToBattleScene()
+    public void MoveToBattleScene()
     {
         if (Battle._battle && Battle.IsBattle)
         {
@@ -116,13 +115,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public IEnumerator AttackCoroutine(Entity target)
+    public IEnumerator PlayerAttackSequence(PlayerController player, MonsterController monster)
     {
-        _playerAni.PlayAttackAni();
+        Debug.Log("플레이어가 공격합니다.");
+        yield return _playerAni.PlayAttackAni();
 
-        yield return new WaitForSeconds(0.5f); // => 애니메이션 시간에 맞춰 시간설정
-
-        Player.Attack(target);
+        yield return monster.TakeDamageSequence(player.Player);
     }
 
+    public IEnumerator TakeDamageSequence(Entity attacker)
+    {
+        Debug.Log("플레이어가 맞았습니다.");
+
+        _playerAni.PlayDamagedAni();
+
+        yield return new WaitForSeconds(1f);
+
+        if ( attacker is Monster monster)
+            _monster = monster;
+
+        Player.TakeDamage(_monster.Status.Power, Player.Status.Defense, _monster.Status.Critical);
+
+        if (_monster.Status.Hp <= 0)
+        {
+            _monster.Die();
+        }
+    }
 }
