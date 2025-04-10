@@ -1,17 +1,19 @@
 using UnityEngine;
 using System.Threading.Tasks;
+using System;
 
 
 public class Monster : Entity
 {
     private Status _status = new(30, 20f, 3f, 0.05f, 0.8f);    
-    public ref Status Status => ref _status;
+    public Status Status => _status;
 
     [SerializeField] Animator animator;
-    private Player _playerTarget;
 
-    private int _exp = 30;
+    readonly int _exp = 30;
 
+    public Action<int> OnDieGiveExp;
+    public Action OnDieEvent;
 
     private void Awake()
     {
@@ -34,50 +36,23 @@ public class Monster : Entity
 
         _status = _status * multiplier;
     }
-
-    public override void Attack(Entity target)
-    {
-        _playerTarget = target as Player;
-
-        if (target is Player)
-        {
-            //animator.SetTrigger("Attack");
-
-            target.TakeDamage(_status.Power, _playerTarget.Status.Defense, _status.Critical);
-        }
-
-        else
-        {
-            return;
-        }
-    }
+        
 
     public override void TakeDamage(float power, float defense, float critical)
-    {
-
-        //animator.SetTrigger("Damaged");
-
+    {        
         float damage = base.CalculateDamage(power, defense, critical);
-
-        if (damage > _status.Hp)
-        {
-            Die();
-        }
 
         int damageInt = (int)damage;
 
        _status.Hp -= damageInt;
+        Debug.Log($"몬스터의 체력은 {_status.Hp}, 받은 데미지는 {damageInt} 입니다.");
     }
 
-    protected async override void Die()
+    public override void Die()
     {
         // 사망 로직
         //animator.SetTrigger("Die");
-        
-        await Task.Delay(1500);
-  // 경험치 주기
-
-        //if (gameObject != null)
-        //    Destroy(this.gameObject);
+        OnDieGiveExp?.Invoke(_exp);
+        OnDieEvent?.Invoke();
     }
 }

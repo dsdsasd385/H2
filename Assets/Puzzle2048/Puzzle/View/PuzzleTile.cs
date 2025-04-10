@@ -34,6 +34,11 @@ namespace Puzzle2048
         }
         #endregion
 
+        public static void ClearPool()
+        {
+            Pool.Clear();
+        }
+
         public static PuzzleTile Get(Transform parent, Vector2 sizeDelta, Vector2 anchoredPos, int value)
         {
             var tile = Pool.Get();

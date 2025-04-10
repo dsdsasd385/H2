@@ -1,7 +1,6 @@
 using DG.Tweening;
 using System;
 using System.Collections;
-using System.Threading;
 using UnityEngine;
 
 public static class Battle
@@ -16,60 +15,41 @@ public static class Battle
 
         IsBattle = true;
 
-
+        
         BattleStart?.Invoke();
 
         StagePlayUI.AddDialog("<color=red>전투</color>가 발생했습니다!");
 
 
-        // var player = Chapter.playerObj.GetComponent<PlayerController>().Player;
+        var playerController = Chapter.playerObj.GetComponent<PlayerController>();
+        var player = playerController.Player;
                
-        var monster = _battle.monster.GetComponent<MonsterController>().Monster;
+        var monsterController = _battle.monster.GetComponent<MonsterController>();
+        var monster = monsterController.Monster;
 
+        if (player.Status.Speed > monster.Status.Speed)
+        {
+            yield return AttackSequence(playerController, monsterController);
+        }
+        else if (player.Status.Speed < monster.Status.Speed)
+        {
 
-        //for (int i = 0; i < 5; i++)
-        //{
-        //    yield return player.transform.DOLocalJump(player.transform.position, 1.5f, 2, 1f)
-        //        .SetEase(Ease.InQuart)
-        //        .WaitForCompletion();
+            yield return AttackSequence(monsterController, playerController);
+        }
+        else
+        {
+            yield return AttackSequence(playerController, monsterController);
+        }
 
-        //    yield return Delay.WaitRandom(0.5f, 0.8f);
+        if (player.Status.Hp > 0)
+        {
+            StagePlayUI.AddDialog("플레이어 승리! 축하해요!!");
+        }
 
-        //    StagePlayUI.AddDialog($"플레이어의 공격!\n<color=red>{Random.Range(100, 1000)}</color>의 피해를 입혔습니다!");
-
-        //    yield return monster.transform.DOLocalJump(monster.transform.position, 1.5f, 2, 1f)
-        //        .SetEase(Ease.InQuart)
-        //        .WaitForCompletion();
-
-        //    yield return Delay.WaitRandom(0.5f, 0.8f);
-
-        //    StagePlayUI.AddDialog($"몬스터의 공격!\n<color=red>{Random.Range(100, 1000)}</color>의 피해를 입혔습니다!");
-        //}
-
-
-        // if (player.Status.Speed > monster.Status.Speed)
-        // {
-        //     yield return AttackSequence(player, monster);
-        // }
-        // else if (player.Status.Speed < monster.Status.Speed)
-        // {
-        //
-        //     yield return AttackSequence(monster, player);
-        // }
-        // else
-        // {
-        //     yield return AttackSequence(player, monster);
-        // }
-        //
-        // if (player.Status.Hp > 0)
-        // {
-        //     StagePlayUI.AddDialog("플레이어 승리! 축하해요!!");
-        // }
-
-        // else
-        // {
-        //     StagePlayUI.AddDialog("플레이어 패배! 더 강해지기!!");
-        // }
+        else
+        {
+            StagePlayUI.AddDialog("플레이어 패배! 더 강해지기!!");
+        }
         IsBattle = false;
         BattleStart?.Invoke();
 
@@ -78,8 +58,11 @@ public static class Battle
         yield return _battle.UnloadScene();
     }
 
-    private static IEnumerator AttackSequence(Player player, Monster monster)
+    private static IEnumerator AttackSequence(PlayerController playerController, MonsterController monsterController)
     {
+        var player = playerController.Player;
+        var monster = monsterController.Monster;
+
         Debug.Log($"플레이어 선공입니다. 플레이어 공격력은 : {player.Status.Power} 몬스터 체력은 : {monster.Status.Hp}");
 
         while (player.Status.Hp > 0 && monster.Status.Hp > 0)
@@ -93,25 +76,32 @@ public static class Battle
             //yield return player.transform.DOLocalJump(_battle.playerPrefabs.transform.position, 1.5f, 2, 1f)
             //    .SetEase(Ease.InQuart)
             //    .WaitForCompletion();
+            if(playerController == null)
+            {
+                Debug.Log("PlayerController = null");
+            }   
 
-            player.Attack(monster);
-            Debug.Log($"플레이어가 공격했습니다! 플레이어의 공격력은 '{player.Status.Power}', 크리는 '{player.Status.Critical}'입니다.");
-            Debug.Log($"몬스터가 공격당한뒤 체력은 : '{monster.Status.Hp}', 방어력은 '{monster.Status.Defense}' 입니다.");
+            yield return CoroutineRunner.Instance.RunCoroutine(playerController.PlayerAttackSequence(playerController, monsterController));
+
+            //Debug.Log($"플레이어가 공격했습니다! 플레이어의 공격력은 '{player.Status.Power}', 크리는 '{player.Status.Critical}'입니다.");
+            //Debug.Log($"몬스터가 공격당한뒤 체력은 : '{monster.Status.Hp}', 방어력은 '{monster.Status.Defense}' 입니다.");
             if (monster.Status.Hp <= 0)
             {
                 break; // 플레이어의 HP가 0 이하일 경우 공격을 중지
             }
-            yield return new WaitForSeconds(1f);
+            Debug.Log("체력체크함");
+
+            yield return new WaitForSeconds(2f);
 
             // 공격 후 즉시 승패 체크
-           
 
+            
             // 점프
             //yield return monster.transform.DOLocalJump(_battle.monsterPrefabs.transform.position, 1.5f, 2, 1f)
             //    .SetEase(Ease.InQuart)
             //    .WaitForCompletion();
 
-            monster.Attack(player);
+            CoroutineRunner.Instance.RunCoroutine(monsterController.MonsterAttackSequence(playerController, monsterController));
 
             Debug.Log($"몬스터가 공격했습니다! 몬스터의 공격력은 : '{monster.Status.Power}', 몬스터 크리는 '{monster.Status.Critical}'");
             Debug.Log($"플레이어가 공격당한뒤 체력은 : '{player.Status.Hp}' 플레이어 방어력은, '{player.Status.Defense}' 입니다. ");
@@ -121,13 +111,16 @@ public static class Battle
                 break; // 플레이어의 HP가 0 이하일 경우 공격을 중지
             }
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
 
         }
     }
 
-    private static IEnumerator AttackSequence(Monster monster, Player player)
+    private static IEnumerator AttackSequence(MonsterController monsterController, PlayerController playerController)
     {
+        var player = playerController.Player;
+        var monster = monsterController.Monster;
+
         Debug.Log($"몬스터 선공입니다. 몬스터 공격력은 : {monster.Status.Power}, 플레이어 체력은 : {player.Status.Hp}");
         while (monster.Status.Hp > 0 && player.Status.Hp > 0)
         {            // 공격 후 즉시 승패 체크
@@ -141,7 +134,7 @@ public static class Battle
             //    .SetEase(Ease.InQuart)
             //    .WaitForCompletion();
 
-            monster.Attack(player);
+            monsterController.MonsterAttackSequence(playerController, monsterController);
 
             Debug.Log($"몬스터가 공격했습니다! 몬스터의 공격력은 : '{monster.Status.Power}', 몬스터 크리는 '{monster.Status.Critical}'");
             Debug.Log($"플레이어가 공격당한뒤 체력은 : '{player.Status.Hp}' 플레이어 방어력은, '{player.Status.Defense}' 입니다. ");
@@ -149,17 +142,17 @@ public static class Battle
             {
                 break; // 플레이어의 HP가 0 이하일 경우 공격을 중지
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
 
             // 공격 후 즉시 승패 체크
-          
+
 
             //// 점프
             //yield return monster.transform.DOLocalJump(_battle.playerPrefabs.transform.position, 1.5f, 2, 1f)
             //    .SetEase(Ease.InQuart)
             //    .WaitForCompletion();
 
-            player.Attack(monster);
+            playerController.PlayerAttackSequence(playerController, monsterController);
 
             if (player.Status.Hp <= 0)
             {
@@ -168,7 +161,7 @@ public static class Battle
             Debug.Log($"플레이어가 공격했습니다! 플레이어의 공격력은 '{player.Status.Power}', 크리는 '{player.Status.Critical}'입니다.");
             Debug.Log($"몬스터가 공격당한뒤 체력은 : '{monster.Status.Hp}', 방어력은 '{monster.Status.Defense}' 입니다.");
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(2f);
         }
     }
 }

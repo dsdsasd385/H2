@@ -33,6 +33,11 @@ namespace Puzzle2048
         }
         #endregion
 
+        public static void ClearPool()
+        {
+            Pool.Clear();
+        }
+
         public static void PlayMergeParticle(Transform ui, Vector2 anchoredPos, int mergeValue)
         {
             int count = mergeValue switch

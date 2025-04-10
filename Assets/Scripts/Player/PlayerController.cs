@@ -1,70 +1,52 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using System;
-using UnityEditor;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
-    public Player Player {  get; private set; }
+    public Player Player { get; private set; }
 
-    private Wallet _wallet;
-    public Wallet Wallet => _wallet;
+    public PlayerAnimationHandler _playerAni { get; private set; }
 
-    public PlayerUI _playerUI { get; private set; }
-    public PlayerExp _playerExp { get; private set; }
-
-    private Scene _oldScene; 
+    private Scene _oldScene;
     private StageRouletteType _stageRouletteTypes;
 
     private event Action<RouletteResult> roulette;
-      
+
+    private Monster _monster;
 
     public static void InitializeFromChapter()
     {
-        // if(Chapter.playerObj.TryGetComponent(out PlayerController controller))
-        // {
-        //     controller.InitializeComponents();
-        // }
-        //
-        // else
-        // {
-        //     Debug.Log($" PlayerControllerï¿½ï¿½ Chapter.playerObjï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½!");
-        // }
+        if (Chapter.playerObj.TryGetComponent(out PlayerController controller))
+        {
+            controller.InitializeComponents();
+        }
 
+        else
+        {
+            Debug.Log($" PlayerController°¡ Chapter.playerObj¿¡ ¾ø½À´Ï´Ù!");
+        }
+        
     }
 
     public void InitializeComponents()
     {
-        if(Player == null)
-            Player = new Player();
+        _playerAni = GetComponent<PlayerAnimationHandler>();
+        Player = Player.currentPlayer;
 
-        Player.Init();
-
-        _playerUI = GetComponent<PlayerUI>();
-        _playerExp = new PlayerExp();
-        _wallet = GetComponent<Wallet>();
-
-        var eventHandle = GetComponent<PlayerUIEventHandler>();
-
-        if( eventHandle != null)
+        if (Player == null)
         {
-            eventHandle.Initialize(_playerUI, _wallet, _playerExp, Player.Status);
+            Debug.Log("Player°¡ ¾ø½À´Ï´Ù.");
         }
-        else
-        {
-            Debug.LogWarning("PlayerUIEventHandlerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
-        }
-    }
-    void Awake()
-    {
-        //Player = new Player();
-        //_playerExp = new PlayerExp();
-        //_playerUI = GetComponent<PlayerUI>();
-        //Debug.Log($"Player Status = {Player.Status}");
 
         _oldScene = SceneManager.GetActiveScene();
+
+        SubscribeToEvents();
+
+        Player.Init();
     }
-    private void OnEnable()
+    private void SubscribeToEvents()
     {
         Chapter.RouletteResultChangedEvent += SetStatus;
         Battle.BattleStart += MoveToBattleScene;
@@ -87,36 +69,43 @@ public class PlayerController : MonoBehaviour
         {
             case StageRouletteType.EXERCISE:
                 Player.OnHpChanged(result.ChangeValue);
-                Debug.Log($"Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue}%");
+                Debug.Log($"Ã¼·Â Áõ°¡! {result.ChangeValue}%");
                 break;
             case StageRouletteType.RESHARPENING_WEAPON:
                 Player.OnPowerChanged(result.ChangeValue);
-                Debug.Log($"ï¿½ï¿½ï¿½Ý·ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue}%");
+                Debug.Log($"°ø°Ý·Â Áõ°¡! {result.ChangeValue}%");
                 break;
             case StageRouletteType.CLEANING_ARMOR:
                 Player.OnDefenseChanged(result.ChangeValue);
-                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue}%");
+                Debug.Log($"¹æ¾î·Â Áõ°¡! {result.ChangeValue}%");
+                break;
+            case StageRouletteType.PICK_COIN:
+                Player.AddCoin(result.ChangeValue);
+                Debug.Log($"ÄÚÀÎ È¹µæ! {result.ChangeValue}");
                 break;
             case StageRouletteType.BUG_BITE:
                 Player.OnHpChanged(result.ChangeValue);
-                Debug.Log($"Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue} %");
+                Debug.Log($"Ã¼·Â °¨¼Ò! {result.ChangeValue} %");
                 break;
             case StageRouletteType.BROKEN_WEAPON:
                 Player.OnPowerChanged(result.ChangeValue);
-                Debug.Log($"ï¿½ï¿½ï¿½Ý·ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue} %");
+                Debug.Log($"°ø°Ý·Â °¨¼Ò! {result.ChangeValue} %");
                 break;
             case StageRouletteType.LOOSEN_ARMOR:
                 Player.OnDefenseChanged(result.ChangeValue);
-                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue} %");
+                Debug.Log($"¹æ¾î·Â °¨¼Ò! {result.ChangeValue} %");
+                break;
+
+            case StageRouletteType.LOST_COIN:
+                Player.LostCoin(result.ChangeValue);
+                Debug.Log($"ÄÚÀÎ °¨¼Ò! {result.ChangeValue}");
                 break;
         }
     }
 
-
-
-    private void MoveToBattleScene()
+    public void MoveToBattleScene()
     {
-        if (Battle._battle && Battle.IsBattle)  
+        if (Battle._battle && Battle.IsBattle)
         {
             SceneManager.MoveGameObjectToScene(gameObject, SceneManager.GetSceneByName("BattleScene"));
         }
@@ -126,6 +115,30 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public IEnumerator PlayerAttackSequence(PlayerController player, MonsterController monster)
+    {
+        Debug.Log("ÇÃ·¹ÀÌ¾î°¡ °ø°ÝÇÕ´Ï´Ù.");
+        yield return _playerAni.PlayAttackAni();
 
+        yield return monster.TakeDamageSequence(player.Player);
+    }
 
+    public IEnumerator TakeDamageSequence(Entity attacker)
+    {
+        Debug.Log("ÇÃ·¹ÀÌ¾î°¡ ¸Â¾Ò½À´Ï´Ù.");
+
+        _playerAni.PlayDamagedAni();
+
+        yield return new WaitForSeconds(1f);
+
+        if ( attacker is Monster monster)
+            _monster = monster;
+
+        Player.TakeDamage(_monster.Status.Power, Player.Status.Defense, _monster.Status.Critical);
+
+        if (_monster.Status.Hp <= 0)
+        {
+            _monster.Die();
+        }
+    }
 }

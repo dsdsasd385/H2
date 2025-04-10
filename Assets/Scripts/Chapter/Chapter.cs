@@ -9,7 +9,7 @@ public abstract class Chapter : MonoBehaviour
 {
     public static event Action<int, StageType> StageChangedEvent;
     public static event Action<RouletteResult> RouletteResultChangedEvent;
-    
+    public static GameObject playerObj { get; private set; }
     private static IEnumerator OnRoulette()
     {
         RouletteResult result = default;
@@ -20,7 +20,8 @@ public abstract class Chapter : MonoBehaviour
             Debug.Log($"룰렛 실행 : 값은 {res.ChangeValue}, 결과 타입은{res.Type}");
             RouletteResultChangedEvent?.Invoke(result);
         });
-        
+
+
         var logs = result.Dialog.Split('\n');
 
         foreach (var log in logs)
@@ -30,6 +31,11 @@ public abstract class Chapter : MonoBehaviour
         }
 
         yield return StatusRouletteUI.ShowRouletteImage(result.Type);
+    }
+
+    private static IEnumerator OnPuzzle()
+    {
+        yield return AdditiveScene.LoadSceneAsync<PuzzleScene>(Screen.width, Screen.height, 0f, null);
     }
     
     /******************************************************************************************************************/
@@ -41,32 +47,34 @@ public abstract class Chapter : MonoBehaviour
     [ShowNativeProperty] public int        BattleCount     => stageList.Count(stage => stage == StageType.BATTLE);
     
     [SerializeField]                       private List<StageType> stageList;
+    [SerializeField] private GameObject playerPrefab;  // 인스펙터에서 할당
 
     [MinMaxSlider(1f, 5f), SerializeField] private Vector2         growthRateRange;
 
-    private Queue<IEnumerator> _otherActions = new();
-    private List<IEnumerator>  _stageActions = new();
-    private GrowthRate         _growthRate;
 
-    protected abstract IEnumerator OnEvent();
+    private List<IEnumerator> _stageActions = new();
+    private GrowthRate        _growthRate;
+
     protected abstract IEnumerator OnBattle(float growthRate);
 
     public void Initialize()
     {
-        var player = Entities.Player.CreateNew(1000, 100, 100, 15, 3, 0);
+        // todo
+        // Loading Player
+        playerObj = Instantiate(playerPrefab);
+        DontDestroyOnLoad(playerObj);
 
-        RouletteResultChangedEvent += player.OnRoulette;
+        Player.CreatePlayer();
 
-        player.LevelChanged += _ => _otherActions.Enqueue(player.AddSkill());
-        
-        Skill.Initialize();
-        
         StagePlayUI.Initialize();
-        
+
+
+        // Loading Map
+
         _growthRate = new(growthRateRange, BattleCount);
 
         SetStageAction();
-    }
+    } 
 
     private void SetStageAction()
     {
@@ -82,7 +90,7 @@ public abstract class Chapter : MonoBehaviour
                     action = OnRoulette();
                     break;
                 case StageType.STAGE_EVENT:
-                    action = OnEvent();
+                    action = OnPuzzle();
                     break;
                 case StageType.BATTLE:
                     action = OnBattle(_growthRate.GetRate(battleStageOrder));
@@ -106,10 +114,6 @@ public abstract class Chapter : MonoBehaviour
             StageChangedEvent?.Invoke(index + 1, stageList[index]);
             
             var stageAction = _stageActions[index];
-
-            while (_otherActions.Count > 0)
-                yield return _otherActions.Dequeue();
-            
             yield return PopupButtonUI.WaitForClick("스테이지 진행", -1);
             yield return stageAction;
             StagePlayUI.AddBlank();

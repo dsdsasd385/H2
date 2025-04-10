@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 6819989686066862053}
   - component: {fileID: 4887679972189769237}
   - component: {fileID: 4124540707276416932}
+  - component: {fileID: 3255581046804533598}
+  - component: {fileID: 6757452548786177137}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -42,7 +44,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 723457909043310149}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -3702037217650275473, guid: 16a34bdcd85cf5b4881a479b0aa7a844, type: 3}
 --- !u!23 &6819989686066862053
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -120,3 +122,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ff3c019aed53354499bbed949ae668a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3255581046804533598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723457909043310149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b34910cc37cbc6c459df286a9e158ad6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &6757452548786177137
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723457909043310149}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 445310022ab14fe46998fcdd3b8a4437, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
