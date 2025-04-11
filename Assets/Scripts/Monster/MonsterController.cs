@@ -12,15 +12,19 @@ public class MonsterController : MonoBehaviour
 
     private Player _playerTarget;
 
+    private float _moveSpeed;
+    private Vector3 _originPos;
     // Start is called before the first frame update
     void Awake()
     {
         _monster = new Monster();
 
         _monster.transform = transform;
-        
+
         _monsterAni = GetComponent<MonsterAnimationHandler>();
-        
+
+        _originPos = transform.position;
+
         SubscribeToEvents();
     }
     private void OnDestroy()
@@ -28,9 +32,9 @@ public class MonsterController : MonoBehaviour
         UnsubscribeFromEvents();
     }
 
-    public void SubscribeToEvents() 
+    public void SubscribeToEvents()
     {
-        if(_monsterAni != null && Monster != null)
+        if (_monsterAni != null && Monster != null)
         {
             Debug.Log($"_monsterAni�� {_monsterAni} �̸� Monster�� {Monster}�Դϴ�.");
 
@@ -41,7 +45,7 @@ public class MonsterController : MonoBehaviour
 
     public void UnsubscribeFromEvents()
     {
-        if(_monsterAni != null && Monster != null)
+        if (_monsterAni != null && Monster != null)
         {
             Monster.OnDieGiveExp -= GievExp;
             Monster.OnDieEvent -= DieEvent;
@@ -62,7 +66,17 @@ public class MonsterController : MonoBehaviour
             Debug.LogWarning("_playerTarget 이 없습니다.");
         }
     }
+    public IEnumerator MonsterMoveToTarget(Transform transform, Vector3 targetTransform, float speed)
+    {   
+        _moveSpeed = speed;
+        Vector3 targetPos = targetTransform;
 
+        while (Vector3.Distance(transform.position, targetPos) > 0.1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+            yield return null;
+        }
+    }
     public IEnumerator MonsterAttackSequence(PlayerController player, MonsterController monster)
     {
         Debug.Log("몬스터가 공격했습니다..");
@@ -72,6 +86,8 @@ public class MonsterController : MonoBehaviour
         yield return new WaitForSeconds(0.5f); // => �ִϸ��̼� �ð��� ���� �ð�����
 
         StartCoroutine(player.TakeDamageSequence(monster.Monster));// �ʿ��� �����Ͱ� power,defense,critical
+
+        yield return MonsterMoveToTarget(transform, _originPos, _moveSpeed);
     }
     public IEnumerator TakeDamageSequence(Entity attacker)
     {
@@ -81,7 +97,7 @@ public class MonsterController : MonoBehaviour
         if (_playerTarget == null && attacker is Player player)
             _playerTarget = player;
 
-        if(_monster != null)
+        if (_monster != null)
         {
             _monster.TakeDamage(_playerTarget.Status.Power, Status.Defense, _playerTarget.Status.Critical);
 
