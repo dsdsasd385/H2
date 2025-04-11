@@ -1,92 +1,76 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
-    [SerializeField] private TMP_Text _hpTxt;
-    [SerializeField] private TMP_Text _leveltxt;
-    [SerializeField] private TMP_Text _powerTxt;
-    [SerializeField] private TMP_Text _defenseTxt;
-    [SerializeField] private TMP_Text _coinTxt;
-
-    private Slider _exp;
-    private Slider _hpVar;
+    [SerializeField] private Slider sldExp;
+    [SerializeField] private Slider sldHp;
+    [SerializeField] private TMP_Text txtLevel;
+    [SerializeField] private TMP_Text txtHp;
+    [SerializeField] private TMP_Text txtPower;
+    [SerializeField] private TMP_Text txtDefence;
     
-
     private StagePlayUI _stagePlayUI;
-
-
+    
     public void Initialize()
     {
-        // 이벤트 구독
-        Player.currentPlayer.Status.OnHpChange += SetHpVar;
-        Player.currentPlayer.Status.OnPowerChange += SetPowerText;
-        Player.currentPlayer.Status.OnDefenseChange += SetDefenseText;
-        Player.currentPlayer.OnChangeExp += SetExp;
-        Player.currentPlayer.OnLevelUp += SetLevel;
-        Player.currentPlayer.OnCoinChanged += SetCoinText;
-        //    Player.OnPlayAttackAnimation += _playerAni.PlayAttackAni;
-        //    Player.OnPlayDamagedAnimation += _playerAni.PlayDamagedAni;
-        //    Player.OnPlayDieAnimation += _playerAni.PlayDieAni;
-        //
-        }
+        Player.currentPlayer.Status.OnHpChange += RefreshHp;
+        Player.currentPlayer.Status.OnPowerChange += RefreshPower;
+        Player.currentPlayer.Status.OnDefenseChange += RefreshDefence;
+        Player.currentPlayer.OnChangeExp += RefreshExp;
+        Player.currentPlayer.OnLevelUp += RefreshLevel;
 
-        private void OnDestroy()
+        var player = Player.currentPlayer;
+        
+        RefreshLevel(player.Level);
+        RefreshExp(player.Exp, player.NeedExp);
+        RefreshPower(player.Status.Power);
+        RefreshDefence(player.Status.Defense);
+        RefreshHp(player.Status.Hp, player.Status.MaxHp);
+    }
+
+    private void OnDestroy()
+    {
+        if (Player.currentPlayer != null)
         {
-        if(Player.currentPlayer != null)
-        {
-            // 이벤트 구독해제
-            Player.currentPlayer.Status.OnHpChange -= SetHpVar;
-            Player.currentPlayer.Status.OnPowerChange -= SetPowerText;
-            Player.currentPlayer.Status.OnDefenseChange -= SetDefenseText;
-            Player.currentPlayer.OnChangeExp -= SetExp;
-            Player.currentPlayer.OnLevelUp -= SetLevel;
+            Player.currentPlayer.Status.OnHpChange -= RefreshHp;
+            Player.currentPlayer.Status.OnPowerChange -= RefreshPower;
+            Player.currentPlayer.Status.OnDefenseChange -= RefreshDefence;
+            Player.currentPlayer.OnChangeExp -= RefreshExp;
+            Player.currentPlayer.OnLevelUp -= RefreshLevel;
         }
     }
 
-        private void SetHpVar(int hp)
-        {
-            _hpTxt.text = hp.ToString("F2");
-            //_hpVar.value = hp;
-            Debug.Log("HpText가 변경되었습니다.");
-            // 슬라이드 애니메이션 (스르륵 움직이게)
-        }
-        private void SetCriticalText(float critical)
-        {
-
-        }
-        private void SetPowerText(float power)
-        {
-            _powerTxt.text = power.ToString("F2");
-            Debug.Log("powerText가 변경되었습니다.");
-        }
-        private void SetDefenseText(float defense)
-        {
-            _defenseTxt.text = defense.ToString("F2");
-            Debug.Log("DefenseText 변경되었습니다.");
-
-        }
-        private void SetSpeedText(float speed)
-        {
-
-        }
-
-        private void SetCoinText(int coin)
-        {
-            // CoinText에 할당
-            _coinTxt.text = coin.ToString();
-        }
-
-        private void SetExp(int exp)
-        {
-            // exp 활용
-        }
-
-        private void SetLevel(int level)
-        {
-            _leveltxt.text = level.ToString();
-        }
-
-
+    private void RefreshLevel(int level)
+    {
+        txtLevel.text = $"LV {level}";
     }
+
+    private void RefreshExp(int exp, int needExp)
+    {
+        sldExp.maxValue = needExp;
+
+        DOTween.To(() => sldExp.value, x => sldExp.value = x, exp, 0.5f);
+    }
+
+    private void RefreshHp(int hp, int maxHp)
+    {
+        sldHp.maxValue = maxHp;
+
+        txtHp.text = $"{hp}/{maxHp}";
+
+        DOTween.To(() => sldHp.value, x => sldHp.value = x, hp, 0.5f);
+    }
+
+    private void RefreshPower(float power)
+    {
+        txtPower.text = $"{power:F1}";
+    }
+
+    private void RefreshDefence(float defence)
+    {
+        txtDefence.text = $"{defence:F1}";
+    }
+}
