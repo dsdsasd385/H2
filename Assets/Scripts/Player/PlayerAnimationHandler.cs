@@ -32,4 +32,13 @@ public class PlayerAnimationHandler : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
     }
 
+    public IEnumerator PlayRunToAttackAni()
+    {
+        _animator.SetTrigger("Run");
+
+        yield return PlayAttackAni();
+
+        yield return new WaitForSeconds(0.5f);
+    }
+
 }
