@@ -51,7 +51,7 @@ public abstract class Chapter : MonoBehaviour
 
     [MinMaxSlider(1f, 5f), SerializeField] private Vector2         growthRateRange;
 
-
+    private Queue<IEnumerator> _otherJobs   = new();
     private List<IEnumerator> _stageActions = new();
     private GrowthRate        _growthRate;
 
@@ -65,10 +65,12 @@ public abstract class Chapter : MonoBehaviour
         DontDestroyOnLoad(playerObj);
 
         Player.CreatePlayer();
+        Skill.Initialize();
+
+        Player.currentPlayer.OnLevelUp += _ => _otherJobs.Enqueue(OnPlayerLevelUp());
 
         StagePlayUI.Initialize();
-
-
+        
         // Loading Map
 
         _growthRate = new(growthRateRange, BattleCount);
@@ -114,9 +116,24 @@ public abstract class Chapter : MonoBehaviour
             StageChangedEvent?.Invoke(index + 1, stageList[index]);
             
             var stageAction = _stageActions[index];
+
+            while (_otherJobs.Count > 0)
+            {
+                var job = _otherJobs.Dequeue();
+                yield return job;
+            }
+            
             yield return PopupButtonUI.WaitForClick("스테이지 진행", -1);
             yield return stageAction;
             StagePlayUI.AddBlank();
         }
+    }
+
+    private IEnumerator OnPlayerLevelUp()
+    {
+        var addableSkills = Skill.GetAddableSkills();
+        SelectSkillUI.Initialize(addableSkills);
+        yield return new WaitUntil(() => SelectSkillUI.SelectedSkill != null);
+        Skill.AddSkill(SelectSkillUI.SelectedSkill);
     }
 }
