@@ -79,8 +79,9 @@ public static class Battle
             if(playerController == null)
             {
                 Debug.Log("PlayerController = null");
-            }   
-            
+            }
+
+            yield return CoroutineRunner.Instance.RunCoroutine(playerController.PlayerMoveToTarget(playerController.transform, monsterController.transform.position, 20f));
 
             yield return CoroutineRunner.Instance.RunCoroutine(playerController.PlayerAttackSequence(playerController, monsterController));
 
@@ -96,11 +97,13 @@ public static class Battle
 
             // 공격 후 즉시 승패 체크
 
-            
+
             // 점프
             //yield return monster.transform.DOLocalJump(_battle.monsterPrefabs.transform.position, 1.5f, 2, 1f)
             //    .SetEase(Ease.InQuart)
             //    .WaitForCompletion();
+
+            yield return CoroutineRunner.Instance.RunCoroutine(monsterController.MonsterMoveToTarget(monsterController.transform, playerController.transform.position, 20f));
 
             yield return CoroutineRunner.Instance.RunCoroutine(monsterController.MonsterAttackSequence(playerController, monsterController));
 

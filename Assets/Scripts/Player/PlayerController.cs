@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class PlayerController : MonoBehaviour
 {
     public Player Player { get; private set; }
@@ -16,6 +17,8 @@ public class PlayerController : MonoBehaviour
     private event Action<RouletteResult> roulette;
 
     private Monster _monster;
+    private Vector3 _originPos;
+    private float _moveSpeed;
 
     public static void InitializeFromChapter()
     {
@@ -34,10 +37,11 @@ public class PlayerController : MonoBehaviour
     {
         _playerAni = GetComponent<PlayerAnimationHandler>();
         Player = Player.currentPlayer;
+        _originPos = transform.position;
 
         if (Player == null)
         {
-            Debug.Log("Player�� �����ϴ�.");
+            Debug.Log("Player가 null입니다.");
             return;
         }
 
@@ -118,6 +122,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 플레이어 -> 몬스터 이동
+    public IEnumerator PlayerMoveToTarget(Transform transform, Vector3 targetTransform, float speed)
+    {
+        _moveSpeed = speed;
+        Vector3 targetPos = targetTransform;
+
+        while (Vector3.Distance(transform.position, targetPos) > 0.1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+            yield return null;
+        }
+    }
+
     public IEnumerator PlayerAttackSequence(PlayerController player, MonsterController monster)
     {
         Debug.Log("플레이어가 공격을 시작했습니다..");
@@ -127,6 +144,8 @@ public class PlayerController : MonoBehaviour
         yield return _playerAni.PlayAttackAni();
 
         yield return monster.TakeDamageSequence(player.Player);
+
+        yield return PlayerMoveToTarget(transform, _originPos, _moveSpeed);
     }
 
     public IEnumerator TakeDamageSequence(Entity attacker)
@@ -141,6 +160,7 @@ public class PlayerController : MonoBehaviour
             _monster = monster;
 
         Player.TakeDamage(_monster.Status.Power, Player.Status.Defense, _monster.Status.Critical);
+
 
         if (_monster.Status.Hp <= 0)
         {
