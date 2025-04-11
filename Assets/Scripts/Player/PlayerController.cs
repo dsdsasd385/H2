@@ -125,6 +125,8 @@ public class PlayerController : MonoBehaviour
     // 플레이어 -> 몬스터 이동
     public IEnumerator PlayerMoveToTarget(Transform transform, Vector3 targetTransform, float speed)
     {
+        yield return _playerAni.PlayRunAni();
+
         _moveSpeed = speed;
         Vector3 targetPos = targetTransform;
 
@@ -133,6 +135,22 @@ public class PlayerController : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
             yield return null;
         }
+    }
+
+    public IEnumerator ReturnMovePlayer(Transform transform, Vector3 targetTransform, float speed)
+    {
+        yield return _playerAni.PlayRunAni();
+
+        _moveSpeed = speed;
+        Vector3 targetPos = targetTransform;
+
+        while (Vector3.Distance(transform.position, targetPos) > 0.1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+            yield return null;
+        }
+
+        yield return _playerAni.PlayIdle();
     }
 
     public IEnumerator PlayerAttackSequence(PlayerController player, MonsterController monster)
@@ -145,7 +163,7 @@ public class PlayerController : MonoBehaviour
 
         yield return monster.TakeDamageSequence(player.Player);
 
-        yield return PlayerMoveToTarget(transform, _originPos, _moveSpeed);
+        yield return ReturnMovePlayer(transform, _originPos, _moveSpeed);
     }
 
     public IEnumerator TakeDamageSequence(Entity attacker)

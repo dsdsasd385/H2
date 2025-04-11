@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerAnimationHandler : MonoBehaviour
@@ -39,6 +40,20 @@ public class PlayerAnimationHandler : MonoBehaviour
         yield return PlayAttackAni();
 
         yield return new WaitForSeconds(0.5f);
+    }
+
+    public IEnumerator PlayRunAni()
+    {
+        _animator.SetTrigger("Run");
+        Debug.Log("달리기 애니메이션");
+        yield return null;
+    }
+
+    public IEnumerator PlayIdle()
+    {
+        _animator.SetTrigger("Idle");
+        yield return null;
+
     }
 
 }
