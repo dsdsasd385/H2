@@ -24,6 +24,8 @@ public class InGameScene : GameScene
         
         CurrentChapter.Initialize();
         
+        Dim.FadeOut(1f, 1f);
+        
         yield break;
     }
 

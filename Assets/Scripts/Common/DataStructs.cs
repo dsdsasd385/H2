@@ -29,3 +29,13 @@ public struct GrowthRate
         return _rateList[battleStageOrder - 1];
     }
 }
+
+[Serializable]
+public struct StatusData
+{
+    public int   hp;
+    public float power;
+    public float defense;
+    public float critical;
+    public float speed;
+}

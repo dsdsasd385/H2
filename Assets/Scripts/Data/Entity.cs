@@ -1,19 +1,26 @@
 using System;
 using UnityEngine;
+
 public class Status
 {
-    private int _hp;        // ü��
+    private int   _maxHp;
+    private int   _hp;        // ü��
     private float _power;    // ���ݷ�
     private float _defense;  // ����
     private float _critical; // ġ��Ÿ
     private float _speed;    // ����(speed�� �������� ����)
-
-
-    public event Action<int> OnHpChange;
+    
+    public event Action<int>   OnHpChange;
     public event Action<float> OnPowerChange;
     public event Action<float> OnDefenseChange;
     public event Action<float> OnCriticalChange;
     public event Action<float> OnSpeedChange;
+    
+    public int MaxHp
+    {
+        get => _maxHp;
+        set => _maxHp = Mathf.Max(0, value);
+    }
 
     public int Hp
     {
@@ -83,6 +90,26 @@ public class Status
         } // ���� 0 �̻� �����ǵ���
     }
 
+    public StatusData ToStatusData()
+    {
+        return new StatusData
+        {
+            hp = Hp,
+            power = Power,
+            defense = Defense,
+            critical = Critical,
+            speed = Speed
+        };
+    }
+
+    public Status(StatusData data)
+    {
+        MaxHp = Hp = data.hp;
+        Power = data.power;
+        Defense = data.defense;
+        Critical = data.critical;
+        Speed = data.speed;
+    }
 
     public Status(int hp, float power, float defense, float critical, float speed)
     {

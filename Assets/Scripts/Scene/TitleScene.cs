@@ -2,7 +2,7 @@ public class TitleScene : GameScene
 {
     protected override void OnSceneStarted()
     {
-        GameScene.LoadScene("OutGameScene");
+        UI.Open<TitleUI>();
     }
     
     protected override void OnReleaseScene()

@@ -81,7 +81,7 @@ public class Player : Entity
 
     public void Init()
     {
-        _status = new Status(50, 3000f, 5f, 0.05f, 1f);
+        _status = new Status(SaveLoad.LoadStatus());
         _level = 1;
         _exp = 0;
         _expToNextLevel = 25;
