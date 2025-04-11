@@ -13,7 +13,7 @@ public static class Battle
     {
         Skill.InitActiveSkills();
         
-        yield return AdditiveScene.LoadSceneAsync<BattleScene>(990, 930, 200, loadedScene => _battle = loadedScene);
+        yield return AdditiveScene.LoadSceneAsync<BattleScene>(1080, 890, 270, loadedScene => _battle = loadedScene);
 
         IsBattle = true;
 
