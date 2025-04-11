@@ -59,8 +59,7 @@ public class PlayerUI : MonoBehaviour
     {
         sldHp.maxValue = maxHp;
 
-        txtHp.text = $"{hp}/{maxHp}";
-
+        DOTween.To(() => txtHp.text, x => txtHp.text = x, $"{hp}/{maxHp}", 0.5f);
         DOTween.To(() => sldHp.value, x => sldHp.value = x, hp, 0.5f);
     }
 
