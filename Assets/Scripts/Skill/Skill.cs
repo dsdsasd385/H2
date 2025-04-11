@@ -28,6 +28,11 @@ public abstract class Skill
         WorldCanvas.InitPool();
     }
 
+    /// <summary>
+    /// Type에 해당하는 스킬을 플레이어가 가지고 있는지 확인
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static bool HasSkill<T>() where T : Skill
     {
         return _addedSkillList.OfType<T>().Any();
@@ -80,6 +85,9 @@ public abstract class Skill
         activeSkills.ForEach(skill => skill.InitTurnCount());
     }
 
+    /// <summary>
+    /// 전투시 플레이어의 공격턴이 오면 호출하여 액티브 스킬을 활성화
+    /// </summary>
     public static void ProceedTurn()
     {
         var activeSkills = _addedSkillList
@@ -89,7 +97,13 @@ public abstract class Skill
         activeSkills.ForEach(skill => skill.AddProceedTurn());
     }
 
-    public static IEnumerator UseActiveSkills(Entities.Entity from, List<Entities.Entity> targetList)
+    /// <summary>
+    /// 공격이 가능한 액티브 스킬들을 모두 사용
+    /// </summary>
+    /// <param name="from"></param>
+    /// <param name="targetList"></param>
+    /// <returns></returns>
+    public static IEnumerator UseActiveSkills(Entity from, List<Entity> targetList)
     {
         var activeSkills = _addedSkillList
             .OfType<ActiveSkill>()
@@ -137,5 +151,5 @@ public abstract class ActiveSkill : Skill
 
     public bool CanUseSkill() => _turnCount <= _proceedTurn;
     
-    public abstract IEnumerator OnUseActive(Entities.Entity from, List<Entities.Entity> targetList);
+    public abstract IEnumerator OnUseActive(Entity from, List<Entity> targetList);
 }

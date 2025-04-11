@@ -2,6 +2,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -25,9 +26,8 @@ public class PlayerController : MonoBehaviour
 
         else
         {
-            Debug.Log($" PlayerController°¡ Chapter.playerObj¿¡ ¾ø½À´Ï´Ù!");
+            Debug.Log($" PlayerControllerï¿½ï¿½ Chapter.playerObjï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½!");
         }
-        
     }
 
     public void InitializeComponents()
@@ -37,8 +37,11 @@ public class PlayerController : MonoBehaviour
 
         if (Player == null)
         {
-            Debug.Log("Player°¡ ¾ø½À´Ï´Ù.");
+            Debug.Log("Playerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
+            return;
         }
+
+        Player.transform = transform;
 
         _oldScene = SceneManager.GetActiveScene();
 
@@ -69,36 +72,36 @@ public class PlayerController : MonoBehaviour
         {
             case StageRouletteType.EXERCISE:
                 Player.OnHpChanged(result.ChangeValue);
-                Debug.Log($"Ã¼·Â Áõ°¡! {result.ChangeValue}%");
+                Debug.Log($"Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue}%");
                 break;
             case StageRouletteType.RESHARPENING_WEAPON:
                 Player.OnPowerChanged(result.ChangeValue);
-                Debug.Log($"°ø°Ý·Â Áõ°¡! {result.ChangeValue}%");
+                Debug.Log($"ï¿½ï¿½ï¿½Ý·ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue}%");
                 break;
             case StageRouletteType.CLEANING_ARMOR:
                 Player.OnDefenseChanged(result.ChangeValue);
-                Debug.Log($"¹æ¾î·Â Áõ°¡! {result.ChangeValue}%");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue}%");
                 break;
             case StageRouletteType.PICK_COIN:
                 Player.AddCoin(result.ChangeValue);
-                Debug.Log($"ÄÚÀÎ È¹µæ! {result.ChangeValue}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ È¹ï¿½ï¿½! {result.ChangeValue}");
                 break;
             case StageRouletteType.BUG_BITE:
                 Player.OnHpChanged(result.ChangeValue);
-                Debug.Log($"Ã¼·Â °¨¼Ò! {result.ChangeValue} %");
+                Debug.Log($"Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue} %");
                 break;
             case StageRouletteType.BROKEN_WEAPON:
                 Player.OnPowerChanged(result.ChangeValue);
-                Debug.Log($"°ø°Ý·Â °¨¼Ò! {result.ChangeValue} %");
+                Debug.Log($"ï¿½ï¿½ï¿½Ý·ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue} %");
                 break;
             case StageRouletteType.LOOSEN_ARMOR:
                 Player.OnDefenseChanged(result.ChangeValue);
-                Debug.Log($"¹æ¾î·Â °¨¼Ò! {result.ChangeValue} %");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue} %");
                 break;
 
             case StageRouletteType.LOST_COIN:
                 Player.LostCoin(result.ChangeValue);
-                Debug.Log($"ÄÚÀÎ °¨¼Ò! {result.ChangeValue}");
+                Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½! {result.ChangeValue}");
                 break;
         }
     }
@@ -117,7 +120,10 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator PlayerAttackSequence(PlayerController player, MonsterController monster)
     {
-        Debug.Log("ÇÃ·¹ÀÌ¾î°¡ °ø°ÝÇÕ´Ï´Ù.");
+        Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
+
+        yield return Skill.UseActiveSkills(player.Player, new List<Entity>() { monster.Monster });
+        
         yield return _playerAni.PlayAttackAni();
 
         yield return monster.TakeDamageSequence(player.Player);
@@ -125,7 +131,7 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator TakeDamageSequence(Entity attacker)
     {
-        Debug.Log("ÇÃ·¹ÀÌ¾î°¡ ¸Â¾Ò½À´Ï´Ù.");
+        Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½Â¾Ò½ï¿½ï¿½Ï´ï¿½.");
 
         _playerAni.PlayDamagedAni();
 

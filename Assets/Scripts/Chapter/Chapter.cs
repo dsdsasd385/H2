@@ -65,6 +65,7 @@ public abstract class Chapter : MonoBehaviour
         DontDestroyOnLoad(playerObj);
 
         Player.CreatePlayer();
+        
         Skill.Initialize();
 
         Player.currentPlayer.OnLevelUp += _ => _otherJobs.Enqueue(OnPlayerLevelUp());

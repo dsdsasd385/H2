@@ -5,7 +5,7 @@ public class Rewind : ActiveSkill
 {
     protected override int GetTurnCount() => 1;
 
-    public override IEnumerator OnUseActive(Entities.Entity from, List<Entities.Entity> targetList)
+    public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
         yield break;
     }
@@ -21,7 +21,7 @@ public class Flair : ActiveSkill
 {
     protected override int GetTurnCount() => 2;
     
-    public override IEnumerator OnUseActive(Entities.Entity from, List<Entities.Entity> targetList)
+    public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
         yield break;
     }
@@ -37,7 +37,7 @@ public class Smog : ActiveSkill
 {
     protected override int GetTurnCount() => 3;
     
-    public override IEnumerator OnUseActive(Entities.Entity from, List<Entities.Entity> targetList)
+    public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
         yield break;
     }
@@ -53,7 +53,7 @@ public class HeatDeath : ActiveSkill
 {
     protected override int GetTurnCount() => -1;
     
-    public override IEnumerator OnUseActive(Entities.Entity from, List<Entities.Entity> targetList)
+    public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
         yield break;
     }

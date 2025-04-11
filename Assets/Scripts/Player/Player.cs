@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,7 +10,7 @@ public class Player : Entity
     {
         var player = new Player();
         currentPlayer = player;
-
+        
         PlayerController.InitializeFromChapter();
     }
 
@@ -37,7 +36,7 @@ public class Player : Entity
             int oldCoin = _coin;
             _coin = Math.Max(0, value);
             OnCoinChanged?.Invoke(_coin);
-            Debug.Log($"ÄÚÀÎ º¯°æ: {oldCoin} -> {_coin}");
+            Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {oldCoin} -> {_coin}");
         }
     }
 
@@ -61,7 +60,7 @@ public class Player : Entity
         {
             _exp = value;
             OnChangeExp?.Invoke(_exp);
-            Debug.Log($"Exp°¡ º¯°æµÇ¾ú½À´Ï´Ù. {_exp}");
+            Debug.Log($"Expï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. {_exp}");
         }
     }
 
@@ -102,13 +101,13 @@ public class Player : Entity
     {
         Exp -= _expToNextLevel;
         Level++;
-        Debug.Log($"·¹º§¾÷ Çß½À´Ï´Ù. Level : {_level}");
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß½ï¿½ï¿½Ï´ï¿½. Level : {_level}");
 
         _expToNextLevel = Mathf.RoundToInt(_expToNextLevel * 1.5f);
-        Debug.Log($"³²Àº °æÇèÄ¡´Â {Exp}ÀÌ¸ç ·¹º§¾÷ °æÇèÄ¡´Â {_expToNextLevel}À¸·Î º¯°æµÇ¾ú½À´Ï´Ù.");
-        // UI¿¬°á
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ {Exp}ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ {_expToNextLevel}ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
+        // UIï¿½ï¿½ï¿½ï¿½
 
-        // ½ºÅ³Ãß°¡
+        // ï¿½ï¿½Å³ï¿½ß°ï¿½
     }
 
     public override void TakeDamage(float power, float defense, float critical)
@@ -123,44 +122,44 @@ public class Player : Entity
 
     public override void Die()
     {
-        // »ç¸Á ·ÎÁ÷
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         //animator.SetTrigger("Die");
-        Debug.Log("ÇÃ·¹ÀÌ¾î°¡ »ç¸ÁÇß½À´Ï´Ù.");
+        Debug.Log("ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.");
 
         SceneManager.LoadScene("TitleScene");
     }
 
 
-    // Ã¼·Âº¯ÇÒ¶§ ÀÌº¥Æ®
+    // Ã¼ï¿½Âºï¿½ï¿½Ò¶ï¿½ ï¿½Ìºï¿½Æ®
     public void OnHpChanged(int value)
     {
-        // ÀÌÀü Ã¼·Â ÀúÀå
+        // ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         _lastHp = _status.Hp;
-        // Ã¼·Â ¼öÁ¤
+        // Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         var newHp = _lastHp * (1 + value / 100f);
         _status.Hp = (int)newHp;
-        Debug.Log($"Ã¼·ÂÀÌ º¯°æµÇ¾ú½À´Ï´Ù. {_status.Hp}");
+        Debug.Log($"Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. {_status.Hp}");
     }
 
-    // °ø°Ý·Âº¯ÇÒ¶§ ÀÌº¥Æ®
+    // ï¿½ï¿½ï¿½Ý·Âºï¿½ï¿½Ò¶ï¿½ ï¿½Ìºï¿½Æ®
     public void OnPowerChanged(int value)
     {
-        // °ø°Ý·Â ¼öÁ¤
+        // ï¿½ï¿½ï¿½Ý·ï¿½ ï¿½ï¿½ï¿½ï¿½
         _status.Power *= (1 + value / 100f);
-        Debug.Log($"°ø°Ý·ÂÀÌ º¯°æµÇ¾ú½À´Ï´Ù. {_status.Power}");
+        Debug.Log($"ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. {_status.Power}");
     }
-    // ¹æ¾î·Âº¯ÇÒ¶§ ÀÌº¥Æ®
+    // ï¿½ï¿½ï¿½Âºï¿½ï¿½Ò¶ï¿½ ï¿½Ìºï¿½Æ®
     public void OnDefenseChanged(int value)
     {
-        // ¹æ¾î·Â ¼öÁ¤
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         _status.Defense *= (1 + value / 100f);
 
-        Debug.Log($"¹æ¾î·ÂÀÌ º¯°æµÇ¾ú½À´Ï´Ù. {_status.Defense}");
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. {_status.Defense}");
     }
 
     public void OnCriticalChanged(int value)
     {
         _status.Critical *= (1 + value / 100f);
-        Debug.Log($"Å©¸®Æ¼ÄÃÀÌ º¯°æµÇ¾ú½À´Ï´Ù. {_status.Critical}");
+        Debug.Log($"Å©ï¿½ï¿½Æ¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. {_status.Critical}");
     }   
 }

@@ -8,20 +8,20 @@ public class SkillTestScene : GameScene
     [SerializeField] private Transform playerPos;
     [SerializeField] private Transform monsterPos;
     
-    private Entities.Entity _player;
-    private Entities.Entity _monster;
+    private Entity _player;
+    private Entity _monster;
 
     private int _turn;
     
     protected override void OnSceneStarted()
     {
-        _player = new Entities.Player(1000, 100, 100, 30, 5);
-        _player.SetModel(GameObject.CreatePrimitive(PrimitiveType.Cube));
+        _player = new Player();
+        _player.transform = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
         _player.transform.position = playerPos.position;
         _player.transform.rotation = playerPos.rotation;
 
-        _monster = new Entities.Monster(1000, 100, 100, 30, 5);
-        _monster.SetModel(GameObject.CreatePrimitive(PrimitiveType.Cube));
+        _monster = new Monster();
+        _monster.transform = GameObject.CreatePrimitive(PrimitiveType.Cube).transform;
         _monster.transform.position = monsterPos.position;
         _monster.transform.rotation = monsterPos.rotation;
         
@@ -55,6 +55,6 @@ public class SkillTestScene : GameScene
         
         Skill.ProceedTurn();
         
-        yield return Skill.UseActiveSkills(_player, new List<Entities.Entity>{_monster});
+        yield return Skill.UseActiveSkills(_player, new List<Entity>{_monster});
     }
 }

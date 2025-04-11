@@ -7,12 +7,12 @@ public class MagicMissile : ActiveSkill
 {
     protected override int GetTurnCount() => 2;
     
-    public override IEnumerator OnUseActive(Entities.Entity from, List<Entities.Entity> targetList)
+    public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
         var target = targetList[0];
-
+        
         var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.up * 1.5f, target.transform, 0.5f);
-
+        
         yield return projectile.transform.DOMove(target.transform.position, 10f)
             .SetSpeedBased(true)
             .SetEase(Ease.InQuart)
@@ -36,7 +36,7 @@ public class BloodMissile : ActiveSkill
 {
     protected override int GetTurnCount() => 2;
     
-    public override IEnumerator OnUseActive(Entities.Entity from, List<Entities.Entity> targetList)
+    public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
         yield break;
     }
@@ -52,7 +52,7 @@ public class PoisonMissile : ActiveSkill
 {
     protected override int GetTurnCount() => 2;
     
-    public override IEnumerator OnUseActive(Entities.Entity from, List<Entities.Entity> targetList)
+    public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
         yield break;
     }
@@ -68,7 +68,7 @@ public class IceMissile : ActiveSkill
 {
     protected override int GetTurnCount() => 2;
     
-    public override IEnumerator OnUseActive(Entities.Entity from, List<Entities.Entity> targetList)
+    public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
         yield break;
     }

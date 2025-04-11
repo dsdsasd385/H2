@@ -2,11 +2,11 @@ using System;
 using UnityEngine;
 public class Status
 {
-    private int _hp;        // Ã¼·Â
-    private float _power;    // °ø°Ý·Â
-    private float _defense;  // ¹æ¾î·Â
-    private float _critical; // Ä¡¸íÅ¸
-    private float _speed;    // ¼±°ø(speed°¡ ³ôÀºÂÊÀÌ ¼±°ø)
+    private int _hp;        // Ã¼ï¿½ï¿½
+    private float _power;    // ï¿½ï¿½ï¿½Ý·ï¿½
+    private float _defense;  // ï¿½ï¿½ï¿½ï¿½
+    private float _critical; // Ä¡ï¿½ï¿½Å¸
+    private float _speed;    // ï¿½ï¿½ï¿½ï¿½(speedï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 
 
     public event Action<int> OnHpChange;
@@ -17,14 +17,14 @@ public class Status
 
     public int Hp
     {
-        get { return _hp; }  // hp °ªÀ» °¡Á®¿Ã ¶§´Â ±×³É ¹ÝÈ¯
+        get { return _hp; }  // hp ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ ï¿½ï¿½È¯
         set
         {
             int oldHp = _hp;
-            // hp °ªÀÌ 0 ÀÌÇÏ·Î ¼³Á¤µÇÁö ¾Êµµ·Ï
+            // hp ï¿½ï¿½ï¿½ï¿½ 0 ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½
             _hp = Mathf.Max(0, value);
             OnHpChange?.Invoke(_hp);
-            Debug.Log($"Ã¼·ÂÀÌ º¯°æµÇ¾ú½À´Ï´Ù. ÀÌÀüÃ¼·Â : {oldHp}, ÇöÀçÃ¼·Â : {_hp}");
+            Debug.Log($"Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ : {oldHp}, ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ : {_hp}");
 
         }
     }
@@ -38,12 +38,12 @@ public class Status
             float oldPower = _power;
             _power = Mathf.Max(0, value);
             OnPowerChange?.Invoke(_power);
-            Debug.Log($"°ø°Ý·ÂÀÌ º¯°æµÇ¾ú½À´Ï´Ù. ÀÌÀü°ø°Ý·Â : {oldPower}, ÇöÀç°ø°Ý·Â : {_power}");
+            Debug.Log($"ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ : {oldPower}, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý·ï¿½ : {_power}");
 
-        } // °ªÀÌ 0 ÀÌ»ó¸¸ ¼³Á¤µÇµµ·Ï
+        } // ï¿½ï¿½ï¿½ï¿½ 0 ï¿½Ì»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½
     }
 
-    // ¹æ¾î·Â ÇÁ·ÎÆÛÆ¼
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼
     public float Defense
     {
         get { return _defense; }
@@ -52,14 +52,14 @@ public class Status
             float oldDefense = _defense;
             _defense = Mathf.Max(0, value);
             OnDefenseChange?.Invoke(_defense);
-            Debug.Log($"ÀÌ º¯°æµÇ¾ú½À´Ï´Ù. ÀÌÀü¹æ¾î·Â : {oldDefense}, ÇöÀç¹æ¾î·Â : {_defense}");
+            Debug.Log($"ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : {oldDefense}, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ : {_defense}");
 
 
-        } // °ªÀÌ 0 ÀÌ»ó¸¸ ¼³Á¤µÇµµ·Ï
+        } // ï¿½ï¿½ï¿½ï¿½ 0 ï¿½Ì»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½
     }
 
 
-    // Ä¡¸íÅ¸ ÇÁ·ÎÆÛÆ¼
+    // Ä¡ï¿½ï¿½Å¸ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼
     public float Critical
     {
         get { return _critical; }
@@ -67,12 +67,12 @@ public class Status
         {
             _critical = Mathf.Max(0, value);
             OnCriticalChange?.Invoke(_critical);
-        } // °ªÀÌ 0 ÀÌ»ó¸¸ ¼³Á¤µÇµµ·Ï
+        } // ï¿½ï¿½ï¿½ï¿½ 0 ï¿½Ì»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½
     }
 
 
 
-    // ¼±°ø ÇÁ·ÎÆÛÆ¼
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼
     public float Speed
     {
         get { return _speed; }
@@ -80,7 +80,7 @@ public class Status
         {
             _speed = Mathf.Max(0, value);
             OnSpeedChange?.Invoke(_speed);
-        } // °ªÀÌ 0 ÀÌ»ó¸¸ ¼³Á¤µÇµµ·Ï
+        } // ï¿½ï¿½ï¿½ï¿½ 0 ï¿½Ì»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½
     }
 
 
@@ -115,17 +115,19 @@ public abstract class Entity
 {
     public Status status { get; protected set; }
 
-    // ½ºÅÝ ±¸Çö
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     //public abstract void SetStatus();
 
-    // °ø°Ý ±â´É
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     public virtual void Attack(Entity target) { }
 
-    // ÇÇÇØ ÀÔÀ½
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public abstract void TakeDamage(float power, float defense, float critical);
+    
+    public Transform transform { get; set; }
 
 
-    // ÇÇÇØ·® °è»ê
+    // ï¿½ï¿½ï¿½Ø·ï¿½ ï¿½ï¿½ï¿½
     public float CalculateDamage(float power, float defense, float critical)
     {
         float finalDamage = power;
@@ -133,18 +135,18 @@ public abstract class Entity
         if (UnityEngine.Random.value < critical)
         {
             finalDamage *= criticaMultplier;
-            Debug.Log($"Å©¸®Æ¼ÄÃ µ¥¹ÌÁö! : {finalDamage}");
+            Debug.Log($"Å©ï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½! : {finalDamage}");
         }
 
-        float defenseRate = defense / (1 + defense);  // ¹æ¾îÀ² °è»ê
-        Debug.Log($"¹æ¾îÀ²Àº {defenseRate}");
+        float defenseRate = defense / (1 + defense);  // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {defenseRate}");
 
         finalDamage = finalDamage * (1 - defenseRate);
-        Debug.Log($"ÃÖÁ¾ µ¥¹ÌÁö´Â {finalDamage}");
-        return finalDamage;  // °è»êµÈ ÇÇÇØ·® ¸®ÅÏ
+        Debug.Log($"ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {finalDamage}");
+        return finalDamage;  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ø·ï¿½ ï¿½ï¿½ï¿½ï¿½
 
 
     }
-    // »ç¸Á Ã³¸®
+    // ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
     public virtual void Die() { }
 }

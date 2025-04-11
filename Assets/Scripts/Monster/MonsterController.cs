@@ -16,9 +16,11 @@ public class MonsterController : MonoBehaviour
     void Awake()
     {
         _monster = new Monster();
+
+        _monster.transform = transform;
+        
         _monsterAni = GetComponent<MonsterAnimationHandler>();
         
-
         SubscribeToEvents();
     }
     private void OnDestroy()
@@ -30,7 +32,7 @@ public class MonsterController : MonoBehaviour
     {
         if(_monsterAni != null && Monster != null)
         {
-            Debug.Log($"_monsterAni°¡ {_monsterAni} ÀÌ¸ç Monster°¡ {Monster}ÀÔ´Ï´Ù.");
+            Debug.Log($"_monsterAniï¿½ï¿½ {_monsterAni} ï¿½Ì¸ï¿½ Monsterï¿½ï¿½ {Monster}ï¿½Ô´Ï´ï¿½.");
 
             Monster.OnDieGiveExp += GievExp;
             Monster.OnDieEvent += DieEvent;
@@ -52,28 +54,28 @@ public class MonsterController : MonoBehaviour
         if (_playerTarget != null)
         {
             _playerTarget.AddExp(exp);
-            Debug.Log($"ÇÃ·¹ÀÌ¾î¿¡°Ô {exp}°æÇèÄ¡¸¦ ÁÖ¾ú½À´Ï´Ù.");
+            Debug.Log($"ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ï¿½ï¿½ {exp}ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
 
         }
         else
         {
-            Debug.LogWarning("°æÇèÄ¡ Áö±Þ ´ë»óÀÌ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
         }
     }
 
     public IEnumerator MonsterAttackSequence(PlayerController player, MonsterController monster)
     {
-        Debug.Log("¸ó½ºÅÍ°¡ °ø°ÝÇÕ´Ï´Ù.");
+        Debug.Log("ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
 
-        _monsterAni.PlayAttackAni();
+        yield return _monsterAni.PlayAttackAni();
 
-        yield return new WaitForSeconds(0.5f); // => ¾Ö´Ï¸ÞÀÌ¼Ç ½Ã°£¿¡ ¸ÂÃç ½Ã°£¼³Á¤
+        yield return new WaitForSeconds(0.5f); // => ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½
 
-        StartCoroutine(player.TakeDamageSequence(monster.Monster));// ÇÊ¿äÇÑ µ¥ÀÌÅÍ°¡ power,defense,critical
+        StartCoroutine(player.TakeDamageSequence(monster.Monster));// ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ power,defense,critical
     }
     public IEnumerator TakeDamageSequence(Entity attacker)
     {
-        Debug.Log("¸ó½ºÅÍ°¡ ¸Â¾Ò½À´Ï´Ù.");
+        Debug.Log("ï¿½ï¿½ï¿½Í°ï¿½ ï¿½Â¾Ò½ï¿½ï¿½Ï´ï¿½.");
         yield return _monsterAni.PlayDamagedAni();
 
         if (_playerTarget == null && attacker is Player player)

@@ -11,6 +11,8 @@ public static class Battle
     public static bool IsBattle { get; private set; }
     public static IEnumerator BattleCoroutine(float growthRate)
     {
+        Skill.InitActiveSkills();
+        
         yield return AdditiveScene.LoadSceneAsync<BattleScene>(990, 930, 200, loadedScene => _battle = loadedScene);
 
         IsBattle = true;
@@ -42,16 +44,14 @@ public static class Battle
         }
 
         if (player.Status.Hp > 0)
-        {
             StagePlayUI.AddDialog("플레이어 승리! 축하해요!!");
-        }
 
         else
-        {
             StagePlayUI.AddDialog("플레이어 패배! 더 강해지기!!");
-        }
+        
         IsBattle = false;
-        BattleStart?.Invoke();
+        
+        BattleEnd?.Invoke();
 
         yield return Delay.Wait(1f);
            
@@ -101,7 +101,7 @@ public static class Battle
             //    .SetEase(Ease.InQuart)
             //    .WaitForCompletion();
 
-            CoroutineRunner.Instance.RunCoroutine(monsterController.MonsterAttackSequence(playerController, monsterController));
+            yield return CoroutineRunner.Instance.RunCoroutine(monsterController.MonsterAttackSequence(playerController, monsterController));
 
             Debug.Log($"몬스터가 공격했습니다! 몬스터의 공격력은 : '{monster.Status.Power}', 몬스터 크리는 '{monster.Status.Critical}'");
             Debug.Log($"플레이어가 공격당한뒤 체력은 : '{player.Status.Hp}' 플레이어 방어력은, '{player.Status.Defense}' 입니다. ");
@@ -134,7 +134,7 @@ public static class Battle
             //    .SetEase(Ease.InQuart)
             //    .WaitForCompletion();
 
-            monsterController.MonsterAttackSequence(playerController, monsterController);
+            yield return monsterController.MonsterAttackSequence(playerController, monsterController);
 
             Debug.Log($"몬스터가 공격했습니다! 몬스터의 공격력은 : '{monster.Status.Power}', 몬스터 크리는 '{monster.Status.Critical}'");
             Debug.Log($"플레이어가 공격당한뒤 체력은 : '{player.Status.Hp}' 플레이어 방어력은, '{player.Status.Defense}' 입니다. ");
@@ -152,7 +152,7 @@ public static class Battle
             //    .SetEase(Ease.InQuart)
             //    .WaitForCompletion();
 
-            playerController.PlayerAttackSequence(playerController, monsterController);
+            yield return playerController.PlayerAttackSequence(playerController, monsterController);
 
             if (player.Status.Hp <= 0)
             {
