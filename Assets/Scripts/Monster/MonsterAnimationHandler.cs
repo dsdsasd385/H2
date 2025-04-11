@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class MonsterAnimationHandler : MonoBehaviour
 {
-    private Animator _animator;
-
-    private void Awake()
-    {
-        _animator = GetComponent<Animator>();
-    }
+    [SerializeField] private Animator _animator;
 
     public IEnumerator PlayAttackAni()
     {

@@ -80,6 +80,7 @@ public static class Battle
             {
                 Debug.Log("PlayerController = null");
             }   
+            
 
             yield return CoroutineRunner.Instance.RunCoroutine(playerController.PlayerAttackSequence(playerController, monsterController));
 

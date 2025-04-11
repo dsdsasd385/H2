@@ -60,7 +60,7 @@ public class Player : Entity
         {
             _exp = value;
             OnChangeExp?.Invoke(_exp);
-            Debug.Log($"Exp�� ����Ǿ����ϴ�. {_exp}");
+            Debug.Log($"Exp획득. {_exp}");
         }
     }
 
@@ -101,10 +101,10 @@ public class Player : Entity
     {
         Exp -= _expToNextLevel;
         Level++;
-        Debug.Log($"������ �߽��ϴ�. Level : {_level}");
+        Debug.Log($"레벨업 했습니다. Level : {_level}");
 
         _expToNextLevel = Mathf.RoundToInt(_expToNextLevel * 1.5f);
-        Debug.Log($"���� ����ġ�� {Exp}�̸� ������ ����ġ�� {_expToNextLevel}���� ����Ǿ����ϴ�.");
+        Debug.Log($"레벨업 하고 남은 경험치는 : {Exp}, 다음 레벨까지 필요한 경험치량은 : {_expToNextLevel}입니다.");
         // UI����
 
         // ��ų�߰�
@@ -124,7 +124,7 @@ public class Player : Entity
     {
         // ��� ����
         //animator.SetTrigger("Die");
-        Debug.Log("�÷��̾ ����߽��ϴ�.");
+        Debug.Log("플레이어가 사망했습니다..");
 
         SceneManager.LoadScene("TitleScene");
     }
@@ -138,7 +138,7 @@ public class Player : Entity
         // ü�� ����
         var newHp = _lastHp * (1 + value / 100f);
         _status.Hp = (int)newHp;
-        Debug.Log($"ü���� ����Ǿ����ϴ�. {_status.Hp}");
+        Debug.Log($"체력 변경. {_status.Hp}");
     }
 
     // ���ݷº��Ҷ� �̺�Ʈ
@@ -146,7 +146,7 @@ public class Player : Entity
     {
         // ���ݷ� ����
         _status.Power *= (1 + value / 100f);
-        Debug.Log($"���ݷ��� ����Ǿ����ϴ�. {_status.Power}");
+        Debug.Log($"공격력 변경. {_status.Power}");
     }
     // ���º��Ҷ� �̺�Ʈ
     public void OnDefenseChanged(int value)
@@ -154,12 +154,12 @@ public class Player : Entity
         // ���� ����
         _status.Defense *= (1 + value / 100f);
 
-        Debug.Log($"������ ����Ǿ����ϴ�. {_status.Defense}");
+        Debug.Log($"방어력 변경. {_status.Defense}");
     }
 
     public void OnCriticalChanged(int value)
     {
         _status.Critical *= (1 + value / 100f);
-        Debug.Log($"ũ��Ƽ���� ����Ǿ����ϴ�. {_status.Critical}");
+        Debug.Log($"치명타 변경. {_status.Critical}");
     }   
 }

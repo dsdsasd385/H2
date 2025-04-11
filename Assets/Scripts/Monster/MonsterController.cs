@@ -54,18 +54,18 @@ public class MonsterController : MonoBehaviour
         if (_playerTarget != null)
         {
             _playerTarget.AddExp(exp);
-            Debug.Log($"�÷��̾�� {exp}����ġ�� �־����ϴ�.");
+            Debug.Log($"플레이어 경험치 획득 : {exp}");
 
         }
         else
         {
-            Debug.LogWarning("����ġ ���� ����� �����ϴ�.");
+            Debug.LogWarning("_playerTarget 이 없습니다.");
         }
     }
 
     public IEnumerator MonsterAttackSequence(PlayerController player, MonsterController monster)
     {
-        Debug.Log("���Ͱ� �����մϴ�.");
+        Debug.Log("몬스터가 공격했습니다..");
 
         yield return _monsterAni.PlayAttackAni();
 
@@ -75,7 +75,7 @@ public class MonsterController : MonoBehaviour
     }
     public IEnumerator TakeDamageSequence(Entity attacker)
     {
-        Debug.Log("���Ͱ� �¾ҽ��ϴ�.");
+        Debug.Log("몬스터가 데미지입었습니다..");
         yield return _monsterAni.PlayDamagedAni();
 
         if (_playerTarget == null && attacker is Player player)
@@ -89,6 +89,7 @@ public class MonsterController : MonoBehaviour
 
         if (_monster.Status.Hp <= 0)
         {
+            yield return _monsterAni.PlayDieAni();
             _monster.Die();
         }
     }
