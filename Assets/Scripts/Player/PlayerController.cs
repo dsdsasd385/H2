@@ -72,36 +72,36 @@ public class PlayerController : MonoBehaviour
         {
             case StageRouletteType.EXERCISE:
                 Player.OnHpChanged(result.ChangeValue);
-                Debug.Log($"ü�� ����! {result.ChangeValue}%");
+                Debug.Log($"체력 증가! {result.ChangeValue}%");
                 break;
             case StageRouletteType.RESHARPENING_WEAPON:
                 Player.OnPowerChanged(result.ChangeValue);
-                Debug.Log($"���ݷ� ����! {result.ChangeValue}%");
+                Debug.Log($"공격력 증가!{result.ChangeValue}%");
                 break;
             case StageRouletteType.CLEANING_ARMOR:
                 Player.OnDefenseChanged(result.ChangeValue);
-                Debug.Log($"���� ����! {result.ChangeValue}%");
+                Debug.Log($"방어력 증가! {result.ChangeValue}%");
                 break;
             case StageRouletteType.PICK_COIN:
                 Player.AddCoin(result.ChangeValue);
-                Debug.Log($"���� ȹ��! {result.ChangeValue}");
+                Debug.Log($"코인 획득! {result.ChangeValue}");
                 break;
             case StageRouletteType.BUG_BITE:
                 Player.OnHpChanged(result.ChangeValue);
-                Debug.Log($"ü�� ����! {result.ChangeValue} %");
+                Debug.Log($"체력이 깎였습니다. {result.ChangeValue} %");
                 break;
             case StageRouletteType.BROKEN_WEAPON:
                 Player.OnPowerChanged(result.ChangeValue);
-                Debug.Log($"���ݷ� ����! {result.ChangeValue} %");
+                Debug.Log($"공격력이 깎였습니다!  {result.ChangeValue} %");
                 break;
             case StageRouletteType.LOOSEN_ARMOR:
                 Player.OnDefenseChanged(result.ChangeValue);
-                Debug.Log($"���� ����! {result.ChangeValue} %");
+                Debug.Log($"방어력이 깎였습니다! {result.ChangeValue} %");
                 break;
 
             case StageRouletteType.LOST_COIN:
                 Player.LostCoin(result.ChangeValue);
-                Debug.Log($"���� ����! {result.ChangeValue}");
+                Debug.Log($"코인을 잃었습니다! {result.ChangeValue}");
                 break;
         }
     }
@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator PlayerAttackSequence(PlayerController player, MonsterController monster)
     {
-        Debug.Log("�÷��̾ �����մϴ�.");
+        Debug.Log("플레이어가 공격을 시작했습니다..");
 
         yield return Skill.UseActiveSkills(player.Player, new List<Entity>() { monster.Monster });
         
@@ -131,9 +131,9 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator TakeDamageSequence(Entity attacker)
     {
-        Debug.Log("�÷��̾ �¾ҽ��ϴ�.");
+        Debug.Log("플레이어가 데미지받았습니다.");
 
-        _playerAni.PlayDamagedAni();
+        yield return _playerAni.PlayDamagedAni();
 
         yield return new WaitForSeconds(1f);
 

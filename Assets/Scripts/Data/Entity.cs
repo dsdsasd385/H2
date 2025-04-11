@@ -24,7 +24,7 @@ public class Status
             // hp ���� 0 ���Ϸ� �������� �ʵ���
             _hp = Mathf.Max(0, value);
             OnHpChange?.Invoke(_hp);
-            Debug.Log($"ü���� ����Ǿ����ϴ�. ����ü�� : {oldHp}, ����ü�� : {_hp}");
+            Debug.Log($"이전 체력은 : {oldHp}, 새로운 체력은: {_hp}");
 
         }
     }
@@ -38,7 +38,7 @@ public class Status
             float oldPower = _power;
             _power = Mathf.Max(0, value);
             OnPowerChange?.Invoke(_power);
-            Debug.Log($"���ݷ��� ����Ǿ����ϴ�. �������ݷ� : {oldPower}, ������ݷ� : {_power}");
+            Debug.Log($"이전 공격력은 : {oldPower}, 새로운 공격력은 : {_power}");
 
         } // ���� 0 �̻� �����ǵ���
     }
@@ -52,7 +52,7 @@ public class Status
             float oldDefense = _defense;
             _defense = Mathf.Max(0, value);
             OnDefenseChange?.Invoke(_defense);
-            Debug.Log($"�� ����Ǿ����ϴ�. �������� : {oldDefense}, ������� : {_defense}");
+            Debug.Log($"이전 방어력은 : {oldDefense}, 새로운 방어력은 : {_defense}");
 
 
         } // ���� 0 �̻� �����ǵ���
@@ -135,14 +135,14 @@ public abstract class Entity
         if (UnityEngine.Random.value < critical)
         {
             finalDamage *= criticaMultplier;
-            Debug.Log($"ũ��Ƽ�� ������! : {finalDamage}");
+            Debug.Log($"크리티컬 공격력은 : {finalDamage}");
         }
 
         float defenseRate = defense / (1 + defense);  // ����� ���
-        Debug.Log($"������� {defenseRate}");
+        Debug.Log($"방어율은 {defenseRate}");
 
         finalDamage = finalDamage * (1 - defenseRate);
-        Debug.Log($"���� �������� {finalDamage}");
+        Debug.Log($"총 데미지는 {finalDamage}");
         return finalDamage;  // ���� ���ط� ����
 
 
