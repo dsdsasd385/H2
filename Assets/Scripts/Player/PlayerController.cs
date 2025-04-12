@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour
         yield return _playerAni.PlayRunAni();
 
         _moveSpeed = speed;
-        Vector3 targetPos = targetTransform;
+        Vector3 targetPos = new Vector3(targetTransform.x - 3, targetTransform.y, targetTransform.z);
 
         while (Vector3.Distance(transform.position, targetPos) > 0.1f)
         {
@@ -171,8 +171,6 @@ public class PlayerController : MonoBehaviour
         Debug.Log("플레이어가 데미지받았습니다.");
 
         yield return _playerAni.PlayDamagedAni();
-
-        yield return new WaitForSeconds(1f);
 
         if ( attacker is Monster monster)
             _monster = monster;

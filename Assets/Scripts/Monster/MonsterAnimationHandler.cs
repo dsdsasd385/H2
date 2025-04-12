@@ -16,7 +16,7 @@ public class MonsterAnimationHandler : MonoBehaviour
     {
         _animator.SetTrigger("Damaged");
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
     }
 
     public IEnumerator PlayDieAni()
@@ -24,5 +24,19 @@ public class MonsterAnimationHandler : MonoBehaviour
         _animator.SetTrigger("Die");
 
         yield return new WaitForSeconds(0.5f);
+    }
+
+    public IEnumerator PlayRunAni()
+    {
+        _animator.SetTrigger("Run");
+        Debug.Log("달리기 애니메이션");
+        yield return null;
+    }
+
+    public IEnumerator PlayIdle()
+    {
+        _animator.SetTrigger("Idle");
+        yield return null;
+
     }
 }

@@ -67,7 +67,23 @@ public class MonsterController : MonoBehaviour
         }
     }
     public IEnumerator MonsterMoveToTarget(Transform transform, Vector3 targetTransform, float speed)
-    {   
+    {
+        yield return _monsterAni.PlayRunAni();
+
+        _moveSpeed = speed;
+        Vector3 targetPos = new Vector3(targetTransform.x +3, targetTransform.y, targetTransform.z);
+
+        while (Vector3.Distance(transform.position, targetPos) > 0.1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
+            yield return null;
+        }
+    }
+
+    public IEnumerator ReturnMovePlayer(Transform transform, Vector3 targetTransform, float speed)
+    {
+        yield return _monsterAni.PlayRunAni();
+
         _moveSpeed = speed;
         Vector3 targetPos = targetTransform;
 
@@ -76,18 +92,19 @@ public class MonsterController : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, targetPos, speed * Time.deltaTime);
             yield return null;
         }
+
+        yield return _monsterAni.PlayIdle();
     }
+
     public IEnumerator MonsterAttackSequence(PlayerController player, MonsterController monster)
     {
         Debug.Log("몬스터가 공격했습니다..");
 
         yield return _monsterAni.PlayAttackAni();
 
-        yield return new WaitForSeconds(0.5f); // => �ִϸ��̼� �ð��� ���� �ð�����
+        yield return player.TakeDamageSequence(monster.Monster);
 
-        StartCoroutine(player.TakeDamageSequence(monster.Monster));// �ʿ��� �����Ͱ� power,defense,critical
-
-        yield return MonsterMoveToTarget(transform, _originPos, _moveSpeed);
+        yield return ReturnMovePlayer(transform, _originPos, _moveSpeed);
     }
     public IEnumerator TakeDamageSequence(Entity attacker)
     {
@@ -105,7 +122,6 @@ public class MonsterController : MonoBehaviour
 
         if (_monster.Status.Hp <= 0)
         {
-            yield return _monsterAni.PlayDieAni();
             _monster.Die();
         }
     }
