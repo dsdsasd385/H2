@@ -10,7 +10,7 @@ public class Status
     private float _critical; // ġ��Ÿ
     private float _speed;    // ����(speed�� �������� ����)
     
-    public event Action<int>   OnHpChange;
+    public event Action<int, int>   OnHpChange;
     public event Action<float> OnPowerChange;
     public event Action<float> OnDefenseChange;
     public event Action<float> OnCriticalChange;
@@ -30,9 +30,8 @@ public class Status
             int oldHp = _hp;
             // hp ���� 0 ���Ϸ� �������� �ʵ���
             _hp = Mathf.Max(0, value);
-            OnHpChange?.Invoke(_hp);
+            OnHpChange?.Invoke(_hp, MaxHp);
             Debug.Log($"이전 체력은 : {oldHp}, 새로운 체력은: {_hp}");
-
         }
     }
 

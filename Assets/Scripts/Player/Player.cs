@@ -23,9 +23,9 @@ public class Player : Entity
     private int _level;
     private Monster _monsterTarget;
 
-    public event Action<int> OnChangeExp;
-    public event Action<int> OnLevelUp;
-    public event Action<int> OnCoinChanged;
+    public event Action<int, int> OnChangeExp;
+    public event Action<int>      OnLevelUp;
+    public event Action<int>      OnCoinChanged;
 
     private int _coin;
     public int Coin
@@ -59,10 +59,21 @@ public class Player : Entity
         set
         {
             _exp = value;
-            OnChangeExp?.Invoke(_exp);
+
+            while (_exp >= _expToNextLevel)
+            {
+                var remain = _exp - _expToNextLevel;
+                Level++;
+                _expToNextLevel = Mathf.CeilToInt(_expToNextLevel * 1.5f);
+                _exp = remain;
+            }
+            
+            OnChangeExp?.Invoke(_exp, _expToNextLevel);
             Debug.Log($"Exp획득. {_exp}");
         }
     }
+
+    public int NeedExp => _expToNextLevel;
 
 
     public int Level
@@ -90,24 +101,6 @@ public class Player : Entity
     public void AddExp(int exp)
     {
         Exp += exp;
-
-        while (Exp >= _expToNextLevel)
-        {
-            LevelUp();
-        }     
-    }
-
-    public void LevelUp()
-    {
-        Exp -= _expToNextLevel;
-        Level++;
-        Debug.Log($"레벨업 했습니다. Level : {_level}");
-
-        _expToNextLevel = Mathf.RoundToInt(_expToNextLevel * 1.5f);
-        Debug.Log($"레벨업 하고 남은 경험치는 : {Exp}, 다음 레벨까지 필요한 경험치량은 : {_expToNextLevel}입니다.");
-        // UI����
-
-        // ��ų�߰�
     }
 
     public override void TakeDamage(float power, float defense, float critical)
