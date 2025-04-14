@@ -13,27 +13,9 @@ public class Monster : Entity
     readonly int _exp = 30;
 
     public Action<int> OnDieGiveExp;
-    public Action OnDieEvent;
 
-    private void Awake()
-    {
-        // status.OnHpChange += MonsterUI.SetHpVar;
-        // status.OnOnPowerChange += MonsterUI.SetPower;
-        // status.OnDefenseChange += MonsterUI.SetDefense;
-        // status.OnCriticalChange += MonsterUI.SetCritical;
-        // status.OnSpeedChange += MonsterUI.SetSpeed;
-    }
-
-    //public override void SetStatus() { }
     public void UpgradeStatus(float multiplier)
-    {
-        //float multHp = (float)status.hp * multiplier;
-        //status.hp = (int)multHp;
-        //status.power *= multiplier;
-        //status.defense *= multiplier;
-        //status.critical *= multiplier;
-        //status.speed *= multiplier;
-
+    {        
         _status = _status * multiplier;
     }
         
@@ -45,14 +27,15 @@ public class Monster : Entity
         int damageInt = (int)damage;
 
        _status.Hp -= damageInt;
-        Debug.Log($"몬스터의 체력은 {_status.Hp}, 받은 데미지는 {damageInt} 입니다.");
+
+        var text = WorldCanvas.Get<DamageText>(transform.position + Vector3.up, 100);
+        text.transform.position = transform.position + Vector3.up;  // 생성 후 재할당
+        text.ShowDamage(damageInt);
+        Debug.Log($"Transform : {transform.position}");
     }
 
     public override void Die()
     {
-        // 사망 로직
-        //animator.SetTrigger("Die");
         OnDieGiveExp?.Invoke(_exp);
-        OnDieEvent?.Invoke();
     }
 }

@@ -179,8 +179,6 @@ MonoBehaviour:
     type: 3}
   player: {fileID: 3640931205992520545, guid: 0d88a3b61b0d4434ea3b49a4cb8717d2, type: 3}
   monster: {fileID: 4124540707276416932, guid: b087fc24ead7a7746aaf9fd8c8696017, type: 3}
-  playerItem: {fileID: 4447545546743372559, guid: 0d88a3b61b0d4434ea3b49a4cb8717d2,
-    type: 3}
 --- !u!1 &213940293
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,6 +264,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 729aad4491e915a41bda2b8325cf757a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &515271570
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 515271572}
+  - component: {fileID: 515271571}
+  m_Layer: 0
+  m_Name: '[MonsterPool]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &515271571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515271570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42903384a174bc1489b7ccba04695998, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterPrefab: {fileID: 723457909043310149, guid: 128ad16e90ba0074eb6a750278446b99,
+    type: 3}
+--- !u!4 &515271572
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515271570}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.4632177, y: 7.252406, z: -0.6303779}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &552538609
 GameObject:
   m_ObjectHideFlags: 3
@@ -1009,3 +1053,4 @@ SceneRoots:
   - {fileID: 62124087}
   - {fileID: 1548858359570484483}
   - {fileID: 848479813}
+  - {fileID: 515271572}

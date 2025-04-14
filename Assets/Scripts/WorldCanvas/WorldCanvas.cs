@@ -33,6 +33,8 @@ public abstract class WorldCanvas : MonoBehaviour
                 actionOnGet: canvas =>
                 {
                     canvas.transform.position = initPos;
+                    Debug.Log("DamageText À§Ä¡: " + canvas.transform.position);
+
                     canvas.Cg.alpha = 1f;
                     canvas._isReleased = false;
                 });

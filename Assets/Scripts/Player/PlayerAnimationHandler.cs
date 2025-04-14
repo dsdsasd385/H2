@@ -45,7 +45,6 @@ public class PlayerAnimationHandler : MonoBehaviour
     public IEnumerator PlayRunAni()
     {
         _animator.SetTrigger("Run");
-        Debug.Log("달리기 애니메이션");
         yield return null;
     }
 

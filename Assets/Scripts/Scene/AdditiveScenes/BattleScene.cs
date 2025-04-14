@@ -23,29 +23,28 @@ public class BattleScene : AdditiveScene
     
     protected override IEnumerator OnSceneLoaded()
     {
-
-        //playerPrefabs = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        //player = playerPrefabs.AddComponent<Player>();
-        //playerItem = playerPrefabs.AddComponent<PlayerItem>();
         if(player == null)
         player = Instantiate(playerPrefabs).GetComponent<PlayerController>();
 
         player.transform.position = playerPos.position;
         player.transform.rotation = Quaternion.LookRotation(mapCenter.position);
 
-        //monsterPrefabs = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        //monster = monsterPrefabs.AddComponent<Monster>();
-        monster = Instantiate(monsterPrefabs).GetComponent<MonsterController>();
-        monster.transform.position = monsterPos[0].position;
-        monsterPrefabs.transform.rotation = Quaternion.LookRotation(mapCenter.position);
+        if (MonsterPoolManager.Instance == null)
+        {
+            Debug.LogError("MonsterPoolManager.Instance is null! 매니저가 아직 생성되지 않았습니다.");
+        }
 
-        //Instantiate(player);
-        //player.transform.position = playerPos.position;
-        //player.transform.rotation = Quaternion.LookRotation(mapCenter.position);
+        if (monsterPos == null || monsterPos.Length == 0 || monsterPos[0] == null)
+        {
+            Debug.LogError("monsterPos[0] 이 null입니다.");
+        }
 
-        //Instantiate(monster);
+        GameObject monsterObj = MonsterPoolManager.Instance.SpawnMonster(monsterPos[0].position, Quaternion.LookRotation(mapCenter.position));
+        monster = monsterObj.GetComponent<MonsterController>();
+
+        //monster = Instantiate(monsterPrefabs).GetComponent<MonsterController>();
         //monster.transform.position = monsterPos[0].position;
-        //monster.transform.rotation = Quaternion.LookRotation(mapCenter.position);
+        //monsterPrefabs.transform.rotation = Quaternion.LookRotation(mapCenter.position);
 
         yield return null;
     }

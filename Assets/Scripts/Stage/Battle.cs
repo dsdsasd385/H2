@@ -11,6 +11,7 @@ public static class Battle
     public static bool IsBattle { get; private set; }
     public static IEnumerator BattleCoroutine(float growthRate)
     {
+        WorldCanvas.InitPool();
         Skill.InitActiveSkills();
         
         yield return AdditiveScene.LoadSceneAsync<BattleScene>(1080, 890, 270, loadedScene => _battle = loadedScene);
