@@ -110,6 +110,8 @@ public class Player : Entity
         int damageInt = (int)damage;
 
         _status.Hp -= damageInt;
+        var text = WorldCanvas.Get<DamageText>(transform.position + Vector3.up, 100);
+        text.ShowDamage(damageInt);
     }
 
 

@@ -168,6 +168,7 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator TakeDamageSequence(Entity attacker)
     {
+     
         Debug.Log("플레이어가 데미지받았습니다.");
 
         yield return _playerAni.PlayDamagedAni();
