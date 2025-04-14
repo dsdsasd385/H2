@@ -11,7 +11,7 @@ public class MagicMissile : ActiveSkill
     {
         var target = targetList[0];
         
-        var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.up * 1.5f, target.transform, 0.5f);
+        var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.up * 1.5f, target.transform, 2.5f);
         
         yield return projectile.transform.DOMove(target.transform.position, 10f)
             .SetSpeedBased(true)

@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3257412163886115832}
-  - component: {fileID: 8595292610062590168}
+  - component: {fileID: 8693940461975399958}
   m_Layer: 0
-  m_Name: MagicMissileProjectile
+  m_Name: PoisonMissileProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 3856051311861685580}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8595292610062590168
+--- !u!114 &8693940461975399958
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1613500214068090274}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8cb7d90ee4742e49f2ec9df913e5abf, type: 3}
+  m_Script: {fileID: 11500000, guid: a0367289f49747fe8cbfef4e4c0e896b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   view: {fileID: 2859230102158979803}
@@ -4972,7 +4972,7 @@ Animator:
   m_GameObject: {fileID: 4888167972167895414}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 5d80f4a05b1a60244a318185e835a31e, type: 2}
+  m_Controller: {fileID: 9100000, guid: 92495b1e866e11140a0293d8d86d634c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
