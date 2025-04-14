@@ -101,17 +101,27 @@ public class MonsterController : MonoBehaviour
 
     public IEnumerator MonsterAttackSequence(PlayerController player, MonsterController monster)
     {
+        if (Monster.IsFreeze)
+        {
+            Debug.Log("빙결상태로 공격을 실행하지 못합니다.");
+            yield break;
+        }
+
         Debug.Log("몬스터가 공격했습니다..");
 
         yield return MonsterMoveToTarget(transform, player.transform.position, 20f);
 
         yield return _monsterAni.PlayAttackAni();
 
-        StartCoroutine(monster.TakeDamageSequence(player.Player));
+        StartCoroutine(player.TakeDamageSequence(monster.Monster));
 
         yield return new WaitForSeconds(0.5f);
 
         yield return ReturnMovePlayer(transform, _originPos, _moveSpeed);
+
+        Monster.EndTurnUpdate();
+
+        yield return new WaitForSeconds(0.5f);
     }
     public IEnumerator TakeDamageSequence(Entity attacker)
     {
@@ -121,10 +131,9 @@ public class MonsterController : MonoBehaviour
         if (_playerTarget == null && attacker is Player player)
             _playerTarget = player;
 
-        if (_monster != null)
+        if (Monster != null)
         {
-            _monster.TakeDamage(_playerTarget.Status.Power, Status.Defense, _playerTarget.Status.Critical);
-
+            Monster.TakeDamage(_playerTarget.Status.Power, Status.Defense, _playerTarget.Status.Critical);
         }
 
         if (_monster.Status.Hp <= 0)

@@ -68,7 +68,7 @@ public abstract class Chapter : MonoBehaviour
         
         Skill.Initialize();
 
-        Player.currentPlayer.OnLevelUp += _ => _otherJobs.Enqueue(OnPlayerLevelUp());
+        Player.CurrentPlayer.OnLevelUp += _ => _otherJobs.Enqueue(OnPlayerLevelUp());
 
         StagePlayUI.Initialize();
         

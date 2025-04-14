@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class Player : Entity
 {
-    public static Player currentPlayer {  get; private set; }
+    public static Player CurrentPlayer { get; private set; }
     public static void CreatePlayer()
     {
         var player = new Player();
-        currentPlayer = player;
+        CurrentPlayer = player;
         
         PlayerController.InitializeFromChapter();
     }
@@ -95,7 +95,9 @@ public class Player : Entity
     public void Init()
     {
         _status = new Status(SaveLoad.LoadStatus());
-        maxHp = status.Hp;
+        base.Status = _status; // base Entity의 status에도 할당
+
+        maxHp = _status.Hp;
         _level = 1;
         _exp = 0;
         _expToNextLevel = 25;
@@ -134,7 +136,7 @@ public class Player : Entity
     {
         //maxHp = Mathf.FloorToInt(maxHp * (heal / 100f));
         int healAmount = Mathf.FloorToInt(maxHp * (heal / 100f));
-        status.Hp = Mathf.Min(status.Hp + healAmount, maxHp);
+        Status.Hp = Mathf.Min(Status.Hp + healAmount, maxHp);
 
     }
 

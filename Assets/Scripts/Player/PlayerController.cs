@@ -3,13 +3,14 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 
 
 public class PlayerController : MonoBehaviour
 {
     public Player Player { get; private set; }
 
-    public PlayerAnimationHandler _playerAni { get; private set; }
+    public PlayerAnimationHandler PlayerAni { get; private set; }
 
     private Scene _oldScene;
     private StageRouletteType _stageRouletteTypes;
@@ -20,6 +21,21 @@ public class PlayerController : MonoBehaviour
     private Vector3 _originPos;
     private float _moveSpeed;
 
+    [Button]
+    public void PowerUp()
+    {
+        Player.Status.Power += 50f;
+    }
+    [Button]
+    public void PowerDown()
+    {
+        Player.Status.Power -= 50f;
+    }
+    [Button]
+    public void ExpUp()
+    {
+        Player.Exp += 100;
+    }
     public static void InitializeFromChapter()
     {
         if (Chapter.playerObj.TryGetComponent(out PlayerController controller))
@@ -35,8 +51,8 @@ public class PlayerController : MonoBehaviour
 
     public void InitializeComponents()
     {
-        _playerAni = GetComponent<PlayerAnimationHandler>();
-        Player = Player.currentPlayer;
+        PlayerAni = GetComponent<PlayerAnimationHandler>();
+        Player = Player.CurrentPlayer;
         _originPos = transform.position;
 
         if (Player == null)
@@ -123,7 +139,7 @@ public class PlayerController : MonoBehaviour
     // 플레이어 -> 몬스터 이동
     public IEnumerator PlayerMoveToTarget(Transform transform, Vector3 targetTransform, float speed)
     {
-        yield return _playerAni.PlayRunAni();
+        yield return PlayerAni.PlayRunAni();
 
         _moveSpeed = speed;
         Vector3 targetPos = new Vector3(targetTransform.x - 3, targetTransform.y, targetTransform.z);
@@ -137,7 +153,7 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator ReturnMovePlayer(Transform transform, Vector3 targetTransform, float speed)
     {
-        yield return _playerAni.PlayRunAni();
+        yield return PlayerAni.PlayRunAni();
 
         _moveSpeed = speed;
         Vector3 targetPos = targetTransform;
@@ -148,7 +164,7 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
-        yield return _playerAni.PlayIdle();
+        yield return PlayerAni.PlayIdle();
     }
 
     public IEnumerator PlayerAttackSequence(PlayerController player, MonsterController monster)
@@ -161,9 +177,9 @@ public class PlayerController : MonoBehaviour
 
         yield return PlayerMoveToTarget(transform, monster.transform.position, 20f);
         
-        yield return _playerAni.PlayAttackAni();
+        yield return PlayerAni.PlayAttackAni();
 
-        StartCoroutine( monster.TakeDamageSequence(player.Player));
+        StartCoroutine(monster.TakeDamageSequence(player.Player));
 
         yield return new WaitForSeconds(0.5f);
 
@@ -175,7 +191,7 @@ public class PlayerController : MonoBehaviour
      
         Debug.Log("플레이어가 데미지받았습니다.");
 
-        yield return _playerAni.PlayDamagedAni();
+        yield return PlayerAni.PlayDamagedAni();
 
         if ( attacker is Monster monster)
             _monster = monster;

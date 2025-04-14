@@ -14,15 +14,25 @@ public class Monster : Entity
     readonly int _exp = 30;
 
     public Action<int> OnDieGiveExp;
-
+    
     public void UpgradeStatus(float multiplier)
     {        
         _status = _status * multiplier;
     }
-        
+
+    public void ApplyFreezeEffect(int freezeTurn)
+    {
+        ApplyFreeze(freezeTurn);
+    }
+    
+    public void Init()
+    {
+        base.Status = _status;
+    }
+
 
     public override void TakeDamage(float power, float defense, float critical)
-    {        
+    {   
         float damage = base.CalculateDamage(power, defense, critical);
 
         int damageInt = (int)damage;
@@ -32,7 +42,6 @@ public class Monster : Entity
         var text = WorldCanvas.Get<DamageText>(transform.position + Vector3.up, 100);
         text.transform.position = transform.position + Vector3.up;  // 생성 후 재할당
         text.ShowDamage(damageInt);
-        Debug.Log($"Transform : {transform.position}");
     }
 
     public override void Die()

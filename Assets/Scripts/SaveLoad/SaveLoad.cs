@@ -26,7 +26,7 @@ public static class SaveLoad
     public static StatusData LoadStatus()
     {
         if (PlayerPrefs.HasKey(PLAYER_STATUS_KEY) == false)
-            return new StatusData { hp = 50, power = 3000f, defense = 5f, critical = 0.05f, speed = 1f };
+            return new StatusData { hp = 50, power = 30f, defense = 5f, critical = 0.05f, speed = 1f };
 
         string json = Load(PLAYER_STATUS_KEY, null);
         StatusData data = JsonUtility.FromJson<StatusData>(json);

@@ -13,14 +13,14 @@ public class StageInfo : MonoBehaviour
     private void OnEnable()
     {
         Chapter.StageChangedEvent += OnStageChanged;
-        Player.currentPlayer.OnCoinChanged += OnCoinChanged;
-        OnCoinChanged(Player.currentPlayer.Coin);
+        Player.CurrentPlayer.OnCoinChanged += OnCoinChanged;
+        OnCoinChanged(Player.CurrentPlayer.Coin);
     }
 
     private void OnDisable()
     {
         Chapter.StageChangedEvent -= OnStageChanged;
-        Player.currentPlayer.OnCoinChanged -= OnCoinChanged;
+        Player.CurrentPlayer.OnCoinChanged -= OnCoinChanged;
     }
 
     private void OnCoinChanged(int coin)

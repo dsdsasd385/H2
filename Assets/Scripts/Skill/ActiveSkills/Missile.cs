@@ -11,6 +11,13 @@ public class MagicMissile : ActiveSkill
     {
         var target = targetList[0];
 
+        if (target == null || !target.transform.gameObject.activeInHierarchy)
+        {
+            Debug.LogWarning("대상 Entity가 유효하지 않습니다. 스킬 실행 취소.");
+            yield break;
+        }
+
+
         var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.up * 1.5f, target.transform, 2.5f);
 
         yield return projectile.transform.DOMove(target.transform.position, 10f)
@@ -19,10 +26,9 @@ public class MagicMissile : ActiveSkill
             .OnComplete(() => projectile.Release(2f))
             .WaitForCompletion();
 
-        //int damage = (int)from.CalculateDamage(from.status.Power, target.status.Defense, from.status.Critical);
 
-        float min = from.status.Power * 0.4f;
-        float max = from.status.Power * 0.6f;
+        float min = from.Status.Power * 0.4f;
+        float max = from.Status.Power * 0.6f;
 
         int damage = Mathf.RoundToInt(Random.Range(min, max));
 
@@ -47,7 +53,13 @@ public class BloodMissile : ActiveSkill
     {
         var target = targetList[0];
 
-        var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.up * 1.5f, target.transform, 2.5f);
+        if (target == null || !target.transform.gameObject.activeInHierarchy)
+        {
+            Debug.LogWarning("대상 Entity가 유효하지 않습니다. 스킬 실행 취소.");
+            yield break;
+        }
+
+        var projectile = Projectile.Get<BloodMissileProjectile>(from.transform.position + Vector3.up * 1.5f, target.transform, 2.5f);
 
         yield return projectile.transform.DOMove(target.transform.position, 8f)
              .SetSpeedBased(true)
@@ -55,8 +67,10 @@ public class BloodMissile : ActiveSkill
              .OnComplete(() => projectile.Release(2f))
              .WaitForCompletion();
 
-        float min = from.status.Power * 0.2f;
-        float max = from.status.Power * 0.4f;
+
+
+        float min = from.Status.Power * 0.2f;
+        float max = from.Status.Power * 0.4f;
 
         int damage = Mathf.RoundToInt(Random.Range(min, max));
 
@@ -82,7 +96,14 @@ public class PoisonMissile : ActiveSkill
     {
         var target = targetList[0];
 
-        var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.right * 1.5f, target.transform, 2.5f);
+        if (target == null || !target.transform.gameObject.activeInHierarchy)
+        {
+            Debug.LogWarning("대상 Entity가 유효하지 않습니다. 스킬 실행 취소.");
+            yield break;
+        }
+
+
+        var projectile = Projectile.Get<PoisonMissileProjectile>(from.transform.position + Vector3.up * 1.5f, target.transform, 2.5f);
 
         yield return projectile.transform.DOMove(target.transform.position, 10f)
              .SetSpeedBased(true)
@@ -90,7 +111,13 @@ public class PoisonMissile : ActiveSkill
              .OnComplete(() => projectile.Release(2f))
              .WaitForCompletion();
 
-        int damage = (int)from.CalculateDamage(from.status.Power, target.status.Defense, from.status.Critical);
+
+        float min = from.Status.Power * 0.2f;
+        float max = from.Status.Power * 0.4f;
+
+        int damage = Mathf.RoundToInt(Random.Range(min, max));
+  
+        target.TryApplyPoison(0.5f, 2, 3f);
 
         var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
         text.ShowDamage(damage);
@@ -113,15 +140,26 @@ public class IceMissile : ActiveSkill
     {
         var target = targetList[0];
 
-        var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.left * 1.5f, target.transform, 2.5f);
+        if (target == null || !target.transform.gameObject.activeInHierarchy)
+        {
+            Debug.LogWarning("대상 Entity가 유효하지 않습니다. 스킬 실행 취소.");
+            yield break;
+        }
 
+        var projectile = Projectile.Get<IceMissileProjectile>(from.transform.position + Vector3.up * 1.5f, target.transform, 2.5f);
+        
         yield return projectile.transform.DOMove(target.transform.position, 10f)
              .SetSpeedBased(true)
              .SetEase(Ease.InQuart)
              .OnComplete(() => projectile.Release(2f))
              .WaitForCompletion();
 
-        int damage = (int)from.CalculateDamage(from.status.Power, target.status.Defense, from.status.Critical);
+
+        float min = from.Status.Power * 0.2f;
+        float max = from.Status.Power * 0.4f;
+
+        int damage = Mathf.RoundToInt(Random.Range(min, max));
+        target.TryApplyFreeze(0.1f); // 10% 확률로 빙결시도
 
         var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
         text.ShowDamage(damage);

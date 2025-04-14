@@ -42,6 +42,7 @@ public class BattleScene : AdditiveScene
         GameObject monsterObj = MonsterPoolManager.Instance.SpawnMonster(monsterPos[0].position, Quaternion.LookRotation(mapCenter.position));
         monster = monsterObj.GetComponent<MonsterController>();
 
+        monster.Monster.Init();
         //monster = Instantiate(monsterPrefabs).GetComponent<MonsterController>();
         //monster.transform.position = monsterPos[0].position;
         //monsterPrefabs.transform.rotation = Quaternion.LookRotation(mapCenter.position);

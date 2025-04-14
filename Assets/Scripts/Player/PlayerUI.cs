@@ -16,13 +16,13 @@ public class PlayerUI : MonoBehaviour
     
     public void Initialize()
     {
-        Player.currentPlayer.Status.OnHpChange += RefreshHp;
-        Player.currentPlayer.Status.OnPowerChange += RefreshPower;
-        Player.currentPlayer.Status.OnDefenseChange += RefreshDefence;
-        Player.currentPlayer.OnChangeExp += RefreshExp;
-        Player.currentPlayer.OnLevelUp += RefreshLevel;
+        Player.CurrentPlayer.Status.OnHpChange += RefreshHp;
+        Player.CurrentPlayer.Status.OnPowerChange += RefreshPower;
+        Player.CurrentPlayer.Status.OnDefenseChange += RefreshDefence;
+        Player.CurrentPlayer.OnChangeExp += RefreshExp;
+        Player.CurrentPlayer.OnLevelUp += RefreshLevel;
 
-        var player = Player.currentPlayer;
+        var player = Player.CurrentPlayer;
         
         RefreshLevel(player.Level);
         RefreshExp(player.Exp, player.NeedExp);
@@ -33,13 +33,13 @@ public class PlayerUI : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (Player.currentPlayer != null)
+        if (Player.CurrentPlayer != null)
         {
-            Player.currentPlayer.Status.OnHpChange -= RefreshHp;
-            Player.currentPlayer.Status.OnPowerChange -= RefreshPower;
-            Player.currentPlayer.Status.OnDefenseChange -= RefreshDefence;
-            Player.currentPlayer.OnChangeExp -= RefreshExp;
-            Player.currentPlayer.OnLevelUp -= RefreshLevel;
+            Player.CurrentPlayer.Status.OnHpChange -= RefreshHp;
+            Player.CurrentPlayer.Status.OnPowerChange -= RefreshPower;
+            Player.CurrentPlayer.Status.OnDefenseChange -= RefreshDefence;
+            Player.CurrentPlayer.OnChangeExp -= RefreshExp;
+            Player.CurrentPlayer.OnLevelUp -= RefreshLevel;
         }
     }
 

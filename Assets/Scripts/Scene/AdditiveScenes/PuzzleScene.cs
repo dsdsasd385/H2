@@ -24,7 +24,7 @@ public class PuzzleScene : AdditiveScene, IPuzzleRule
 
     private void OnGameOver(int point)
     {
-        Player.currentPlayer.AddCoin(point);
+        Player.CurrentPlayer.AddCoin(point);
 
         StartCoroutine(GameOverCoroutine(point));
     }
