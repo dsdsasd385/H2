@@ -7,7 +7,7 @@ public static class Battle
 {
     public static BattleScene _battle { get; private set; }
     public static event Action BattleStart;
-    public static event Action BattleEnd;
+
     public static bool IsBattle { get; private set; }
     public static IEnumerator BattleCoroutine(float growthRate)
     {
@@ -50,8 +50,8 @@ public static class Battle
             StagePlayUI.AddDialog("플레이어 패배! 더 강해지기!!");
         
         IsBattle = false;
-        
-        BattleEnd?.Invoke();
+
+        BattleStart?.Invoke();
 
         yield return Delay.Wait(1f);
            
