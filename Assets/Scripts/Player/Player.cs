@@ -115,7 +115,6 @@ public class Player : Entity
         text.transform.position = transform.position + Vector3.up;  // 생성 후 재할당
         text.ShowDamage(damageInt);
         Debug.Log($"Transform : {transform.position}");
-
     }
 
 

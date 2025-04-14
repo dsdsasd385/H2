@@ -90,6 +90,9 @@ public class PlayerController : MonoBehaviour
                 Player.AddCoin(result.ChangeValue);
                 Debug.Log($"코인 획득! {result.ChangeValue}");
                 break;
+            case StageRouletteType.READ_BOOK:
+                Player.AddExp(result.ChangeValue);
+                break;
             case StageRouletteType.BUG_BITE:
                 Player.OnHpChanged(result.ChangeValue);
                 Debug.Log($"체력이 깎였습니다. {result.ChangeValue} %");
@@ -102,7 +105,6 @@ public class PlayerController : MonoBehaviour
                 Player.OnDefenseChanged(result.ChangeValue);
                 Debug.Log($"방어력이 깎였습니다! {result.ChangeValue} %");
                 break;
-
             case StageRouletteType.LOST_COIN:
                 Player.LostCoin(result.ChangeValue);
                 Debug.Log($"코인을 잃었습니다! {result.ChangeValue}");

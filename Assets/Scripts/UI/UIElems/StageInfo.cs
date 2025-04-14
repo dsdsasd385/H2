@@ -25,7 +25,7 @@ public class StageInfo : MonoBehaviour
 
     private void OnCoinChanged(int coin)
     {
-        StartCoroutine(txtCoin.ChangeValueAnim(_beforeCoin, coin, 0.25f));
+        StartCoroutine(txtCoin.ChangeValueAnim(_beforeCoin, coin, 0.5f));
     }
 
     private void OnStageChanged(int stage, StageType stageType)
@@ -47,6 +47,6 @@ public class StageInfo : MonoBehaviour
         }
 
         txtStage.text = $"{stageText} {type}";
-        txtStage.DOFade(1f, 0.3f).From(0f);
+        txtStage.DOFade(1f, 0.5f).From(0f);
     }
 }

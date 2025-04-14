@@ -50,6 +50,8 @@ public class PlayerUI : MonoBehaviour
 
     private void RefreshExp(int exp, int needExp)
     {
+        print($"NEED : {needExp} EXP : {exp}");
+        
         sldExp.maxValue = needExp;
 
         DOTween.To(() => sldExp.value, x => sldExp.value = x, exp, 0.5f);
