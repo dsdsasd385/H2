@@ -146,6 +146,7 @@ public abstract class Entity
 
     // ���� ���
     public virtual void Attack(Entity target) { }
+    public virtual void Heal(int healAmount) { }
 
     // ���� ����
     public abstract void TakeDamage(float power, float defense, float critical);

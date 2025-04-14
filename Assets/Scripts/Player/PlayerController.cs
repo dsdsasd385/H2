@@ -87,6 +87,7 @@ public class PlayerController : MonoBehaviour
                 break;
             case StageRouletteType.READ_BOOK:
                 Player.AddExp(result.ChangeValue);
+                Debug.Log($"경험치 획득{result.ChangeValue}");
                 break;
             case StageRouletteType.BUG_BITE:
                 Player.OnHpChanged(result.ChangeValue);

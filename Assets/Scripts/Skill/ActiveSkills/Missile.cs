@@ -6,20 +6,25 @@ using UnityEngine;
 public class MagicMissile : ActiveSkill
 {
     protected override int GetTurnCount() => 2;
-    
+
     public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
         var target = targetList[0];
-        
+
         var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.up * 1.5f, target.transform, 2.5f);
-        
+
         yield return projectile.transform.DOMove(target.transform.position, 10f)
             .SetSpeedBased(true)
             .SetEase(Ease.InQuart)
-            .OnComplete(()=>projectile.Release(2f))
+            .OnComplete(() => projectile.Release(2f))
             .WaitForCompletion();
 
-        int damage = (int)from.CalculateDamage(from.status.Power, target.status.Defense, from.status.Critical);
+        //int damage = (int)from.CalculateDamage(from.status.Power, target.status.Defense, from.status.Critical);
+
+        float min = from.status.Power * 0.4f;
+        float max = from.status.Power * 0.6f;
+
+        int damage = Mathf.RoundToInt(Random.Range(min, max));
 
         var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
         text.ShowDamage(damage);
@@ -37,14 +42,29 @@ public class MagicMissile : ActiveSkill
 public class BloodMissile : ActiveSkill
 {
     protected override int GetTurnCount() => 2;
-    
+
     public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
         var target = targetList[0];
 
         var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.up * 1.5f, target.transform, 2.5f);
 
-        yield break;
+        yield return projectile.transform.DOMove(target.transform.position, 8f)
+             .SetSpeedBased(true)
+             .SetEase(Ease.InQuart)
+             .OnComplete(() => projectile.Release(2f))
+             .WaitForCompletion();
+
+        float min = from.status.Power * 0.2f;
+        float max = from.status.Power * 0.4f;
+
+        int damage = Mathf.RoundToInt(Random.Range(min, max));
+
+        from.Heal(5);
+
+        var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
+        text.ShowDamage(damage);
+        yield return null;
     }
 
     public override string GetSkillName() =>
@@ -57,12 +77,27 @@ public class BloodMissile : ActiveSkill
 public class PoisonMissile : ActiveSkill
 {
     protected override int GetTurnCount() => 2;
-    
+
     public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
-        yield break;
+        var target = targetList[0];
+
+        var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.right * 1.5f, target.transform, 2.5f);
+
+        yield return projectile.transform.DOMove(target.transform.position, 10f)
+             .SetSpeedBased(true)
+             .SetEase(Ease.InQuart)
+             .OnComplete(() => projectile.Release(2f))
+             .WaitForCompletion();
+
+        int damage = (int)from.CalculateDamage(from.status.Power, target.status.Defense, from.status.Critical);
+
+        var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
+        text.ShowDamage(damage);
+        yield return null;
+
     }
-    
+
     public override string GetSkillName() =>
         "포이즌 미사일";
 
@@ -73,12 +108,26 @@ public class PoisonMissile : ActiveSkill
 public class IceMissile : ActiveSkill
 {
     protected override int GetTurnCount() => 2;
-    
+
     public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
-        yield break;
+        var target = targetList[0];
+
+        var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.left * 1.5f, target.transform, 2.5f);
+
+        yield return projectile.transform.DOMove(target.transform.position, 10f)
+             .SetSpeedBased(true)
+             .SetEase(Ease.InQuart)
+             .OnComplete(() => projectile.Release(2f))
+             .WaitForCompletion();
+
+        int damage = (int)from.CalculateDamage(from.status.Power, target.status.Defense, from.status.Critical);
+
+        var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
+        text.ShowDamage(damage);
+        yield return null;
     }
-    
+
     public override string GetSkillName() =>
         "아이스 미사일";
 

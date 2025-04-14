@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,6 +18,7 @@ public class Player : Entity
     private Status _status;
     public Status Status => _status;
 
+    private int maxHp;
     private int _lastHp;
     private int _exp;
     private int _expToNextLevel;
@@ -93,6 +95,7 @@ public class Player : Entity
     public void Init()
     {
         _status = new Status(SaveLoad.LoadStatus());
+        maxHp = status.Hp;
         _level = 1;
         _exp = 0;
         _expToNextLevel = 25;
@@ -127,6 +130,13 @@ public class Player : Entity
         SceneManager.LoadScene("TitleScene");
     }
 
+    public override void Heal(int heal)
+    {
+        //maxHp = Mathf.FloorToInt(maxHp * (heal / 100f));
+        int healAmount = Mathf.FloorToInt(maxHp * (heal / 100f));
+        status.Hp = Mathf.Min(status.Hp + healAmount, maxHp);
+
+    }
 
     public void OnHpChanged(int value)
     {
