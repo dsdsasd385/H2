@@ -1,3 +1,4 @@
+using Entities;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,29 +11,15 @@ public class MonsterController : MonoBehaviour
 
     private MonsterAnimationHandler _monsterAni;
 
+    private List<Entity> _monsters = new List<Entity>();
+    public List<Entity> Monsters => _monsters;
+
+
     private Player _playerTarget;
 
     private float _moveSpeed;
     private Vector3 _originPos;
-    // Start is called before the first frame update
-    //void Awake()
-    //{
-    //    _monster = new Monster();
 
-    //    _monster.transform = transform;
-
-    //    _monsterAni = GetComponent<MonsterAnimationHandler>();
-
-    //    _originPos = transform.position;
-
-    //    SubscribeToEvents();
-    //}
-
-
-    //private void OnDestroy()
-    //{
-    //    UnsubscribeFromEvents();
-    //} 
     public void Init()
     {
         _monster = new Monster();
@@ -42,6 +29,8 @@ public class MonsterController : MonoBehaviour
         _monsterAni = GetComponent<MonsterAnimationHandler>();
 
         _originPos = transform.position;
+
+        _monsters.Add(this.Monster);
 
         SubscribeToEvents();
     }
@@ -114,9 +103,13 @@ public class MonsterController : MonoBehaviour
     {
         Debug.Log("몬스터가 공격했습니다..");
 
+        yield return MonsterMoveToTarget(transform, player.transform.position, 20f);
+
         yield return _monsterAni.PlayAttackAni();
 
-        yield return player.TakeDamageSequence(monster.Monster);
+        StartCoroutine(monster.TakeDamageSequence(player.Player));
+
+        yield return new WaitForSeconds(0.5f);
 
         yield return ReturnMovePlayer(transform, _originPos, _moveSpeed);
     }
@@ -139,6 +132,7 @@ public class MonsterController : MonoBehaviour
             yield return _monsterAni.PlayDieAni();
             _monster.Die();
             MonsterPoolManager.Instance.DespawnMonster(gameObject);
+
         }
     }
 }

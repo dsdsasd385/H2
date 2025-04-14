@@ -64,12 +64,7 @@ public class PlayerController : MonoBehaviour
         Chapter.RouletteResultChangedEvent -= SetStatus;
         Battle.BattleStart -= MoveToBattleScene;
     }
-    private void OnDestroy()
-    {
-        Chapter.RouletteResultChangedEvent -= SetStatus;
-        Battle.BattleStart -= MoveToBattleScene;
-    }
-
+  
     private void SetStatus(RouletteResult result)
     {
         switch (result.Type)
@@ -158,12 +153,18 @@ public class PlayerController : MonoBehaviour
     public IEnumerator PlayerAttackSequence(PlayerController player, MonsterController monster)
     {
         Debug.Log("플레이어가 공격을 시작했습니다..");
+        Skill.ProceedTurn();
+        yield return Skill.UseActiveSkills(player.Player, monster.Monsters);
 
-        yield return Skill.UseActiveSkills(player.Player, new List<Entity>() { monster.Monster });
+        //yield return Skill.UseActiveSkills(player.Player, new List<Entity>() { monster.Monster });
+
+        yield return PlayerMoveToTarget(transform, monster.transform.position, 20f);
         
         yield return _playerAni.PlayAttackAni();
 
-        yield return monster.TakeDamageSequence(player.Player);
+        StartCoroutine( monster.TakeDamageSequence(player.Player));
+
+        yield return new WaitForSeconds(0.5f);
 
         yield return ReturnMovePlayer(transform, _originPos, _moveSpeed);
     }

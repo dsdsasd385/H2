@@ -82,8 +82,6 @@ public static class Battle
                 Debug.Log("PlayerController = null");
             }
 
-            yield return CoroutineRunner.Instance.RunCoroutine(playerController.PlayerMoveToTarget(playerController.transform, monsterController.transform.position, 20f));
-
             yield return CoroutineRunner.Instance.RunCoroutine(playerController.PlayerAttackSequence(playerController, monsterController));
 
             //Debug.Log($"플레이어가 공격했습니다! 플레이어의 공격력은 '{player.Status.Power}', 크리는 '{player.Status.Critical}'입니다.");
@@ -104,7 +102,6 @@ public static class Battle
             //    .SetEase(Ease.InQuart)
             //    .WaitForCompletion();
 
-            yield return CoroutineRunner.Instance.RunCoroutine(monsterController.MonsterMoveToTarget(monsterController.transform, playerController.transform.position, 20f));
 
             yield return CoroutineRunner.Instance.RunCoroutine(monsterController.MonsterAttackSequence(playerController, monsterController));
 

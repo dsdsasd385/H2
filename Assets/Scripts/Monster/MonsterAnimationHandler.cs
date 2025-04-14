@@ -23,7 +23,7 @@ public class MonsterAnimationHandler : MonoBehaviour
     {
         _animator.SetTrigger("Die");
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.3f);
     }
 
     public IEnumerator PlayRunAni()

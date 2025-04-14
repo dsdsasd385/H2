@@ -128,7 +128,6 @@ public class Player : Entity
     }
 
 
-    // ü�º��Ҷ� �̺�Ʈ
     public void OnHpChanged(int value)
     {
         // ���� ü�� ����
@@ -139,14 +138,12 @@ public class Player : Entity
         Debug.Log($"체력 변경. {_status.Hp}");
     }
 
-    // ���ݷº��Ҷ� �̺�Ʈ
     public void OnPowerChanged(int value)
     {
         // ���ݷ� ����
         _status.Power *= (1 + value / 100f);
         Debug.Log($"공격력 변경. {_status.Power}");
     }
-    // ���º��Ҷ� �̺�Ʈ
     public void OnDefenseChanged(int value)
     {
         // ���� ����

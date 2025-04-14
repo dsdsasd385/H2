@@ -18,9 +18,11 @@ public class MagicMissile : ActiveSkill
             .SetEase(Ease.InQuart)
             .OnComplete(()=>projectile.Release(2f))
             .WaitForCompletion();
-        
+
+        int damage = (int)from.CalculateDamage(from.status.Power, target.status.Defense, from.status.Critical);
+
         var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
-        text.ShowDamage(Random.Range(100, 1000));
+        text.ShowDamage(damage);
 
         yield return null;
     }
@@ -38,9 +40,13 @@ public class BloodMissile : ActiveSkill
     
     public override IEnumerator OnUseActive(Entity from, List<Entity> targetList)
     {
+        var target = targetList[0];
+
+        var projectile = Projectile.Get<MagicMissileProjectile>(from.transform.position + Vector3.up * 1.5f, target.transform, 2.5f);
+
         yield break;
     }
-    
+
     public override string GetSkillName() =>
         "블러드 미사일";
 
