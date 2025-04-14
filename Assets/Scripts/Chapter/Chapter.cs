@@ -107,9 +107,15 @@ public abstract class Chapter : MonoBehaviour
 
     public void PlayChapter()
     {
-        StartCoroutine(PlayChapterCoroutine());
+        if (_chapterCoroutine != null)
+            StopCoroutine(_chapterCoroutine);
+
+        _chapterCoroutine = PlayChapterCoroutine();
+
+        StartCoroutine(_chapterCoroutine);
     }
 
+    private IEnumerator _chapterCoroutine;
     private IEnumerator PlayChapterCoroutine()
     {
         for (var index = 0; index < _stageActions.Count; index++)
@@ -128,6 +134,15 @@ public abstract class Chapter : MonoBehaviour
             yield return stageAction;
             StagePlayUI.AddBlank();
         }
+        
+        UI.Open<GameOverUI>().SetMsg("챕터 클리어!");
+    }
+
+    private void OnPlayerDefeated()
+    {
+        StopCoroutine(_chapterCoroutine);
+        
+        UI.Open<GameOverUI>().SetMsg("GAME OVER!");
     }
 
     private IEnumerator OnPlayerLevelUp()
