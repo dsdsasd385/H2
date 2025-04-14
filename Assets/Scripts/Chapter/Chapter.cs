@@ -132,6 +132,7 @@ public abstract class Chapter : MonoBehaviour
             
             yield return PopupButtonUI.WaitForClick("스테이지 진행", -1);
             yield return stageAction;
+            yield return new WaitForSeconds(0.5f);
             StagePlayUI.AddBlank();
         }
         

@@ -21,22 +21,13 @@ public class StagePlayUI : UI
     #endregion
 
     private readonly List<GameObject> _dialogList = new();
-
-    [SerializeField] private List<TMP_Text> _textList = new();
-
-    public TMP_Text GetText(string key)
-    {
-        return _textList.Find(text => text.name == key);
-    }
+    
     public static void Initialize()
     {
         for (var i = 0; i < Instance._dialogList.Count; i++)
             Destroy(Instance._dialogList[i]);
 
         Instance._dialogList.Clear();
-
-        Chapter.StageChangedEvent -= OnStageChanged;
-        Chapter.StageChangedEvent += OnStageChanged;
 
         Instance.playerUI.Initialize();
     }
@@ -58,17 +49,13 @@ public class StagePlayUI : UI
         Instance.RefreshDialogView();
     }
 
-    private static void OnStageChanged(int stage, StageType stageType)
-    {
-        print($"현재 스테이지 : {stage} - {stageType}");
-    }
-
     /******************************************************************************************************************/
     /******************************************************************************************************************/
 
-    [SerializeField] private PlayerUI playerUI;
+    [SerializeField] private StageInfo  stageInfo;
+    [SerializeField] private PlayerUI   playerUI;
     [SerializeField] private ScrollRect dialogView;
-    [SerializeField] private Transform dialogParent;
+    [SerializeField] private Transform  dialogParent;
     [SerializeField] private DialogItem dialogPrefab;
     [SerializeField] private GameObject dialogBlankPrefab;
 
