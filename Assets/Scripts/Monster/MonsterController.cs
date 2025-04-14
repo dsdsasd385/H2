@@ -15,7 +15,25 @@ public class MonsterController : MonoBehaviour
     private float _moveSpeed;
     private Vector3 _originPos;
     // Start is called before the first frame update
-    void Awake()
+    //void Awake()
+    //{
+    //    _monster = new Monster();
+
+    //    _monster.transform = transform;
+
+    //    _monsterAni = GetComponent<MonsterAnimationHandler>();
+
+    //    _originPos = transform.position;
+
+    //    SubscribeToEvents();
+    //}
+
+
+    //private void OnDestroy()
+    //{
+    //    UnsubscribeFromEvents();
+    //} 
+    public void Init()
     {
         _monster = new Monster();
 
@@ -27,7 +45,7 @@ public class MonsterController : MonoBehaviour
 
         SubscribeToEvents();
     }
-    private void OnDestroy()
+    private void OnDisable()
     {
         UnsubscribeFromEvents();
     }
@@ -36,10 +54,7 @@ public class MonsterController : MonoBehaviour
     {
         if (_monsterAni != null && Monster != null)
         {
-            Debug.Log($"_monsterAni�� {_monsterAni} �̸� Monster�� {Monster}�Դϴ�.");
-
             Monster.OnDieGiveExp += GievExp;
-            Monster.OnDieEvent += DieEvent;
         }
     }
 
@@ -48,7 +63,6 @@ public class MonsterController : MonoBehaviour
         if (_monsterAni != null && Monster != null)
         {
             Monster.OnDieGiveExp -= GievExp;
-            Monster.OnDieEvent -= DieEvent;
 
         }
     }
@@ -122,14 +136,9 @@ public class MonsterController : MonoBehaviour
 
         if (_monster.Status.Hp <= 0)
         {
+            yield return _monsterAni.PlayDieAni();
             _monster.Die();
+            MonsterPoolManager.Instance.DespawnMonster(gameObject);
         }
     }
-
-    private void DieEvent()
-    {
-        _monsterAni.PlayDieAni();
-        Destroy(gameObject, 2.5f);
-    }
-
 }
