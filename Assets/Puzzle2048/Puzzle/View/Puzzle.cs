@@ -25,12 +25,14 @@ namespace Puzzle2048
         
         private int           _remainMove;
         private int           _point;
+        private bool          _isGameOver;
 
         private void Initialize(IPuzzleRule rule)
         {
-            _rule = rule;
-            _view = Instantiate(PuzzleSettings.GetViewPrefab());
-            _app = gameObject.AddComponent<PuzzleGameApp>();
+            _isGameOver = false;
+            _rule       = rule;
+            _view       = Instantiate(PuzzleSettings.GetViewPrefab());
+            _app        = gameObject.AddComponent<PuzzleGameApp>();
             _app.Initialize(_rule, _view, rule.GetBoardSize());
         }
 
@@ -44,7 +46,10 @@ namespace Puzzle2048
                 _view.OnRemainMoveChanged(_remainMove);
 
                 if (_remainMove == 0)
+                {
+                    _isGameOver = true;
                     _app.FinishGame();
+                }
             };
 
             _app.TileRemovedEvent += () =>
@@ -62,6 +67,9 @@ namespace Puzzle2048
     
         private void Update()
         {
+            if (_isGameOver)
+                return;
+            
 #if UNITY_EDITOR || UNITY_STANDALONE
             HandleKeyboardInput();
 #elif UNITY_IOS || UNITY_ANDROID

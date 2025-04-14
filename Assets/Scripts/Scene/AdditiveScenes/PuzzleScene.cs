@@ -24,22 +24,24 @@ public class PuzzleScene : AdditiveScene, IPuzzleRule
 
     private void OnGameOver(int point)
     {
-        // todo Player add gold (point)
+        Player.currentPlayer.AddCoin(point);
 
-        StartCoroutine(GameOverCoroutine());
+        StartCoroutine(GameOverCoroutine(point));
     }
 
-    private IEnumerator GameOverCoroutine()
+    private IEnumerator GameOverCoroutine(int point)
     {
-        yield return new WaitForSeconds(1f);
+        string msg = point > 0 ? $"<color=#2989FF>SUCCESS!</color>\n{point}골드 획득!" : $"<color=#FF3419>FAILED!</color>";
         
-        _gameOver = true;
+        yield return UI.Open<PuzzleGameOverUI>().SetMessage(msg);
         
         yield return UnloadScene();
     }
 
     protected override IEnumerator OnUnloadScene()
     {
+        _gameOver = true;
+        
         yield break;
     }
     
