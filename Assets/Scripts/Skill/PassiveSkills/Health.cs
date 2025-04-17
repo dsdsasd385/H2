@@ -2,7 +2,7 @@ public class Health : PassiveSkill
 {
     public override void OnGetPassive()
     {
-        
+        Player.CurrentPlayer.OnHpChanged(10);
     }
 
     public override string GetSkillName() =>
@@ -16,9 +16,9 @@ public class Health2 : PassiveSkill
 {
     public override void OnGetPassive()
     {
-        
+        Player.CurrentPlayer.OnHpChanged(30);
     }
-    
+
     public override string GetSkillName() =>
         "강인한 체력++";
 

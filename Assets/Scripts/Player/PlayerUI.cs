@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,6 +42,11 @@ public class PlayerUI : MonoBehaviour
             Player.CurrentPlayer.OnChangeExp -= RefreshExp;
             Player.CurrentPlayer.OnLevelUp -= RefreshLevel;
         }
+    }
+
+    private string ToString(int level)
+    {
+        throw new NotImplementedException();
     }
 
     private void RefreshLevel(int level)

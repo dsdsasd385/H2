@@ -1,9 +1,10 @@
 public class AttackDefence : PassiveSkill
 {
-    public override void OnGetPassive()
+    public override void OnGetPassive( )
     {
-        
-    }
+        Player.CurrentPlayer.OnPowerChanged(5);
+        Player.CurrentPlayer.OnDefenseChanged(5);
+    } 
 
     public override string GetSkillName() =>
         "공격과 방어+";
@@ -16,8 +17,9 @@ public class AttackDefence2 : PassiveSkill
 {
     public override void OnGetPassive()
     {
-        
-    }
+        Player.CurrentPlayer.OnPowerChanged(10);
+        Player.CurrentPlayer.OnDefenseChanged(10);
+    } 
 
     public override string GetSkillName() =>
         "공격과 방어++";

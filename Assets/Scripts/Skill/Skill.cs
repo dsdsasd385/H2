@@ -1,3 +1,4 @@
+using Entities;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -123,9 +124,10 @@ public abstract class Skill
 
 public abstract class PassiveSkill : Skill
 {
-    protected Entities.Player Player => Entities.Player.Self;
-    
+    protected Player Player => Player.CurrentPlayer;
+
     public abstract void OnGetPassive();
+
 }
 
 public abstract class ActiveSkill : Skill

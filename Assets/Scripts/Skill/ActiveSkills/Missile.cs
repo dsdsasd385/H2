@@ -32,8 +32,9 @@ public class MagicMissile : ActiveSkill
 
         int damage = Mathf.RoundToInt(Random.Range(min, max));
 
+        target.TakeDamage(damage, target.Status.Defense, from.Status.Critical);
+
         var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
-        text.ShowDamage(damage);
 
         yield return null;
     }
@@ -74,10 +75,11 @@ public class BloodMissile : ActiveSkill
 
         int damage = Mathf.RoundToInt(Random.Range(min, max));
 
+        target.TakeDamage(damage, target.Status.Defense,from.Status.Critical);
+
         from.Heal(5);
 
         var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
-        text.ShowDamage(damage);
         yield return null;
     }
 
@@ -116,11 +118,12 @@ public class PoisonMissile : ActiveSkill
         float max = from.Status.Power * 0.4f;
 
         int damage = Mathf.RoundToInt(Random.Range(min, max));
-  
+
+        target.TakeDamage(damage, target.Status.Defense, from.Status.Critical);
+
         target.TryApplyPoison(0.5f, 2, 3f);
 
         var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
-        text.ShowDamage(damage);
         yield return null;
 
     }
@@ -159,10 +162,12 @@ public class IceMissile : ActiveSkill
         float max = from.Status.Power * 0.4f;
 
         int damage = Mathf.RoundToInt(Random.Range(min, max));
+
+        target.TakeDamage(damage, target.Status.Defense, from.Status.Critical);
+
         target.TryApplyFreeze(0.1f); // 10% 확률로 빙결시도
 
         var text = WorldCanvas.Get<DamageText>(target.transform.position + Vector3.up, 100);
-        text.ShowDamage(damage);
         yield return null;
     }
 

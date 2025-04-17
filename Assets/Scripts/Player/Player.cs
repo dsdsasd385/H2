@@ -141,13 +141,21 @@ public class Player : Entity
     }
 
     public void OnHpChanged(int value)
-    {
-        // ���� ü�� ����
-        _lastHp = _status.Hp;
-        // ü�� ����
-        var newHp = _lastHp * (1 + value / 100f);
-        _status.Hp = (int)newHp;
-        Debug.Log($"체력 변경. {_status.Hp}");
+    {    
+        // 1) 증가 전 최대체력 저장
+        int oldMaxHp = maxHp;
+        // 2) 증가 전 현재체력 저장
+        int oldHp = _status.Hp;
+
+        // 3) 최대체력(value%)만큼 증가
+        maxHp = Mathf.CeilToInt(maxHp * (1 + value / 100f));
+        // 4) Status.MaxHp에도 반영
+        _status.MaxHp = maxHp;
+
+        // 5) 증가 전 체력 비율을 유지하면서 현재체력 재계산
+        float hpRatio = (float)oldHp / oldMaxHp;
+        int newCurrent = Mathf.CeilToInt(maxHp * hpRatio);
+        _status.Hp = newCurrent;
     }
 
     public void OnPowerChanged(int value)
